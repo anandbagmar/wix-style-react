@@ -2,8 +2,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import uniqueId from 'lodash/uniqueId';
 import classnames from 'classnames';
-import styles from '../RadioGroup.scss';
-import { withFocusable, focusableStates } from '../../common/Focusable';
+import styles from '../RadioGroup.st.css';
+import { withFocusable } from 'wix-ui-core/dist/src/hocs/Focusable/FocusableHOC';
 import Text from '../../Text';
 import { dataHooks } from './constants';
 
@@ -56,10 +56,18 @@ class RadioButton extends React.PureComponent {
       vAlign,
       value,
       tabIndex,
+      focusableOnFocus,
+      focusableOnBlur,
     } = this.props;
 
     return (
-      <div style={style} data-hook={dataHook}>
+      <div
+        {...styles('focusableRadioButton', {}, this.props)}
+        onFocus={focusableOnFocus}
+        onBlur={focusableOnBlur}
+        style={style}
+        data-hook={dataHook}
+      >
         <div
           className={classnames(styles.radioWrapper, {
             [styles.disabled]: disabled,
@@ -67,9 +75,6 @@ class RadioButton extends React.PureComponent {
           })}
           data-hook={dataHooks.RadioButtonWrapper}
           tabIndex={disabled ? null : tabIndex}
-          onFocus={this.props.focusableOnFocus}
-          onBlur={this.props.focusableOnBlur}
-          {...focusableStates(this.props)}
         >
           <input
             data-hook={dataHooks.RadioButtonInput}

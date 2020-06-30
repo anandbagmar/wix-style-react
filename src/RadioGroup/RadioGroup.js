@@ -4,7 +4,7 @@ import uniqueId from 'lodash/uniqueId';
 import classNames from 'classnames';
 
 import RadioButton from './RadioButton/RadioButton';
-import styles from './RadioGroup.scss';
+import styles from './RadioGroup.st.css';
 import { dataHooks } from './constants';
 
 /**
