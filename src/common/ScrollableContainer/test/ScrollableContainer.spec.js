@@ -11,7 +11,7 @@ import { positionY } from '../constants';
 describe('ScrollableContainer', () => {
   const render = createRendererWithUniDriver(scrollableContainerDriverFactory);
 
-  afterEach(() => cleanup());
+  afterEach(cleanup);
 
   it('should render the provided children', async () => {
     const children = <div data-hook={'children'} />;
@@ -32,6 +32,25 @@ describe('ScrollableContainer', () => {
     expect(onScrollPositionChangedSpy).toHaveBeenCalledWith(
       expect.objectContaining({ position: { y: positionY.NONE } }),
     );
+  });
+
+  it('should use received forwarded ref when passed while internal registering to scroll events still works', async () => {
+    const testValue = 'test';
+    const testRef = React.createRef();
+    const onScrollPositionChangedSpy = jest.fn();
+    render(
+      <ScrollableContainer
+        ref={testRef}
+        onScrollPositionChanged={onScrollPositionChangedSpy}
+      >
+        {testValue}
+      </ScrollableContainer>,
+    );
+    expect(onScrollPositionChangedSpy).toHaveBeenCalledTimes(1);
+    expect(onScrollPositionChangedSpy).toHaveBeenCalledWith(
+      expect.objectContaining({ position: { y: positionY.NONE } }),
+    );
+    expect(testRef.current.textContent).toEqual(testValue);
   });
 
   describe('Scroll Logic', () => {
