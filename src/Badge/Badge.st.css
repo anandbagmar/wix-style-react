@@ -1,9 +1,4 @@
 :import {
-    -st-from: '../Foundation/stylable/typography.st.css';
-    -st-named: text-medium-bold;
-}
-
-:import {
   -st-from: 'wix-ui-core/hocs.st.css';
   -st-named: Focusable;
 }
@@ -78,13 +73,7 @@
 }
 
 .root .text {
-  -st-mixin: text-medium-bold;
-  font-size: 10px;
-  line-height: 12px;
-  letter-spacing: 1px;
   color: currentColor;
-  white-space: nowrap;
-  max-width: 100%;
 }
 
 .root:uppercase .text {

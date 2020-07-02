@@ -81,8 +81,8 @@ class Ellipsis extends React.PureComponent {
 
     return render({
       ref: this.ref,
-      ellipsisClasses: className =>
-        [ellipsis && styles.text, className].filter(Boolean).join(' '),
+      ellipsisClasses: (...classNames) =>
+        [ellipsis && styles.text, ...classNames].filter(Boolean).join(' '),
     });
   };
 

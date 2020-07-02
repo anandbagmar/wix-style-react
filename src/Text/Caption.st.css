@@ -1,0 +1,14 @@
+:import {
+  -st-from: "./Text.st.css";
+  -st-default: Text;
+}
+
+.caption {
+  -st-extends: Text;
+}
+
+.c1 {
+  font-size: 10px !important;
+  line-height: 12px !important;
+  letter-spacing: 1px;
+}

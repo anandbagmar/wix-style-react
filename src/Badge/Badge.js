@@ -1,25 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import classNames from 'classnames';
 import { withFocusable } from 'wix-ui-core/dist/src/hocs/Focusable';
 import { generateDataAttr } from '../utils/generateDataAttr';
-
 import { SKIN, TYPE, SIZE } from './constants';
 import style from './Badge.st.css';
-
-import ellipsisHOC from '../common/EllipsisHOC';
-
-const BadgeContent = ({ children, className, ...restProps }) => {
-  return (
-    <span className={classNames(style.text, className)} {...restProps}>
-      {children}
-    </span>
-  );
-};
-
-// It's a best practice to create the HOC outside the render function,
-// mainly to improve the performance and prevent remounting that in some case could cause issues
-const EllipsedBadgeContent = ellipsisHOC(BadgeContent);
+import Caption from '../Text/Caption';
 
 class Badge extends React.PureComponent {
   static propTypes = {
@@ -87,10 +72,6 @@ class Badge extends React.PureComponent {
       : {};
   };
 
-  _renderContent = children => {
-    return <EllipsedBadgeContent ellipsis>{children}</EllipsedBadgeContent>;
-  };
-
   render() {
     const {
       children,
@@ -115,7 +96,9 @@ class Badge extends React.PureComponent {
             className: style.prefix,
             'data-prefix-icon': true,
           })}
-        {this._renderContent(children)}
+        <Caption className={style.text} caption="c1" weight="bold" ellipsis>
+          {children}
+        </Caption>
         {suffixIcon &&
           React.cloneElement(suffixIcon, {
             className: style.suffix,

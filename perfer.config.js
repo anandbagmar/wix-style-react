@@ -6,7 +6,7 @@ const javascriptFiles = [
   ['AutoComplete.bundle.min.js', 71],
   ['AutoCompleteWithLabel.bundle.min.js', 69],
   ['Avatar.bundle.min.js', 54],
-  ['Badge.bundle.min.js', 13],
+  ['Badge.bundle.min.js', 37],
   ['BadgeSelect.bundle.min.js', 54],
   ['BadgeSelectItemBuilder.bundle.min.js', 33],
   ['BarChart.bundle.min.js', 43],
