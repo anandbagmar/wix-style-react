@@ -135,27 +135,6 @@ describe(RadioGroup.displayName, () => {
       });
     });
 
-    describe('vAlign attribute', () => {
-      const radioGroup = props => (
-        <RadioGroup {...props}>
-          <RadioGroup.Radio value={1}>Option 1</RadioGroup.Radio>
-          <RadioGroup.Radio value={2}>Option 2</RadioGroup.Radio>
-        </RadioGroup>
-      );
-
-      it('should have a default vcenter class', async () => {
-        const driver = createDriver(radioGroup());
-        expect(await driver.getClassOfLabelAt(0)).toContain('vcenter');
-        expect(await driver.getClassOfLabelAt(1)).toContain('vcenter');
-      });
-
-      it('should have a vtop class', async () => {
-        const driver = createDriver(radioGroup({ vAlign: 'top' }));
-        expect(await driver.getClassOfLabelAt(0)).toContain('vtop');
-        expect(await driver.getClassOfLabelAt(1)).toContain('vtop');
-      });
-    });
-
     describe('display attribute', () => {
       it('should be vertical by default', async () => {
         const driver = createDriver(<DefaultRadioGroup />);
