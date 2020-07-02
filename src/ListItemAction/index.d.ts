@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { IconElement } from '../common';
-import { EllipsisHOCProps } from '../common/EllipsisHOC';
+import { EllipsisProps } from '../common/Ellipsis';
 import { ButtonWithAsProp } from '../Button';
 
 export type ListItemActionProps = ButtonWithAsProp<{
@@ -12,7 +12,7 @@ export type ListItemActionProps = ButtonWithAsProp<{
   autoFocus?: boolean;
   ellipsis?: boolean;
   disabled?: boolean;
-  tooltipModifiers?: EllipsisHOCProps;
+  tooltipModifiers?: EllipsisProps;
   highlighted?: boolean;
 }>;
 
