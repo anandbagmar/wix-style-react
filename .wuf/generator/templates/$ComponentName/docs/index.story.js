@@ -8,7 +8,6 @@ import {
   title,
   divider,
   example as baseExample,
-  code as baseCode,
   playground,
   api,
   testkit,
@@ -20,7 +19,6 @@ import allComponents from '../../../stories/utils/allComponents';
 import <%= ComponentName %> from '..';
 
 const example = config => baseExample({ components: allComponents, ...config });
-const code = config => baseCode({ components: allComponents, ...config });
 
 export default {
   category: storySettings.category,
@@ -41,7 +39,6 @@ export default {
   sections: [
     header({
       sourceUrl: `https://github.com/wix/wix-style-react/tree/master/src/${<%= ComponentName %>.displayName}/`,
-      component: <<%= ComponentName %> buttonText="Click me!" />,
     }),
 
     tabs([
@@ -63,12 +60,6 @@ export default {
           example({
             title: 'Simple Usage',
             text: 'A simple example with compact preview',
-            source: '<<%= ComponentName %> buttonText="Hello World!"/>',
-          }),
-
-          code({
-            title: 'Full Interactive Preview',
-            description: 'A non compact version of same code example as above',
             source: '<<%= ComponentName %> buttonText="Hello World!"/>',
           }),
         ],

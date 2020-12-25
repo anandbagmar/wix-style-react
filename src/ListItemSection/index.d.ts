@@ -27,7 +27,7 @@ export const listItemSectionBuilder: (data: {
   ellipsis?: boolean;
 }) => {
   id: string | number;
-  overrideStyle: true;
+  overrideOptionStyle: true;
   value: (props?: Partial<ListItemSectionProps>) => React.ReactNode;
 };
 

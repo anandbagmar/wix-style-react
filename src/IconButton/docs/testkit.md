@@ -17,7 +17,7 @@
 import React from 'react';
 import ReactTestUtils from 'react-dom/test-utils';
 import IconButton from 'wix-style-react/IconButton';
-import { iconButtonTestkitFactory } from 'wix-style-react/dist/testkit';
+import { IconButtonTestkit } from 'wix-style-react/dist/testkit';
 
 const div = document.createElement('div');
 const dataHook = 'myDataHook';
@@ -32,7 +32,7 @@ const wrapper = div.appendChild(
   ReactTestUtils.renderIntoDocument(component, { dataHook })
 );
 
-const testkit = iconButtonTestkitFactory({ wrapper, dataHook });
+const testkit = IconButtonTestkit({ wrapper, dataHook });
 
 //Do tests
 describe('Element should exist', async () => {
@@ -46,7 +46,7 @@ describe('Element should exist', async () => {
 import React from 'react';
 import { mount } from 'enzyme';
 import IconButton from 'wix-style-react/IconButton';
-import { iconButtonTestkitFactory } from 'wix-style-react/dist/testkit/enzyme';
+import { IconButtonTestkit } from 'wix-style-react/dist/testkit/enzyme';
 
 const dataHook = 'myDataHook';
 const wrapper = mount(
@@ -55,7 +55,7 @@ const wrapper = mount(
   </div>
 );
 
-const testkit = iconButtonTestkitFactory({ wrapper, dataHook });
+const testkit = IconButtonTestkit({ wrapper, dataHook });
 
 //Do tests
 describe('Element should exist', async () => {
@@ -69,14 +69,14 @@ describe('Element should exist', async () => {
 
 ```javascript
 import puppeteer from 'puppeteer';
-import { iconButtonTestkitFactory } from 'wix-style-react/dist/testkit/puppeteer';
+import { IconButtonTestkit } from 'wix-style-react/dist/testkit/puppeteer';
 
 //puppeteer setup
 const browser = await puppeteer.launch();
 const page = await browser.newPage();
 
 //Create an element testkit via the data-hook attribute
-const testkit = await iconButtonTestkitFactory({
+const testkit = await IconButtonTestkit({
   dataHook: 'myDataHook',
   page,
 });
@@ -93,10 +93,10 @@ describe('Element should exist', async () => {
 > Element should be rendered with a data-hook into the DOM `<IconButton dataHook="myDataHook" />`
 
 ```javascript
-import { iconButtonTestkitFactory } from 'wix-style-react/dist/testkit/protractor';
+import { IconButtonTestkit } from 'wix-style-react/dist/testkit/protractor';
 
 //Create an element testkit via the data-hook attribute
-const testkit = iconButtonTestkitFactory({ dataHook: 'myDataHook' });
+const testkit = IconButtonTestkit({ dataHook: 'myDataHook' });
 
 await browser.get('/page-where-button-appears'); //Your application url
 

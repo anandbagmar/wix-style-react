@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { OmitPolyfill } from '../common';
+import { OmitPolyfill, Spacing } from '../common';
 
 export interface BoxProps
   extends OmitPolyfill<React.CSSProperties, 'direction'> {
@@ -46,4 +46,4 @@ export type BoxVerticalAlignment =
 
 export type BoxSpacing = 'tiny' | 'small' | 'medium' | 'large';
 
-type BoxCssSizingProperty = string | number;
+type BoxCssSizingProperty = BoxSpacing | Spacing | string | number;

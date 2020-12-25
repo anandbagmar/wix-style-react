@@ -25,6 +25,10 @@ function TimeInputWithAllProps() {
       minutesStep={11}
       width="auto"
       customSuffix={<div>hello</div>}
+      hideStatusSuffix
+      status="error"
+      statusMessage="message"
+      showSeconds
     />
   );
 }

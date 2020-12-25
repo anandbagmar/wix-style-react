@@ -6,6 +6,7 @@ import { Hash } from './components/Hash';
 import { ColorViewer } from './components/ColorViewer';
 
 import { validateHex, normalizeHexInput } from './hex-helpers';
+import Box from '../Box';
 
 class ColorInput extends React.Component {
   static displayName = 'ColorInput';
@@ -118,24 +119,26 @@ class ColorInput extends React.Component {
       popoverProps,
     } = this.props;
     return (
-      <ColorViewer
-        value={value}
-        active={active}
-        disabled={disabled}
-        size={size}
-        placement={popoverPlacement}
-        appendTo={popoverAppendTo}
-        onClick={this.click}
-        onChange={this._onPickerChange}
-        onCancel={this.cancel}
-        onConfirm={this.confirm}
-        onClickOutside={this.confirm}
-        children={colorPickerChildren}
-        onAddColor={onAddColor}
-        addTooltipContent={addTooltipContent}
-        placeholder={placeholder}
-        popoverProps={popoverProps}
-      />
+      <Box verticalAlign="middle">
+        <ColorViewer
+          value={value}
+          active={active}
+          disabled={disabled}
+          size={size}
+          placement={popoverPlacement}
+          appendTo={popoverAppendTo}
+          onClick={this.click}
+          onChange={this._onPickerChange}
+          onCancel={this.cancel}
+          onConfirm={this.confirm}
+          onClickOutside={this.confirm}
+          children={colorPickerChildren}
+          onAddColor={onAddColor}
+          addTooltipContent={addTooltipContent}
+          placeholder={placeholder}
+          popoverProps={popoverProps}
+        />
+      </Box>
     );
   };
 
@@ -157,12 +160,18 @@ class ColorInput extends React.Component {
     e.key === 'Enter' && this.confirm();
     e.key === 'Escape' && this.cancel();
   };
-
+  /**
+   * clicks the input element
+   * @returns {Void}
+   */
   click = () => {
     this.input.focus();
     this.setState({ active: true });
   };
-
+  /**
+   * sets the picked color
+   * @returns {Void}
+   */
   confirm = () => {
     const { onConfirm, onChange } = this.props;
     const value = validateHex(this.state.value);
@@ -171,6 +180,10 @@ class ColorInput extends React.Component {
       onChange(value);
     });
   };
+  /**
+   * sets the previous color
+   * @returns {Void}
+   */
 
   cancel = () => {
     const { onCancel, onChange } = this.props;

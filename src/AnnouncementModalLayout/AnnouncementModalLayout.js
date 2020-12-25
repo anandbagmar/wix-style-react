@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import styles from './AnnouncementModalLayout.st.css';
+import { st, classes } from './AnnouncementModalLayout.st.css';
 import TextButton from '../TextButton';
 import { dataHooks } from './constants';
 
@@ -9,23 +9,26 @@ import BaseModalLayout from '../BaseModalLayout';
 import Button from '../Button';
 
 /** A layout for announcement modals, to be used inside a &lt;Modal /&gt; */
-const AnnouncementModalLayout = ({ children, ...restProps }) => (
-  <BaseModalLayout className={styles.announcementModalLayout} {...restProps}>
+const AnnouncementModalLayout = ({ children, className, ...restProps }) => (
+  <BaseModalLayout
+    className={st(classes.announcementModalLayout, className)}
+    {...restProps}
+  >
     <BaseModalLayout.Illustration />
     <BaseModalLayout.Header titleAppearance={'H2'} />
-    <BaseModalLayout.Content contentHideDividers>
+    <BaseModalLayout.Content hideTopScrollDivider hideBottomScrollDivider>
       {children}
     </BaseModalLayout.Content>
     <BaseModalLayout.Footer />
     <Link {...restProps} />
-    <div className={styles.bottomSpacing} />
+    <div className={classes.bottomSpacing} />
     <BaseModalLayout.Footnote />
   </BaseModalLayout>
 );
 
 const Link = ({ linkText, linkOnClick, theme }) =>
   ((linkText || linkOnClick) && (
-    <div className={styles.link}>
+    <div className={classes.link}>
       <TextButton
         size="small"
         weight="normal"
@@ -49,6 +52,8 @@ AnnouncementModalLayout.propTypes = {
   dataHook: PropTypes.string,
   /** callback for when the close button is clicked */
   onCloseButtonClick: PropTypes.func,
+  /** callback for when the help button is clicked */
+  onHelpButtonClick: PropTypes.func,
   /** a global theme for the modal, will be applied as stylable state and will affect footer buttons skin */
   theme: PropTypes.oneOf(['standard', 'premium']),
 

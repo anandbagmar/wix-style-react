@@ -19,6 +19,7 @@ function DateInputWithAllProps() {
       customInput={<span />}
       dataHook="hook"
       dateFormat={'12/01/19'}
+      dateFormatV2={'12/01/19'}
       defaultValue="value"
       disableEditing
       disabled

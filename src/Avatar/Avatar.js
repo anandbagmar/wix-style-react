@@ -1,12 +1,11 @@
 import React from 'react';
-import classNames from 'classnames';
 import PropTypes from 'prop-types';
 import IconButton from '../IconButton';
 import { avatarShapes, dataHooks } from './constants';
 import { Avatar as CoreAvatar } from 'wix-ui-core/dist/src/components/avatar';
 import Loader from '../Loader';
 import { placeholderSVGs } from './assets';
-import styles from './Avatar.st.css';
+import { st, classes } from './Avatar.st.css';
 import { capitalize } from '../utils/cssClassUtils';
 import stringToColor from './string-to-color';
 import { FontUpgradeContext } from '../FontUpgrade/context';
@@ -76,27 +75,27 @@ class Avatar extends React.PureComponent {
     return (
       <div
         data-hook={dataHook}
-        className={classNames(className, styles.externalContainer)}
+        className={st(className, classes.externalContainer)}
       >
         <FontUpgradeContext.Consumer>
-          {context => (
+          {({ active }) => (
             <div
               data-hook={dataHooks.avatarWSR}
               onMouseEnter={this._onMouseEnter}
               onMouseLeave={this._onMouseLeave}
-              {...styles('avatarContainer', {
+              className={st(classes.avatarContainer, {
                 shape,
                 size,
-                indication: customIndication || indication,
-                presence,
+                indication: Boolean(customIndication || indication),
+                presence: Boolean(presence),
                 presenceType: presence,
                 clickable: !!onClick,
                 fade: fadeIndication,
                 hasText: !!text,
               })}
-              data-madefor={context.active}
+              data-madefor={active}
             >
-              <div className={styles.coreAvatar}>
+              <div className={classes.coreAvatar}>
                 <CoreAvatar
                   {...{
                     ...rest,
@@ -111,29 +110,29 @@ class Avatar extends React.PureComponent {
                     initialsLimit: sizeNumber < 30 ? 1 : undefined,
                     'data-hook': dataHooks.avatarCore,
                   }}
-                  className={classNames(
-                    styles.avatar,
-                    styles[`color${capitalize(calculatedColor)}`],
+                  className={st(
+                    classes.avatar,
+                    classes[`color${capitalize(calculatedColor)}`],
                   )}
                 />
               </div>
               {renderLoader && [
                 <div
                   key="overlay"
-                  className={classNames(styles.loaderContainer, styles.overlay)}
+                  className={st(classes.loaderContainer, classes.overlay)}
                 />,
                 <div
                   key="loader"
-                  className={classNames(styles.loaderContainer, styles.loader)}
+                  className={st(classes.loaderContainer, classes.loader)}
                 >
                   <Loader dataHook={dataHooks.loader} size="tiny" />
                 </div>,
               ]}
-              {presence && <div className={styles.presence} />}
+              {presence && <div className={classes.presence} />}
               {renderIndication && (
-                <div className={styles.indication}>
+                <div className={classes.indication}>
                   <IconButton
-                    className={styles.iconButtonShadow}
+                    className={classes.iconButtonShadow}
                     dataHook={dataHooks.indication}
                     onClick={onIndicationClick}
                     skin="inverted"
@@ -146,7 +145,7 @@ class Avatar extends React.PureComponent {
               )}
               {renderCustomIndication && (
                 <div
-                  className={styles.indication}
+                  className={classes.indication}
                   data-hook={dataHooks.customIndication}
                   onClick={onIndicationClick}
                 >

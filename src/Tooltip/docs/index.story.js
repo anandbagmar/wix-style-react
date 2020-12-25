@@ -95,7 +95,7 @@ export default {
             ),
           ]),
 
-          importExample("import { Tooltip } from 'wix-style-react';"),
+          importExample(),
 
           divider(),
 
@@ -139,7 +139,7 @@ export default {
             liveCode({
               title: 'Focus behaviour',
               subtitle:
-                'The tooltip content appears on keyboard focus for native focusable html elements like: <button> or <input> or any focusable wix-style-react component.',
+                'The tooltip content appears on keyboard focus for native focusable html elements like: `<button>` or `<input>` or any focusable wix-style-react component.',
               source: examples.focus,
             }),
             liveCode({
@@ -178,9 +178,21 @@ export default {
           ]),
           columns([
             liveCode({
-              title: `Append to: (elm) => elm.getAttribute('attribute') === value`,
+              title:
+                "Append to: `(elm) => elm.getAttribute('attribute') === value`",
               subtitle: `Attach to custom parent element. Pass function that will accept element and return boolean whether given DOM element satisfies the provided testing function.`,
               source: examples.predicate,
+            }),
+          ]),
+
+          title('Correct position for `block` elements'),
+
+          columns([
+            liveCode({
+              title: 'Wrap with `<Box inline>`',
+              subtitle:
+                'Given element with `display: block;`, Tooltip might be displayed in wrong position. To fix, wrap with `<Box inline>`',
+              source: examples.inlineFix,
             }),
           ]),
         ],

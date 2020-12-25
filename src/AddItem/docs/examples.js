@@ -64,3 +64,18 @@ export const content = `
 export const showIcon = `<AddItem showIcon={false}>Add Item</AddItem>`;
 
 export const removePadding = `<AddItem showIcon={false} removePadding={true}>Add Item</AddItem>`;
+
+export const borderRadius = `
+  <Layout cols={1} justifyItems="center">
+    <Cell>
+      <div style={{ height: '40px', width: '40px' }}>
+        <AddItem size="tiny" removePadding borderRadius="100%" />
+      </div>
+    </Cell>
+    <Cell>
+      <div style={{ height: '100px', width: '100px' }}>
+        <AddItem size="medium" removePadding borderRadius="100%" />
+      </div>
+    </Cell>
+  </Layout>
+`;

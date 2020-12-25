@@ -4,7 +4,7 @@ import ReactTestUtils from 'react-dom/test-utils';
 import { iconButtonTestkitFactory } from 'wix-style-react/dist/testkit';
 
 export const carouselPrivateUniDriverFactory = base => {
-  const getCurrentSlide = () => base.$('.slick-current');
+  const getCurrentSlide = () => base.$('[aria-hidden="false"]');
 
   const arrowButtonDriver = direction =>
     iconButtonTestkitFactory(`[data-hook="${base.$(`${direction}-button`)}"]`);
@@ -21,8 +21,6 @@ export const carouselPrivateUniDriverFactory = base => {
         .$$('[data-hook="carousel-img"]')
         .map(async img => ReactTestUtils.Simulate.load(await img.getNative()));
     },
-    clickPrevious: () => base.$('[data-hook="prev-button"]').click(),
-    clickNext: () => base.$('[data-hook="next-button"]').click(),
     mouseOver: () => ReactBase(getCurrentSlide())._private.mouseOver(),
     mouseOut: () => ReactBase(getCurrentSlide())._private.mouseOut(),
     clickPageNavigationDot: index => {

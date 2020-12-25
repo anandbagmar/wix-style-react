@@ -1,12 +1,27 @@
 :import {
-  -st-from: "wix-ui-core/index.st.css";
-  -st-named: ToggleSwitch, ToggleSwitchStyle, ToggleSwitchColor, ToggleSwitchLayout;
+  -st-from: "wix-ui-core/dist/src/components/toggle-switch/ToggleSwitch.st.css";
+  -st-default: ToggleSwitch;
+}
+
+:import {
+  -st-from: "wix-ui-core/dist/src/components/toggle-switch/ToggleSwitchStyle.st.css";
+  -st-default: ToggleSwitchStyle;
+}
+
+:import {
+  -st-from: "wix-ui-core/dist/src/components/toggle-switch/ToggleSwitchColor.st.css";
+  -st-default: ToggleSwitchColor;
+}
+
+:import {
+  -st-from: "wix-ui-core/dist/src/components/toggle-switch/ToggleSwitchLayout.st.css";
+  -st-default: ToggleSwitchLayout;
 }
 
 :import {
   -st-from: "../Foundation/stylable/colors.st.css";
   -st-named:
-    B10, B20, B30, B40, B50,
+     THEME-COLOR-10,  THEME-COLOR-20,  THEME-COLOR-30,  THEME-COLOR-40,
     D50,
     F00,
     G10, G20, G30, G40,
@@ -57,10 +72,10 @@
 
 .root:skin(standard) {
   -st-mixin: ToggleSwitchColor(
-    colorUnchecked      value(B40),
-    colorChecked        value(B10),
-    colorUncheckedHover value(B30),
-    colorCheckedHover   value(B20),
+    colorUnchecked      value(THEME-COLOR-40),
+    colorChecked        value(THEME-COLOR-10),
+    colorUncheckedHover value(THEME-COLOR-30),
+    colorCheckedHover   value(THEME-COLOR-20),
     colorDisabled       value(D50)
   );
 }

@@ -1,5 +1,5 @@
-import { Simulate } from 'react-dom/test-utils';
 import { baseUniDriverFactory, ReactBase } from '../../test/utils/unidriver';
+import { Simulate } from 'react-dom/test-utils';
 import { textUniDriverFactory } from '../Text/Text.uni.driver';
 import { tooltipDriverFactory } from '../Tooltip/Tooltip.uni.driver';
 import { dataHooks } from './constants';
@@ -23,6 +23,10 @@ export const checkboxUniDriverFactory = (base, body) => {
 
   return {
     ...baseUniDriverFactory(base),
+    /**
+     * Click on the component root element.
+     * @returns {Promise<void>}
+     */
     click: async () => {
       if (base.type === 'react') {
         // eslint-disable-next-line no-restricted-properties
@@ -33,17 +37,43 @@ export const checkboxUniDriverFactory = (base, body) => {
         return base.click();
       }
     },
-    /** trigger focus on the element */
-    focus: reactBase.focus,
-    /** trigger blur on the element */
-    blur: reactBase.blur,
+    /**
+     * focuses the component.
+     * @returns {Void}
+     */
+    focus: () => reactBase.focus(),
+    /**
+     * blurs off the element.
+     * @returns {Void}
+     */
+    blur: () => reactBase.blur(),
+    /**
+     * Checks whether the checkbox is checked.
+     * @returns {Promise<boolean>}
+     */
     isChecked,
+    /**
+     * Checks whether the checkbox is disabled.
+     * @returns {Promise<boolean>}
+     */
     isDisabled: async () =>
       (await base.attr(DATA_ATTR.DATA_DISABLED)) === 'true',
+    /**
+     * Checks whether the checkbox's value is indeterminate.
+     * @returns {Promise<boolean>}
+     */
     isIndeterminate: async () =>
       (await getDataCheckType(base)) === DATA_ATTR.CHECK_TYPES.INDETERMINATE,
+    /**
+     * Checks whether the checkbox hasError prop is true.
+     * @returns {Promise<boolean>}
+     */
     hasError: async () =>
       (await base.attr(DATA_ATTR.DATA_HAS_ERROR)) === 'true',
+    /**
+     * Gets the error message.
+     * @returns {Promise<string>}
+     */
     getErrorMessage: async () => {
       try {
         const tooltipDriver = await getTooltipDriver();
@@ -52,7 +82,15 @@ export const checkboxUniDriverFactory = (base, body) => {
         throw new Error('Failed getting checkbox error message');
       }
     },
+    /**
+     * Gets checkbox's label.
+     * @returns {Promise<string>}
+     */
     getLabel: labelTextDriver.getText,
+    /**
+     * Gets the label's size.
+     * @returns {Promise<'tiny' | 'small' | 'medium'>}
+     */
     getLabelSize: labelTextDriver.getSize,
   };
 };

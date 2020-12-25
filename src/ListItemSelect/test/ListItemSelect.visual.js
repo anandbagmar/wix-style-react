@@ -1,8 +1,8 @@
 import React from 'react';
 import { storiesOf } from '@storybook/react';
 import Favorite from 'wix-ui-icons-common/Favorite';
-
-import ListItemSelect from '../ListItemSelect';
+import ListItemSelect, { listItemSelectBuilder } from '../ListItemSelect';
+import DropdownLayout from '../../DropdownLayout';
 import Box from '../../Box';
 
 const componentProps = {
@@ -51,6 +51,11 @@ const tests = [
         it: 'highlighted',
         props: { highlighted: true },
       },
+      {
+        it: 'selected and highlighted',
+        props: { selected: true, highlighted: true },
+      },
+
       {
         it: 'selected with subtitle',
         props: {
@@ -114,24 +119,63 @@ const tests = [
   },
 ];
 
-tests.forEach(({ describe, its }) => {
-  its.forEach(({ it, props }) => {
-    storiesOf(`ListItemSelect${describe ? '/' + describe : ''}`, module).add(
-      it,
-      () => (
-        <React.Fragment>
-          {permutations.map(_props => (
-            <Box backgroundColor="#eee">
-              <Box width="400px" margin={1}>
-                <ListItemSelect {..._props} {...props} />
+export const runTests = (
+  { themeName, testWithTheme } = { testWithTheme: i => i },
+) => {
+  tests.forEach(({ describe, its }) => {
+    its.forEach(({ it, props }) => {
+      storiesOf(
+        `${themeName ? `${themeName}|` : ''}ListItemSelect${
+          describe ? '/' + describe : ''
+        }`,
+        module,
+      ).add(it, () =>
+        testWithTheme(
+          <React.Fragment>
+            {permutations.map(_props => (
+              <Box backgroundColor="#eee">
+                <Box width="400px" margin={1}>
+                  <ListItemSelect {..._props} {...props} />
+                </Box>
+                <Box width="400px" margin={1}>
+                  <ListItemSelect checkbox {..._props} {...props} />
+                </Box>
               </Box>
-              <Box width="400px" margin={1}>
-                <ListItemSelect checkbox {..._props} {...props} />
-              </Box>
-            </Box>
-          ))}
-        </React.Fragment>
-      ),
-    );
+            ))}
+          </React.Fragment>,
+        ),
+      );
+    });
   });
-});
+
+  storiesOf(`${themeName ? `${themeName}|` : ''}ListItemSelect`, module).add(
+    'builder',
+    () =>
+      testWithTheme(
+        <DropdownLayout
+          visible
+          selectedId={1}
+          options={[
+            listItemSelectBuilder({
+              id: 0,
+              title: 'option 1',
+              subtitle: 'subtitle 1',
+              checkbox: true,
+            }),
+            listItemSelectBuilder({
+              id: 1,
+              title: 'option 2',
+              subtitle: 'subtitle 2',
+              checkbox: true,
+            }),
+            listItemSelectBuilder({
+              id: 2,
+              title: 'option 3',
+              subtitle: 'subtitle 3',
+              checkbox: true,
+            }),
+          ]}
+        />,
+      ),
+  );
+};

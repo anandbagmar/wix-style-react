@@ -2,29 +2,41 @@ import { baseUniDriverFactory } from '../../test/utils/unidriver';
 
 export const filePickerUniDriverFactory = base => {
   const error = base.$(`[data-hook=filePicker-error]`);
-  const input = base.$(`input`);
+  const input = base.$('[data-hook="file-upload-input"]');
   const subLabel = base.$(`[data-hook="sub-label"]`);
   const mainLabel = base.$(`[data-hook="main-label"]`);
 
   return {
     ...baseUniDriverFactory(base),
 
-    /** fulfilled if element has an error  */
+    /**
+     * Checks whether there's a visible error icon
+     * @return {Promise<boolean>}
+     */
     hasError: () => error.exists(),
 
-    /** returns FilePicker error message text  */
+    /**
+     * Gets error message text
+     * @return {Promise<string>}
+     */
     errorMessage: () => error.text(),
 
-    /** returns FilePicker input element  */
-    getInput: () => input.text(),
-
-    /** returns FilePicker subLabel text  */
+    /**
+     * Gets sub label text
+     * @return {Promise<string>}
+     */
     getSubLabel: () => subLabel.text(),
 
-    /** returns FilePicker mainLabel text  */
+    /**
+     * Gets main label text
+     * @return {Promise<string>}
+     */
     getMainLabel: () => mainLabel.text(),
 
-    /** returns FilePicker input name  */
+    /**
+     * Gets FilePicker input name
+     * @return {Promise<string>}
+     */
     getName: () => input._prop('name'),
   };
 };

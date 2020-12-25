@@ -1,11 +1,13 @@
-import addMonths from 'date-fns/add_months';
-import startOfMonth from 'date-fns/start_of_month';
-import endOfMonth from 'date-fns/end_of_month';
-import endOfDay from 'date-fns/end_of_day';
-import isWithinRange from 'date-fns/is_within_range';
-import isAfter from 'date-fns/is_after';
-import isBefore from 'date-fns/is_before';
-import differenceInCalendarDays from 'date-fns/difference_in_calendar_days';
+import {
+  addMonths,
+  startOfMonth,
+  endOfMonth,
+  endOfDay,
+  isWithinInterval,
+  isAfter,
+  isBefore,
+  differenceInCalendarDays,
+} from 'date-fns';
 
 /**
  * Date utils for a multi-month calendar view.
@@ -30,7 +32,7 @@ export class CalendarView {
    * @memberof CalendarView
    */
   isContained(date) {
-    return isWithinRange(date, this.startDate, this.endDate);
+    return isWithinInterval(date, { start: this.startDate, end: this.endDate });
   }
 
   isRangeFits(from, to) {

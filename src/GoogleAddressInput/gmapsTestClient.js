@@ -1,13 +1,11 @@
-import _ from 'lodash/fp';
-
-export const GEOCODE_RESULT = JSON.parse(
-  '{"formatted_address":"_formatted_address_","address_components":[{"types":["street_number"],"long_name":123}]}',
-);
-
-GEOCODE_RESULT.geometry = {
-  location: {
-    lat: () => 31.12,
-    lng: () => 33.34,
+export const GEOCODE_RESULT = {
+  formatted_address: '_formatted_address_',
+  address_components: [{ types: ['street_number'], long_name: 123 }],
+  geometry: {
+    location: {
+      lat: () => 31.12,
+      lng: () => 33.34,
+    },
   },
 };
 
@@ -26,9 +24,7 @@ export class GmapsTestClient {
   geocode({ request }) {
     const { address, placeId } = request;
     if (address || placeId) {
-      return Promise.resolve([
-        _.extend({}, GEOCODE_RESULT, { __called__: JSON.stringify(request) }),
-      ]);
+      return Promise.resolve([GEOCODE_RESULT]);
     }
     throw new Error('geocode() request params are malformed');
   }
@@ -36,9 +32,7 @@ export class GmapsTestClient {
   placeDetails({ request }) {
     const { placeId } = request;
     if (placeId) {
-      return Promise.resolve([
-        _.extend({}, GEOCODE_RESULT, { __called__: JSON.stringify(request) }),
-      ]);
+      return Promise.resolve([GEOCODE_RESULT]);
     }
     throw new Error('placeDetails() request params are malformed');
   }
@@ -48,9 +42,7 @@ export class GmapsTestClientWithFields extends GmapsTestClient {
   placeDetails({ request }) {
     const { fields } = request;
     if (fields) {
-      return Promise.resolve([
-        _.extend({}, GEOCODE_RESULT, { __called__: JSON.stringify(request) }),
-      ]);
+      return Promise.resolve([GEOCODE_RESULT]);
     }
     throw new Error('placeDetails() request params are malformed');
   }

@@ -76,15 +76,15 @@ export default App;
 ```
 
 ### Using the testkit drivers
-For convenience, the component drivers are consumed directly from the library. Each component provides a `TestkitFactory`, a small utility that takes a rendered node and a `dataHook` and returns the component driver.
+For convenience, the component drivers are consumed directly from the library. Each component provides a testkit, a small utility that takes a rendered node and a `dataHook` and returns the component driver.
 Here's an example how to import a driver to interact with a component in a `React` and `jsdom` environment.
 
 ```js
 //import
-import { inputTestkitFactory } from 'wix-style-react/dist/testkit';
+import { InputTestkit } from 'wix-style-react/dist/testkit';
 
 //initialize
-const inputDriver = inputTestkitFactory({
+const inputDriver = InputTestkit({
   wrapper: document.body, //prefer a more specific node
   dataHook: 'title-changer-input',
 });
@@ -106,22 +106,22 @@ import { render } from 'react-testing-library';
 import App from './App';
 
 import {
-  inputTestkitFactory,
-  headingTestkitFactory,
+  InputTestkit,
+  HeadingTestkit,
 } from 'wix-style-react/dist/testkit';
 
 describe('App', () => {
   it('should update the title', async () => {
     const { baseElement } = render(<App />);
 
-    const inputDriver = inputTestkitFactory({
+    const inputDriver = InputTestkit({
       wrapper: baseElement,
       dataHook: 'title-changer-input',
     });
 
     await inputDriver.enterText('hello world');
 
-    const headingDriver = headingTestkitFactory({
+    const headingDriver = HeadingTestkit({
       wrapper: baseElement,
       dataHook: 'app-title',
     });
@@ -138,9 +138,9 @@ In the upcoming months, all drivers will be available across the above platforms
 For example, puppeteer drivers should be consumed like this:
 
 ```js
-import { inputTestkitFactory } from 'wix-style-react/dist/testkit/puppeteer';
+import { InputTestkit } from 'wix-style-react/dist/testkit/puppeteer';
 
-const inputDriver = await inputTestkitFactory({dataHook: 'title-changer-input', page}); //puppeteer page instance
+const inputDriver = await InputTestkit({dataHook: 'title-changer-input', page}); //puppeteer page instance
 await inputDriver.enterText('hello world');
 ```
 

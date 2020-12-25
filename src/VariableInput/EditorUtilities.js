@@ -10,7 +10,7 @@ import {
 } from 'draft-js';
 import Tag from '../Tag';
 import { entityTypes, dataHooks } from './constants';
-import styles from './VariableInput.st.css';
+import { classes } from './VariableInput.st.css';
 
 /** Insert text in current cursor position */
 const insertText = (editorState, text) => {
@@ -63,9 +63,10 @@ const insertEntity = (editorState, { text, value }) => {
 const _escapeRegExp = text => text.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, '\\$&');
 /** Get variable with given prefix and suffix in the given string */
 const getMatchesInString = (str, prefix, suffix) => {
+  const escPrefixFirstChar = _escapeRegExp(prefix[0]);
   const escPrefix = _escapeRegExp(prefix);
   const escSuffix = _escapeRegExp(suffix);
-  const pattern = `${escPrefix}(.*?)${escSuffix}`;
+  const pattern = `(?:${escPrefixFirstChar})*(${escPrefix}(.*?)${escSuffix})`;
   const regex = new RegExp(pattern, 'g');
   let part;
   const parts = [];
@@ -119,13 +120,14 @@ const stringToContentState = ({
     let indexOffset = 0;
     const entityRanges = [];
     getMatchesInString(row, prefix, suffix).forEach(match => {
-      const [placeholder, value] = match;
+      const [wholeMatch, placeholder, value] = match;
+      const matchIndex = match.index + wholeMatch.indexOf(placeholder);
       const text = variableParser(value) || false;
       if (text) {
         const contentPlaceholder = ` ${text} `;
         rowStr = rowStr.replace(placeholder, contentPlaceholder);
         entityRanges.push({
-          offset: match.index + indexOffset,
+          offset: matchIndex + indexOffset,
           length: contentPlaceholder.length,
           key: entityIndex,
         });
@@ -165,7 +167,7 @@ const decoratorFactory = ({ tag: { size, disabled } }) => {
       },
       component: ({ offsetKey, children }) => {
         return (
-          <span data-offset-key={offsetKey} className={styles.textWrapper}>
+          <span data-offset-key={offsetKey} className={classes.textWrapper}>
             {children}
           </span>
         );
@@ -190,13 +192,12 @@ const decoratorFactory = ({ tag: { size, disabled } }) => {
           <span
             data-offset-key={offsetKey}
             contentEditable={false}
-            className={styles.tagWrapper}
+            className={classes.tagWrapper}
           >
-            <span className={styles.textWrapper}> </span>
+            <span className={classes.textWrapper}> </span>
             <Tag
               id={`variableinput-tag-${entityKey}`}
               dataHook={dataHooks.tag}
-              className={styles.tagEntity}
               removable={false}
               size={size}
               disabled={disabled}
@@ -204,7 +205,7 @@ const decoratorFactory = ({ tag: { size, disabled } }) => {
             >
               {text}
             </Tag>
-            <span className={styles.textWrapper}> </span>
+            <span className={classes.textWrapper} />{' '}
           </span>
         );
       },

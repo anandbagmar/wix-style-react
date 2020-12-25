@@ -2,18 +2,16 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 import DayPickerInput from 'react-day-picker/DayPickerInput';
-import isSameDay from 'date-fns/is_same_day';
-import setYear from 'date-fns/set_year';
-import setMonth from 'date-fns/set_month';
-import setDate from 'date-fns/set_date';
-
+import { isSameDay, setYear, setMonth, setDate } from 'date-fns';
 import Popover from '../Popover';
 import Calendar from '../Calendar';
 import DateInput from './DateInput';
 
 import { PopoverCommonProps } from '../common/PropTypes/PopoverCommon';
+import deprecationLog from '../utils/deprecationLog';
 
-import styles from './DatePicker.st.css';
+import { st, classes } from './DatePicker.st.css';
+import { dataHooks } from './constants';
 
 /**
  * DatePicker component
@@ -36,7 +34,6 @@ export default class DatePicker extends React.PureComponent {
 
   static defaultProps = {
     locale: 'en',
-    dateFormat: 'MM/DD/YYYY',
     filterDate: () => true,
     rtl: false,
     width: 150,
@@ -44,9 +41,9 @@ export default class DatePicker extends React.PureComponent {
     disabled: false,
     inputDataHook: 'date-picker-input',
     popoverProps: {
-      placement: 'top-start',
       zIndex: 1,
     },
+    firstDayOfWeek: 1,
   };
 
   constructor(props) {
@@ -59,6 +56,10 @@ export default class DatePicker extends React.PureComponent {
       isOpen: initialOpen,
       isDateInputFocusable: !props.initialOpen,
     };
+
+    deprecationLog(
+      'dateFormat prop is deprecated and will be removed as part of the next major version, please use dateFormatV2',
+    );
   }
 
   openCalendar = () => {
@@ -102,13 +103,15 @@ export default class DatePicker extends React.PureComponent {
     const isChanged = !isSameDay(value, this.props.value);
 
     if (isChanged) {
+      const oldValue =
+        this.props.value || new Date(new Date().setHours(0, 0, 0, 0));
       const newValue = [
         [value.getFullYear(), setYear],
         [value.getMonth(), setMonth],
         [value.getDate(), setDate],
       ].reduce(
         (_value, [datePart, setter]) => setter(_value, datePart),
-        this.props.value,
+        oldValue,
       );
 
       this.setState({ value: newValue }, () => this.props.onChange(newValue));
@@ -129,10 +132,6 @@ export default class DatePicker extends React.PureComponent {
     // keyHandler(this.state.value);
   };
 
-  onClickOutside() {
-    this.closeCalendar();
-  }
-
   _renderInputWithRefForward = () =>
     React.forwardRef((props, ref) => this._renderInput({ ...props, ref }));
 
@@ -146,8 +145,10 @@ export default class DatePicker extends React.PureComponent {
       status,
       statusMessage,
       customInput,
+      dateFormatV2,
       dateFormat,
       inputProps = {},
+      locale,
     } = this.props;
     const { onFocus, ...inputPropsRest } = inputProps;
     return (
@@ -172,7 +173,9 @@ export default class DatePicker extends React.PureComponent {
         statusMessage={statusMessage}
         autoSelect={false}
         dateFormat={dateFormat}
+        dateFormatV2={dateFormatV2}
         customInput={customInput}
+        locale={locale}
         {...(customInput ? customInput.props : {})}
         {...inputPropsRest}
       />
@@ -181,6 +184,7 @@ export default class DatePicker extends React.PureComponent {
 
   render() {
     const {
+      className,
       showMonthDropdown,
       showYearDropdown,
       filterDate,
@@ -194,12 +198,19 @@ export default class DatePicker extends React.PureComponent {
       zIndex,
       dataHook,
       popoverProps,
+      firstDayOfWeek,
     } = this.props;
 
     const { isOpen, value } = this.state;
 
+    const popoverUpdatedProps = {
+      placement: rtl ? 'top-end' : 'top-start',
+      ...popoverProps,
+    };
+
     const calendarProps = {
-      dataHook: 'date-picker-calendar',
+      dataHook: dataHooks.datePickerCalendar,
+      className: classes.calendar,
       locale,
       showMonthDropdown,
       showYearDropdown,
@@ -211,32 +222,42 @@ export default class DatePicker extends React.PureComponent {
       value,
       shouldCloseOnSelect,
       numOfMonths: twoMonths ? 2 : 1,
+      firstDayOfWeek,
     };
 
     return (
-      <Popover
-        {...styles('root', {}, this.props)}
-        dataHook={dataHook}
-        onClickOutside={this.closeCalendar}
-        appendTo="parent"
-        shown={isOpen}
-        zIndex={zIndex}
-        {...popoverProps}
+      <div
+        className={st(classes.root, className)}
+        data-hook={dataHook}
+        style={{ width: width }}
       >
-        <Popover.Element>
-          <div style={{ width }} data-hook="date-picker-input-container">
-            <DayPickerInput
-              component={this._renderInputWithRefForward()}
-              keepFocus={false}
-            />
-          </div>
-        </Popover.Element>
-        <Popover.Content>
-          <div data-hook={calendarDataHook}>
-            <Calendar {...calendarProps} />
-          </div>
-        </Popover.Content>
-      </Popover>
+        <Popover
+          className={classes.popover}
+          dataHook={dataHooks.datePickerPopover}
+          onClickOutside={this.closeCalendar}
+          appendTo="parent"
+          shown={isOpen}
+          zIndex={zIndex}
+          {...popoverUpdatedProps}
+        >
+          <Popover.Element>
+            <div
+              className={classes.inputContainer}
+              data-hook={dataHooks.datePickerInputContainer}
+            >
+              <DayPickerInput
+                component={this._renderInputWithRefForward()}
+                keepFocus={false}
+              />
+            </div>
+          </Popover.Element>
+          <Popover.Content>
+            <div data-hook={calendarDataHook}>
+              <Calendar {...calendarProps} />
+            </div>
+          </Popover.Content>
+        </Popover>
+      </div>
     );
   }
 }
@@ -244,17 +265,25 @@ export default class DatePicker extends React.PureComponent {
 DatePicker.propTypes = {
   ...Calendar.propTypes,
 
+  /** A single CSS class name to be appended to the root element. */
+  className: PropTypes.string,
+
   /** Can provide Input with your custom props. If you don't need a custom input element, and only want to pass props to the Input, then use inputProps prop. I think this is not in use outside of WSR, and can be deprecated. */
   customInput: PropTypes.node,
 
   /** Properties appended to the default Input component or the custom Input component. */
   inputProps: PropTypes.object,
 
-  /** Custom date format, can be either:
-   * * `string` of tokens (see [`date-fns` docs](https://date-fns.org/v1.29.0/docs/format) for list of supported tokens)
-   * * `function` of signature `Date -> String`
+  /** this prop is deprecated and should not be used
+   * @deprecated
    */
   dateFormat: PropTypes.oneOfType([PropTypes.string, PropTypes.func]),
+
+  /** Custom date format V2, can be either:
+   * * `string` of tokens (see [`date-fns V2` docs](https://date-fns.org/v2.15.0/docs/format) for list of supported tokens)
+   * * `function` of signature `Date -> String`
+   */
+  dateFormatV2: PropTypes.oneOfType([PropTypes.string, PropTypes.func]),
 
   /** DatePicker instance locale */
   locale: PropTypes.oneOfType([
@@ -296,7 +325,7 @@ DatePicker.propTypes = {
   /** placeholder of the Input */
   placeholderText: PropTypes.string,
 
-  /** RTL mode */
+  /** RTL mode. When true, the keyboard navigation will be changed means pressing on the right arrow will navigate to the previous day, and pressing on the left arrow will navigate to the next day. */
   rtl: PropTypes.bool,
 
   /** The selected date */
@@ -317,5 +346,9 @@ DatePicker.propTypes = {
   /** set desired z-index of DatePicker popover */
   zIndex: PropTypes.number,
 
+  /** Sets the popover props. The default placement value depends on the rtl prop - would be 'top-start' when rtl=false and 'top-end' in case of rtl=ture. */
   popoverProps: PropTypes.shape(PopoverCommonProps),
+
+  /** First day of the week, allowing only from 0 to 6 (Sunday to Saturday) */
+  firstDayOfWeek: PropTypes.oneOf([0, 1, 2, 3, 4, 5, 6]),
 };

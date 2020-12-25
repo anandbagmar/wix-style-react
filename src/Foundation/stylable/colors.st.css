@@ -98,6 +98,7 @@
   D10-03: calc_rgba(value(D10), 0.03);
   D10-05: calc_rgba(value(D10), 0.05);
   D10-10: calc_rgba(value(D10), 0.1);
+  D10-12: calc_rgba(value(D10), 0.12);
   D10-20: calc_rgba(value(D10), 0.2);
   D10-30: calc_rgba(value(D10), 0.3);
   D10-66: calc_rgba(value(D10), 0.66);
@@ -114,4 +115,19 @@
   B00-24: calc_rgba(value(B00), 0.24);
   B00-42: calc_rgba(value(B00), 0.42);
   B00-48: calc_rgba(value(B00), 0.48);
+
+  /* Theme */
+  THEME-COLOR-00: var(--wsr-color-00, value(B00));
+  THEME-COLOR-05: var(--wsr-color-05, value(B05));
+  THEME-COLOR-10: var(--wsr-color-10, value(B10));
+  THEME-COLOR-20: var(--wsr-color-20, value(B20));
+  THEME-COLOR-30: var(--wsr-color-30, value(B30));
+  THEME-COLOR-40: var(--wsr-color-40, value(B40));
+  THEME-COLOR-50: var(--wsr-color-50, value(B50));
+  THEME-COLOR-60: var(--wsr-color-60, value(B60));
+  THEME-TEXT-COLOR-PRIMARY: var(--wsr-text-color-primary, value(D10));
+  THEME-TEXT-COLOR-PRIMARY-LIGHT: var(--wsr-text-color-primary-light, value(D80));
+  THEME-TEXT-COLOR-SECONDARY: var(--wsr-text-color-secondary, value(D20));
+  THEME-TEXT-COLOR-SECONDARY-LIGHT: var(--wsr-text-color-secondary-light, value(D40));
+  THEME-DIVIDER-COLOR: var(--wsr-divider-color, value(D60));
 }

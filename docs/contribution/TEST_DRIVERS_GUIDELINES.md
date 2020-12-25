@@ -113,17 +113,17 @@ The above actions can be exposed in a private driver to unit-test the component,
 ## Exposed Testkits
 The following process is automated, so no action is needed from the developer side.
 
-1. Each component has `<ComponentName>TestkitFactory` function which is exposed as public API.
+1. Each component has `<ComponentName>Testkit` function which is exposed as public API.
 1. They are imported through a special path, depending on platform, for example:
     ```js
-    import {buttonTestkitFactory} from 'wix-style-react/dist/testkit'; // ReactDom
-    import {buttonTestkitFactory} from 'wix-style-react/dist/testkit/enzyme';
-    import {buttonTestkitFactory} from 'wix-style-react/dist/testkit/protractor';
-    import {buttonTestkitFactory} from 'wix-style-react/dist/testkit/puppeteer';
+    import {ButtonTestkit} from 'wix-style-react/dist/testkit'; // ReactDom
+    import {ButtonTestkit} from 'wix-style-react/dist/testkit/enzyme';
+    import {ButtonTestkit} from 'wix-style-react/dist/testkit/protractor';
+    import {ButtonTestkit} from 'wix-style-react/dist/testkit/puppeteer';
     ```
 1. Testkit must be invoked with wrapper (DOM node for vanilla, enzyme wrapper for enzyme) and `dataHook`.
     ```js
-    import {buttonTestkitFactory} from 'wix-style-react/dist/testkit';
-    const wrapper = ReactTestUtils.renderIntoDocument(<Myapp>);
-    const buttonDriver = buttonTestkitFactory({wrapper, dataHook: 'my-button'})
+    import {ButtonTestkit} from 'wix-style-react/dist/testkit';
+    const wrapper = ReactTestUtils.renderIntoDocument(<MyApp>);
+    const buttonDriver = ButtonTestkit({wrapper, dataHook: 'my-button'})
     ```

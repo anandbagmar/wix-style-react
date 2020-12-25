@@ -5,11 +5,11 @@ import PropTypes from 'prop-types';
 import * as TabPropTypes from '../constants/tab-prop-types';
 import TabItem from '../TabItem';
 import withItemMaxWidth from '../withItemMaxWidth';
-import styles from '../../Tabs.st.css';
+import { classes } from '../../Tabs.st.css';
 
 class TabItems extends React.Component {
   renderItem(item) {
-    const { activeId, type, width, onClick, itemMaxWidth } = this.props;
+    const { activeId, type, width, onClick, itemMaxWidth, size } = this.props;
     return (
       <TabItem
         key={item.id}
@@ -20,13 +20,14 @@ class TabItems extends React.Component {
         type={type}
         width={width}
         onItemClick={onClick}
+        size={size}
       />
     );
   }
 
   render() {
     const { items, type, dataHook } = this.props;
-    const className = classNames(styles.itemsContainer, styles[type]);
+    const className = classNames(classes.itemsContainer, classes[type]);
 
     return (
       <ul

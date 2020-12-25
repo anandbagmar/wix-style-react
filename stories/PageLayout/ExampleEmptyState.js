@@ -1,13 +1,4 @@
 /* eslint-disable */
-import React from 'react';
-import Page from 'wix-style-react/Page';
-import Button from 'wix-style-react/Button';
-import TextButton from 'wix-style-react/TextButton';
-import Add from 'wix-ui-icons-common/Add';
-import Breadcrumbs from 'wix-style-react/Breadcrumbs';
-import { Row, Col, Container } from 'wix-style-react/Grid';
-import EmptyState from 'wix-style-react/EmptyState';
-
 class ExampleEmptyState extends React.Component {
   renderHeader() {
     const ActionBar = () => {

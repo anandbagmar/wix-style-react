@@ -1,9 +1,9 @@
 import React from 'react';
 import { storiesOf } from '@storybook/react';
 import Breadcrumbs from '../Breadcrumbs';
-import Box from 'wix-style-react/Box';
 import { SIZES, THEMES } from '../constnats';
 import { breadcrumbsTestkitFactory } from '../../../testkit';
+import { Box } from 'wix-style-react';
 
 const sizes = Object.values(SIZES);
 
@@ -78,6 +78,19 @@ const tests = [
         it: 'disabled items',
         props: {
           items: items.map(item => ({ ...item, disabled: true })),
+        },
+      },
+      {
+        it: 'long text items',
+        props: {
+          items: [
+            { id: 1, value: 'first item' },
+            {
+              id: 2,
+              value:
+                'This is a very very very very long text that will be cropped by ellipsis at some point',
+            },
+          ],
         },
       },
     ],

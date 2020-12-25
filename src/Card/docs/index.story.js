@@ -91,7 +91,7 @@ const { Header, Subheader, Content, Divider} = Card;
               compact: false,
             },
             {
-              title: 'Sub Header',
+              title: 'Divider',
               description:
                 "Card's divider and be applied between different content using <Card.Divider/>",
               source: `
@@ -143,7 +143,7 @@ const { Header, Subheader, Content, Divider} = Card;
             {
               title: 'Collapsable',
               description:
-                'A collapsed card behavior can be achieved by using the <Collapse/> component which is a proxy for `react-collapse`',
+                'A collapsed card behavior can be achieved by using the <Collapse/> component',
               source: `
                 class CollapsableCard extends React.Component {
                   state = { isOpen: true };

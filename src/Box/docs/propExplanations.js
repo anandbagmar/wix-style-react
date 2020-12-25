@@ -53,26 +53,31 @@ The component extends the values for \`padding\` and \`margin\`, by accepting th
 1. A numeric value - multiplied by the defined spacing unit according to the design system, which is \`6px\`.
 2. A predefined spacing value with a semantic name (tiny, small, medium and large).
 3. Space-separated values that are represented by a string (for example: "3px 3px").
+4. A Spacing Token - SP1, SP2, etc. - where the number is multiplied by the spacing unit.
 
 Note that the \`padding\` and \`margin\` area properties (\`paddingLeft\`, \`marginTop\`, etc.) support the values specified above.
     `,
     example: `
-<Box
-  align="center"
-  verticalAlign="middle"
-  padding="medium"
-  margin={2}
->
-  <Button
-    as="button"
-    onClick={() => "Clicked!"}
-    priority="primary"
-    size="medium"
-    skin="standard"
+<Box padding="SP5" background="cadetblue" width="fit-content">
+  <Box
+    paddingRight={1}
+    paddingLeft="SP2"
+    paddingTop="medium"
+    paddingBottom="4px"
+    background="turquoise"
   >
-    Button
-  </Button>
+    <Button
+      as="button"
+      onClick={() => 'Clicked!'}
+      priority="primary"
+      size="medium"
+      skin="standard"
+    >
+      Button
+    </Button>
+  </Box>
 </Box>
+  
       `,
   },
   sizing: {

@@ -1,3 +1,4 @@
+import React from 'react';
 import {
   header,
   tabs,
@@ -7,16 +8,31 @@ import {
   title,
   columns,
   divider,
-  code as baseCode,
+  example as baseExample,
+  playground,
   api,
   testkit,
 } from 'wix-storybook-utils/Sections';
-import { storySettings } from './storySettings';
+
+import { storySettings } from '../test/storySettings';
 import allComponents from '../../../stories/utils/allComponents';
 import VerticalTabs from '..';
 import * as examples from './verticalTabsExample';
 
-const code = config => baseCode({ components: allComponents, ...config });
+const example = config => baseExample({ components: allComponents, ...config });
+
+const exampleChildren = [
+  {
+    label: 'Grouped tab items',
+    value: (
+      <VerticalTabs.TabsGroup title="Group Title">
+        <VerticalTabs.TabItem>Tab Item 1</VerticalTabs.TabItem>
+        <VerticalTabs.TabItem>Tab Item 2</VerticalTabs.TabItem>
+        <VerticalTabs.TabItem>Tab Item 3</VerticalTabs.TabItem>
+      </VerticalTabs.TabsGroup>
+    ),
+  },
+];
 
 export default {
   category: storySettings.category,
@@ -27,55 +43,55 @@ export default {
 
   componentProps: {
     size: 'medium',
+    children: exampleChildren[0].value,
+  },
+
+  exampleProps: {
+    children: exampleChildren,
   },
 
   sections: [
     header({
-      sourceUrl:
-        'https://github.com/wix/wix-style-react/tree/master/src/VerticalTabs/',
+      sourceUrl: `https://github.com/wix/wix-style-react/tree/master/src/${VerticalTabs.displayName}/`,
     }),
 
     tabs([
       tab({
         title: 'Description',
         sections: [
-          columns([
-            description({
-              title: 'Description',
-              text:
-                'Vertical Tabs component to be used for easily switching between different side content views.',
-            }),
-          ]),
+          description({
+            title: 'Description',
+            text:
+              'Vertical tabs is a navigation component. It allows to create lists that can be customized by a user. Use it in compact layouts when tabs have many items.',
+          }),
 
-          columns([
-            importExample("import { VerticalTabs } from 'wix-style-react';"),
-          ]),
+          importExample(),
 
           divider(),
 
           title('Examples'),
 
-          code({
+          example({
             title: 'Vertical Tabs With Suffix and one Disabled tab',
             source: examples.verticalTabsSuffixExample,
           }),
 
-          code({
+          example({
             title: 'Vertical Tabs With Suffix - Small Size',
             source: examples.verticalTabsSmallExample,
           }),
 
-          code({
+          example({
             title: 'Vertical Tabs With Footer',
             source: examples.verticalTabsFooterExample,
           }),
 
-          code({
+          example({
             title: 'Vertical Tabs - Tab Selection',
             source: examples.verticalTabsSelectedExample,
           }),
 
-          code({
+          example({
             title: 'Vertical Tabs With Prefix and Multiple Tab Groups',
             source: examples.verticalTabsExample,
           }),
@@ -85,6 +101,7 @@ export default {
       ...[
         { title: 'API', sections: [api()] },
         { title: 'Testkit', sections: [testkit()] },
+        { title: 'Playground', sections: [playground()] },
       ].map(tab),
     ]),
   ],

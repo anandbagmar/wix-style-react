@@ -21,8 +21,12 @@ import BasicExample from '!raw-loader!./examples/BasicExample';
 import FootnoteExample from '!raw-loader!./examples/FootnoteExample';
 import ModalExample from '!raw-loader!./examples/ModalExample';
 import PageExample from '!raw-loader!./examples/PageExample';
-import TableExmaple from '!raw-loader!./examples/TableExample';
+import PersistentDividersExample from '!raw-loader!./examples/PersistentDividersExample';
+import TableExample from '!raw-loader!./examples/TableExample';
 import MarketingExample from '!raw-loader!./examples/MarketingExample';
+import HelpButtonExample from '!raw-loader!./examples/HelpButtonExample';
+import DropdownExample from '!raw-loader!./examples/DropdownExample';
+import InputExample from '!raw-loader!./examples/InputExample';
 import CustomModalLayout from '..';
 import Checkbox from '../../Checkbox';
 import Text from '../../Text';
@@ -101,20 +105,43 @@ export default {
             source: ModalExample,
           }),
           example({
-            title: 'Table example - No content padding',
+            title: 'Persistent Dividers Example',
             text:
-              'A simple example with a table as the content and without content padding',
-            source: TableExmaple,
+              'If you need the header or footer dividers to always show, you can use the `showHeaderDivider` and `showFooterDivider` props',
+            source: PersistentDividersExample,
           }),
           example({
-            title: 'Marketing Layout example',
-            text: 'A custom modal example with a marketing layout',
+            title: 'Table example - No content padding',
+            text:
+              'A simple example with a table as the content and without content padding.',
+            source: TableExample,
+          }),
+          example({
+            title: 'Help Button Example',
+            text: 'A basic example with a help button shown.',
+            source: HelpButtonExample,
+          }),
+          example({
+            title: 'Marketing Layout Example',
+            text: 'A custom modal example with a marketing layout.',
             source: MarketingExample,
           }),
           example({
-            title: 'Custom Page Example',
-            text: 'Open a custom page in a modal',
+            title: 'Custom Page & Title Example',
+            text: 'Open a custom page in a modal with a custom title.',
             source: PageExample,
+          }),
+          example({
+            title: 'Input Example',
+            text:
+              'When Input element is inside modal, outline at the top and bottom is cut. In order to see full outline, Box component with 3px of height has to be used before and after Input element.',
+            source: InputExample,
+          }),
+          example({
+            title: 'Opening popovers from a modal',
+            text:
+              "CustomModalLayout doesn't let to overflow the content. To make popover elements work properly they need to be used with popover prop appendTo set to window.",
+            source: DropdownExample,
           }),
         ],
       }),

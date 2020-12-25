@@ -1,21 +1,21 @@
 import ReactTestUtils from 'react-dom/test-utils';
-import dropdownLayoutDriverFactory from '../DropdownLayout/DropdownLayout.driver';
+import dropdownBaseDriverFactory from '../DropdownBase/DropdownBase.legacy.driver';
 
 const calendarDriverFactory = ({ element }) => {
   const getCalendar = () => element.querySelector('.DayPicker');
   const getNthDay = n =>
     element.querySelectorAll(
-      '[role="gridcell"]:not([class*="outside"]):not([class*="disabled"])',
+      '[role="gridcell"]:not([class*="disabled"])>[data-outsideday="false"]',
     )[n];
   const getNthDayOfTheMonth = n =>
-    element.querySelectorAll('[role="gridcell"]:not([class*="outside"])')[n];
+    element.querySelectorAll('[role="gridcell"][n]>[data-outsideday="false"]');
   const getDayOfDate = (year, month, day) =>
     element.querySelector(
-      `[role="gridcell"]:not([class*="outside"])>[data-date='${year}-${month}-${day}']`,
+      `[role="gridcell"]>[data-outsideday="false"][data-date='${year}-${month}-${day}']`,
     );
   const getSelectedDay = () =>
     element.querySelector(
-      '[role="gridcell"][aria-selected=true]:not(.DayPicker-Day--outside)',
+      '[role="gridcell"][aria-selected=true]>[data-outsideday="false"]',
     );
   const getYearDropdown = () =>
     element.querySelector('[data-hook="datepicker-year-dropdown-button"]');
@@ -29,20 +29,19 @@ const calendarDriverFactory = ({ element }) => {
     element.querySelector('[data-hook="datepicker-year-caption"]');
   const getMonthAndYear = () => [getMonthCaption(), getYearCaption()];
   const getNthWeekDayName = n =>
-    element.querySelectorAll('[class="DayPicker-Weekday"] abbr')[n];
+    element.querySelectorAll('[class*="DayPicker-Weekday"] abbr')[n];
   const getPrevMonthButton = () =>
     element.querySelector('[data-hook="datepicker-left-arrow"]');
   const getNextMonthButton = () =>
     element.querySelector('[data-hook="datepicker-right-arrow"]');
   const getFocusedDay = () => element.querySelector('.DayPicker-Day:focus');
-  const getVisuallyUnfocusedDay = () =>
-    element.querySelector('.DayPicker-Day--unfocused');
+  const getVisuallyUnfocusedDay = () => element.querySelector('.unfocused');
   const getMonthContainers = () => element.querySelectorAll('.DayPicker-Month');
   const getVisibleMonths = () =>
-    element.querySelectorAll('[class="DayPicker-Month"]');
+    element.querySelectorAll('[class*="DayPicker-Month"]');
   const getSelectedDays = () =>
     element.querySelectorAll(
-      '[role="gridcell"][aria-selected=true]:not(.DayPicker-Day--outside)',
+      '[role="gridcell"][aria-selected=true]>[data-outsideday="false"]',
     );
 
   const driver = {
@@ -136,7 +135,7 @@ const calendarDriverFactory = ({ element }) => {
     triggerKeyDown: params =>
       ReactTestUtils.Simulate.keyDown(getFocusedDay(), params),
     isFocusedDayVisuallyUnfocused: () =>
-      getFocusedDay().classList.contains('DayPicker-Day--unfocused'),
+      getFocusedDay().classList.contains('unfocused'),
     containsVisuallyUnfocusedDay: () => !!getVisuallyUnfocusedDay(),
     isTwoMonthsLayout: () => getMonthContainers().length === 2,
 
@@ -145,11 +144,13 @@ const calendarDriverFactory = ({ element }) => {
         element.querySelector('[data-hook="datepicker-month-dropdown-button"]'),
       );
 
-      return dropdownLayoutDriverFactory({
+      const dropdownBaseDriver = dropdownBaseDriverFactory({
         element: element.querySelector(
-          '[data-hook="datepicker-month-dropdown-menu"]',
+          '[data-hook="datepicker-month-dropdown"]',
         ),
       });
+
+      return dropdownBaseDriver.getDropdownLayoutDriver();
     },
 
     getYearDropdownDriver: () => {
@@ -157,18 +158,20 @@ const calendarDriverFactory = ({ element }) => {
         element.querySelector('[data-hook="datepicker-year-dropdown-button"]'),
       );
 
-      return dropdownLayoutDriverFactory({
+      const dropdownBaseDriver = dropdownBaseDriverFactory({
         element: element.querySelector(
-          '[data-hook="datepicker-year-dropdown-menu"]',
+          '[data-hook="datepicker-year-dropdown"]',
         ),
       });
+
+      return dropdownBaseDriver.getDropdownLayoutDriver();
     },
     getNumOfVisibleMonths: () => getVisibleMonths().length,
     getNumOfSelectedDays: () => getSelectedDays().length,
     getSelectedDays: () => {
       const result = [];
       getSelectedDays().forEach(item => {
-        const date = item.childNodes[0]
+        const date = item
           .getAttribute('data-date')
           .split('-')
           .map(part => parseInt(part));

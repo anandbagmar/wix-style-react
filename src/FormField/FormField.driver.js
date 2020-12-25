@@ -4,7 +4,7 @@ import { dataHooks } from './constants';
 
 const formFieldDriver = ({ element, dataHook }) => {
   const byHook = hook => element.querySelector(`[data-hook*="${hook}"]`);
-  const charactersCounter = () => byHook('formfield-counter');
+  const charactersCounter = () => byHook(dataHooks.counter);
 
   const tooltipTestkit = () =>
     tooltipDriverFactory({
@@ -15,13 +15,18 @@ const formFieldDriver = ({ element, dataHook }) => {
   return {
     exists: () => !!element,
     element: () => element,
-    getChildren: () => byHook('formfield-children'),
-    getLabel: () => byHook('formfield-label'),
-    isRequired: () => !!byHook('formfield-asterisk'),
+    /** get children */
+    getChildren: () => byHook(dataHooks.children),
+    /** get label */
+    getLabel: () => byHook(dataHooks.label),
+    /** returns true whether form field is required */
+    isRequired: () => !!byHook(dataHooks.asterisk),
+    /** returns the length left */
     getLengthLeft: () => {
       const counter = charactersCounter();
       return counter ? parseInt(counter.innerHTML, 10) : null;
     },
+    /** returns whether the form field length is exceeded */
     isLengthExceeded: () => {
       const counter = charactersCounter();
       if (counter) {
@@ -30,12 +35,15 @@ const formFieldDriver = ({ element, dataHook }) => {
       }
       return false;
     },
+    /** returns true whether form field has tooltip */
     hasTooltip: () => tooltipTestkit().exists(),
+    /** returns tooltip text of the info content */
     getInfoContent: () => {
       const tooltipDriver = tooltipTestkit();
       tooltipDriver.mouseEnter();
       return tooltipDriver.getContentElement().textContent;
     },
+    /** get form field suffix */
     getSuffix: () => byHook(dataHooks.suffix),
   };
 };

@@ -11,4 +11,18 @@
   spacing42: 42px;
   spacing48: 48px;
   spacing78: 78px;
+  spacing90: 90px;
+
+  Spacing: 6px;
+
+  SP1: calc(value(Spacing) * 1);
+  SP2: calc(value(Spacing) * 2);
+  SP3: calc(value(Spacing) * 3);
+  SP4: calc(value(Spacing) * 4);
+  SP5: calc(value(Spacing) * 5);
+  SP6: calc(value(Spacing) * 6);
+  SP7: calc(value(Spacing) * 7);
+  SP8: calc(value(Spacing) * 8);
+  SP9: calc(value(Spacing) * 9);
+  SP10: calc(value(Spacing) * 10);
 }

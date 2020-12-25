@@ -5,7 +5,7 @@
 import React from 'react';
 import ReactTestUtils from 'react-dom/test-utils';
 import { Button } from 'wix-style-react';
-import { buttonTestkitFactory } from 'wix-style-react/dist/testkit';
+import { ButtonTestkit } from 'wix-style-react/dist/testkit';
 
 const div = document.createElement('div');
 const dataHook = 'myDataHook';
@@ -20,7 +20,7 @@ const wrapper = div.appendChild(
   ReactTestUtils.renderIntoDocument(component, { dataHook })
 );
 
-const testkit = buttonTestkitFactory({ wrapper, dataHook });
+const testkit = ButtonTestkit({ wrapper, dataHook });
 
 //Do tests
 describe('App', () => {
@@ -36,7 +36,7 @@ describe('App', () => {
 import React from 'react';
 import { mount } from 'enzyme';
 import { Button } from 'wix-style-react';
-import { buttonTestkitFactory } from 'wix-style-react/dist/testkit/enzyme';
+import { ButtonTestkit } from 'wix-style-react/dist/testkit/enzyme';
 
 const dataHook = 'myDataHook';
 const wrapper = mount(
@@ -45,7 +45,7 @@ const wrapper = mount(
   </div>
 );
 
-const testkit = buttonTestkitFactory({ wrapper, dataHook });
+const testkit = ButtonTestkit({ wrapper, dataHook });
 
 //Do tests
 describe('App', () => {
@@ -61,14 +61,14 @@ describe('App', () => {
 
 ```javascript
 import puppeteer from 'puppeteer';
-import { buttonTestkitFactory } from 'wix-style-react/dist/testkit/puppeteer';
+import { ButtonTestkit } from 'wix-style-react/dist/testkit/puppeteer';
 
 //puppeteer setup
 const browser = await puppeteer.launch();
 const page = await browser.newPage();
 
 //Create an element testkit via the data-hook attribute
-const testkit = await buttonTestkitFactory({
+const testkit = await ButtonTestkit({
   dataHook: 'myDataHook',
   page,
 });
@@ -87,10 +87,10 @@ describe('App', () => {
 > Element should be rendered with a data-hook into the DOM `<Button dataHook="myDataHook" />`
 
 ```javascript
-import { buttonTestkitFactory } from 'wix-style-react/dist/testkit/protractor';
+import { ButtonTestkit } from 'wix-style-react/dist/testkit/protractor';
 
 //Create an element testkit via the data-hook attribute
-const testkit = buttonTestkitFactory({ dataHook: 'myDataHook' });
+const testkit = ButtonTestkit({ dataHook: 'myDataHook' });
 
 await browser.get('/page-where-button-appears'); //Your application url
 

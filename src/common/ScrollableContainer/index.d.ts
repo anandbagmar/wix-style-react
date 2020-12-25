@@ -1,19 +1,29 @@
 import * as React from 'react';
 
-type ScrollPositionX = 'start' | 'middle' | 'end' | 'none';
-type ScrollPositionY = 'top' | 'middle' | 'bottom' | 'none';
+export enum AreaY {
+  TOP = 'top',
+  MIDDLE = 'middle',
+  BOTTOM = 'bottom',
+  NONE = 'none',
+}
 
-export interface ScrollChangedData {
-  position: {
-    x: ScrollPositionX;
-    y: ScrollPositionY;
+export enum AreaX {
+  START = 'start',
+  MIDDLE = 'middle',
+  END = 'end',
+  NONE = 'none',
+}
+export interface ScrollAreaData {
+  area: {
+    x: AreaX;
+    y: AreaY;
   };
   target: HTMLElement;
 }
 
-interface ScrollableContainerProps {
+export interface ScrollableContainerProps {
   scrollThrottleWait?: number;
-  onScrollPositionChanged?(scrollChangedData: ScrollChangedData): void;
+  onScrollAreaChanged?(scrollChangedData: ScrollAreaData): void;
   onScrollChanged?(target: HTMLElement): void;
 }
 

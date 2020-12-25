@@ -1,11 +1,11 @@
-import styles from './Content.st.css';
+import { st, classes } from './Content.st.css';
 import React, { useState, useCallback } from 'react';
 import Divider from '../../../Divider';
 import PropTypes from 'prop-types';
-import classNames from 'classnames';
 import ScrollableContainer, {
-  positionY,
+  AreaY,
 } from '../../../common/ScrollableContainer';
+import { ScrollableContainerCommonProps } from '../../../common/PropTypes/ScrollableContainerCommon';
 import { dataHooks } from '../../constants';
 import { useBaseModalLayoutContext } from '../../BaseModalLayoutContext';
 
@@ -13,72 +13,76 @@ export const Content = ({
   dataHook,
   className,
   children,
-  contentHideDividers,
-  onContentScrollPositionChanged,
+  hideTopScrollDivider,
+  hideBottomScrollDivider,
+  scrollProps = {},
 }) => {
   const { contentClassName, content = children } = useBaseModalLayoutContext();
-  const [scrollPositionY, setScrollPositionY] = useState(positionY.NONE);
+  const [scrollAreaY, setScrollAreaY] = useState(AreaY.NONE);
+  const { onScrollAreaChanged } = scrollProps;
+  const hideContentDividers = hideTopScrollDivider && hideBottomScrollDivider;
 
-  const handleScrollPositionChanged = useCallback(
-    ({ position, target }) => {
-      if (scrollPositionY !== position.y) {
-        if (!contentHideDividers) {
-          setScrollPositionY(position.y);
+  const handleScrollAreaChanged = useCallback(
+    ({ area, target }) => {
+      if (scrollAreaY !== area.y) {
+        if (!hideContentDividers) {
+          setScrollAreaY(area.y);
         }
-        if (onContentScrollPositionChanged) {
-          onContentScrollPositionChanged({ position, target });
+        if (onScrollAreaChanged) {
+          onScrollAreaChanged({ area, target });
         }
       }
     },
-    [contentHideDividers, onContentScrollPositionChanged, scrollPositionY],
+    [hideContentDividers, onScrollAreaChanged, scrollAreaY],
   );
 
   const isTopDividerHidden = useCallback(
     () =>
-      contentHideDividers ||
-      scrollPositionY === positionY.TOP ||
-      scrollPositionY === positionY.NONE,
-    [contentHideDividers, scrollPositionY],
+      hideTopScrollDivider ||
+      scrollAreaY === AreaY.TOP ||
+      scrollAreaY === AreaY.NONE,
+    [hideTopScrollDivider, scrollAreaY],
   );
 
   const isBottomDividerHidden = useCallback(
     () =>
-      contentHideDividers ||
-      scrollPositionY === positionY.BOTTOM ||
-      scrollPositionY === positionY.NONE,
-    [contentHideDividers, scrollPositionY],
+      hideBottomScrollDivider ||
+      scrollAreaY === AreaY.BOTTOM ||
+      scrollAreaY === AreaY.NONE,
+    [hideBottomScrollDivider, scrollAreaY],
   );
 
-  className = classNames(contentClassName, className);
-  const registerToScrollPositionChanges =
-    !contentHideDividers || !!onContentScrollPositionChanged;
+  const registerToScrollAreaChanges =
+    !hideContentDividers || !!onScrollAreaChanged;
 
   return (
     (content && (
       <div
         data-hook={dataHook}
-        data-hidedividers={contentHideDividers}
-        {...styles(
-          'root',
+        data-hidedividers={hideContentDividers}
+        className={st(
+          classes.root,
           {
             hideTopDivider: isTopDividerHidden(),
             hideBottomDivider: isBottomDividerHidden(),
           },
-          { className },
+          contentClassName,
+          className,
         )}
       >
-        {!contentHideDividers && <Divider className={styles.topDivider} />}
+        {!hideTopScrollDivider && <Divider className={classes.topDivider} />}
         <ScrollableContainer
           dataHook={dataHooks.contentWrapper}
-          className={styles.innerContent}
-          onScrollPositionChanged={
-            (registerToScrollPositionChanges && handleScrollPositionChanged) ||
-            null
+          className={classes.innerContent}
+          onScrollAreaChanged={
+            (registerToScrollAreaChanges && handleScrollAreaChanged) || null
           }
         >
           {content}
         </ScrollableContainer>
-        {!contentHideDividers && <Divider className={styles.bottomDivider} />}
+        {!hideBottomScrollDivider && (
+          <Divider className={classes.bottomDivider} />
+        )}
       </div>
     )) ||
     null
@@ -90,20 +94,44 @@ Content.displayName = 'BaseModalLayout.Content';
 Content.propTypes = {
   /** additional css classes */
   className: PropTypes.string,
+
   /** data hook for testing */
   dataHook: PropTypes.string,
+
   /** the content you want to render in the modal, children passed directly will be treated as `content` as well */
   content: PropTypes.oneOfType([PropTypes.string, PropTypes.node]),
-  /** hides the content scrolling dividers  */
-  contentHideDividers: PropTypes.bool,
-  /** A Handler for changes in the content scroll position
-   * ##### Signature:
-   * function({position: {y: positionY}, target: HTMLElement}) => void
-   * * `positionY`: top | middle | bottom | none
+
+  /** whether to show divider above content (default: false)
+   * when set to true - top divider is never shown
+   * when set to false - shows top divider when scroll position is greater than 0
    */
-  onContentScrollPositionChanged: PropTypes.func,
+  hideTopScrollDivider: PropTypes.bool,
+
+  /** whether to show divider below content (default: false)
+   * when set to true - bottom divider is never shown
+   * when set to false - shows bottom divider until content is scrolled to the boottom
+   */
+  hideBottomScrollDivider: PropTypes.bool,
+
+  /** Props related to the scrollable content.
+   *
+   * **onScrollAreaChanged** - A Handler for scroll area changes, will be triggered only when the user scrolls to a
+   * different area of the scrollable content, see signature for possible areas
+   * ##### Signature:
+   * `function({area: {y: AreaY, x: AreaX}, target: HTMLElement}) => void`
+   *
+   * `AreaY`: top | middle | bottom | none
+   *
+   * `AreaX`: start | middle | end | none (not implemented yet)
+   *
+   * **onScrollAreaChanged** - A Generic Handler for scroll changes with throttling (100ms)
+   * ##### Signature:
+   * `function({target: HTMLElement}) => void`
+   * */
+  scrollProps: PropTypes.shape(ScrollableContainerCommonProps),
 };
 
 Content.defaultProps = {
-  contentHideDividers: false,
+  hideTopScrollDivider: false,
+  hideBottomScrollDivider: false,
 };

@@ -1,11 +1,11 @@
 :import {
-  -st-from: "wix-ui-core/hocs.st.css";
-  -st-named: Focusable;
+  -st-from: "wix-ui-core/dist/src/hocs/Focusable/Focusable.st.css";
+  -st-default: Focusable;
 }
 
 :import {
   -st-from: "../Foundation/stylable/colors.st.css";
-  -st-named: F00,B00, B10, D10, D50, D80;
+  -st-named: F00,B00, THEME-COLOR-10, D10, D50, D80;
 }
 
 :vars {
@@ -20,7 +20,7 @@
   width: value(rootSize);
   height:  value(rootSize);
   border-radius: 50%;
-  background-color: value(B10);
+  background-color: value(THEME-COLOR-10);
 }
 
 .root:disabled {

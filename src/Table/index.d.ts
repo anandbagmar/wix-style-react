@@ -22,19 +22,8 @@ export interface TableProps<RowData = RowDataDefaultType>
   columns: TableColumn<RowData>[];
 }
 
-export default class Table<
-  RowData = RowDataDefaultType
-> extends React.Component<TableProps<RowData>> {
-  static ToolbarContainer: typeof ToolbarContainer;
-  static Titlebar: typeof Titlebar;
-  static Content: typeof Content;
-  static EmptyState: typeof EmptyState;
-  static BulkSelectionCheckbox: typeof BulkSelectionCheckbox;
-
-  setSelectedIds: (selectedIds: TableProps['selectedIds']) => void;
-}
-
 declare const ToolbarContainer: React.SFC;
+declare const SubToolbar: React.FunctionComponent<{ dataHook?: string }>;
 declare const Titlebar: React.SFC<{ dataHook?: string }>;
 declare const Content: React.SFC<{
   titleBarVisible?: boolean;
@@ -42,7 +31,9 @@ declare const Content: React.SFC<{
 }>;
 declare const BulkSelectionCheckbox: React.SFC<{ dataHook: string }>;
 
-export type TableColumn<RowDataType = RowDataDefaultType> = DataTableColumn<RowDataType>;
+export type TableColumn<RowDataType = RowDataDefaultType> = DataTableColumn<
+  RowDataType
+>;
 
 export type OnSelectionChangedFn = (
   selectedIds: TableProps['selectedIds'] | null,
@@ -91,4 +82,18 @@ export type UsedDataTableProps<RowData = RowDataDefaultType> = Pick<
   | 'data'
   | 'horizontalScroll'
   | 'stickyColumns'
+  | 'isRowDisabled'
 >;
+
+export default class Table<
+  RowData = RowDataDefaultType
+> extends React.Component<TableProps<RowData>> {
+  static ToolbarContainer: typeof ToolbarContainer;
+  static Titlebar: typeof Titlebar;
+  static SubToolbar: typeof SubToolbar;
+  static Content: typeof Content;
+  static EmptyState: typeof EmptyState;
+  static BulkSelectionCheckbox: typeof BulkSelectionCheckbox;
+
+  setSelectedIds: (selectedIds: TableProps['selectedIds']) => void;
+}

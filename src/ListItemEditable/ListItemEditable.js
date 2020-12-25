@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Input from '../Input';
 
-import styles from './ListItemEditable.st.css';
+import { classes } from './ListItemEditable.st.css';
 import { dataHooks } from './constants';
 import IconButton from '../IconButton';
 import Tooltip from '../Tooltip';
@@ -43,7 +43,7 @@ class ListItemEditable extends React.PureComponent {
       <Box marginRight={3} flex={1} minWidth={0}>
         <Input
           dataHook={dataHooks.input}
-          className={styles.input}
+          className={classes.input}
           size={size}
           status={status}
           value={value}
@@ -144,10 +144,11 @@ export const listItemEditableBuilder = ({
   approveButtonTooltipProps,
   status,
   statusMessage,
+  margins,
 }) => ({
   id,
   disabled: true,
-  overrideStyle: true,
+  overrideOptionStyle: true,
   value: props => (
     <ListItemEditable
       {...props}
@@ -163,6 +164,7 @@ export const listItemEditableBuilder = ({
       approveButtonTooltipProps={approveButtonTooltipProps}
       status={status}
       statusMessage={statusMessage}
+      margins={margins}
     />
   ),
 });
@@ -195,7 +197,7 @@ ListItemEditable.propTypes = {
   onCancel: PropTypes.func.isRequired,
 
   /** Cancel button tooltip content */
-  cancelButtonTooltipContent: PropTypes.string,
+  cancelButtonTooltipContent: PropTypes.node,
 
   /** Cancel button tooltip common props */
   cancelButtonTooltipProps: PropTypes.shape(TooltipCommonProps),

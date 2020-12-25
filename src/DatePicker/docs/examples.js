@@ -20,7 +20,7 @@ export const customizations = `
   value={new Date('08/07/1986')}
   placeholderText="Select Date"
   onChange={event => console.log(event)}
-  dateFormat="D/M/YY"
+  dateFormatV2="d/L/yy"
   locale='fr'
   showMonthDropdown
   showYearDropdown

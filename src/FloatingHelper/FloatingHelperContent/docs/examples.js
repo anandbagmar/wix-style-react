@@ -45,6 +45,18 @@ export const actionThemes = `<Layout>
 />
 </Box>
 </Cell>
+  <Cell>
+  <Box padding="20px" backgroundColor="D80">
+<FloatingHelper.Content
+  title='Don’t forget to setup payments'
+  body='In order to sell your music you need to choose a payment method.'
+  appearance="light"
+  actionText='Ok, Take Me There'
+  onActionClick={() => null}
+  actionTheme='standardPrimary'
+/>
+</Box>
+</Cell>
 </Layout>`;
 
 export const appearance = `<Layout>

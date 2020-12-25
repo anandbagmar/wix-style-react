@@ -4,21 +4,17 @@ import {
   tabs,
   api,
   playground,
-  description,
   divider,
   importExample,
-  columns,
   header,
   title,
   example as baseExample,
+  testkit,
 } from 'wix-storybook-utils/Sections';
 import Help from 'wix-ui-icons-common/Help';
-
 import CloseButton from '..';
-import { Layout } from '../../Layout';
 import { storySettings } from './storySettings';
 import allComponents from '../../../stories/utils/allComponents';
-import testkit from '!raw-loader!./testkit.md';
 
 import * as examples from './examples';
 
@@ -51,11 +47,7 @@ export default {
 
   sections: [
     header({
-      component: (
-        <Layout gap={0}>
-          <CloseButton />
-        </Layout>
-      ),
+      sourceUrl: `https://github.com/wix/wix-style-react/tree/master/src/${CloseButton.displayName}/`,
     }),
 
     tabs([
@@ -105,7 +97,7 @@ export default {
       }),
 
       tab({ title: 'API', sections: [api()] }),
-      tab({ title: 'Testkit', sections: [description(testkit)] }),
+      tab({ title: 'Testkit', sections: [testkit()] }),
       tab({ title: 'Playground', sections: [playground()] }),
     ]),
   ],

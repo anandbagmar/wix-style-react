@@ -1,30 +1,17 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import classNames from 'classnames';
 import { withFocusable } from 'wix-ui-core/dist/src/hocs/Focusable';
 import { generateDataAttr } from '../utils/generateDataAttr';
-
 import { SKIN, TYPE, SIZE } from './constants';
-import style from './Badge.st.css';
-
-import ellipsisHOC from '../common/EllipsisHOC';
-
-const BadgeContent = ({ children, className, ...restProps }) => {
-  return (
-    <span className={classNames(style.text, className)} {...restProps}>
-      {children}
-    </span>
-  );
-};
-
-// It's a best practice to create the HOC outside the render function,
-// mainly to improve the performance and prevent remounting that in some case could cause issues
-const EllipsedBadgeContent = ellipsisHOC(BadgeContent);
+import { st, classes } from './Badge.st.css';
+import Caption from '../Text/Caption';
 
 class Badge extends React.PureComponent {
   static propTypes = {
     /** Applied as data-hook HTML attribute that can be used to create driver in testing */
     dataHook: PropTypes.string,
+    /** A css class to be applied to the component's root element */
+    className: PropTypes.string,
     /** variation of the component structure */
     type: PropTypes.oneOf(['solid', 'outlined', 'transparent']),
     /** color indication of the component */
@@ -87,10 +74,6 @@ class Badge extends React.PureComponent {
       : {};
   };
 
-  _renderContent = children => {
-    return <EllipsedBadgeContent ellipsis>{children}</EllipsedBadgeContent>;
-  };
-
   render() {
     const {
       children,
@@ -98,6 +81,7 @@ class Badge extends React.PureComponent {
       suffixIcon,
       onClick,
       dataHook,
+      className,
       ...rest
     } = this.getProps();
 
@@ -106,19 +90,27 @@ class Badge extends React.PureComponent {
         data-hook={dataHook}
         onClick={onClick}
         {...this._getFocusableProps()}
-        {...style('root', { clickable: !!onClick, ...rest }, this.getProps())}
+        className={st(
+          classes.root,
+          { clickable: !!onClick, ...rest },
+          className,
+        )}
         {...generateDataAttr(this.props, ['type', 'skin', 'size', 'uppercase'])}
         data-clickable={!!onClick}
+        /* TODO: this prop used to come from stylable v1 spread and is used for testing. Update component testkit to use stylable testkit instead */
+        data-is-inverted={rest['data-is-inverted']}
       >
         {prefixIcon &&
           React.cloneElement(prefixIcon, {
-            className: style.prefix,
+            className: classes.prefix,
             'data-prefix-icon': true,
           })}
-        {this._renderContent(children)}
+        <Caption className={classes.text} caption="c1" ellipsis>
+          {children}
+        </Caption>
         {suffixIcon &&
           React.cloneElement(suffixIcon, {
-            className: style.suffix,
+            className: classes.suffix,
             'data-suffix-icon': true,
           })}
       </div>

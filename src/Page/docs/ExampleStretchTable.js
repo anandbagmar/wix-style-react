@@ -1,31 +1,27 @@
 /* eslint-disable no-console */
 import React from 'react';
-import { Table } from 'wix-style-react/Table';
-import {
-  TableToolbar,
-  ItemGroup,
-  Item,
-  Label,
-  SelectedCount,
-  Divider,
-} from 'wix-style-react/TableToolbar';
 import { header, tail } from './PageChildren';
 import { ExamplePageContainer } from './ExamplePageContainer';
 
-import Dropdown from 'wix-style-react/Dropdown';
-import Search from 'wix-style-react/Search';
-import Checkbox from 'wix-style-react/Checkbox';
-import Card from 'wix-style-react/Card';
-import Page from 'wix-style-react/Page';
-import Button from 'wix-style-react/Button';
-import TextButton from 'wix-style-react/TextButton';
-import Text from 'wix-style-react/Text';
 import Edit from 'wix-ui-icons-common/Edit';
 import Duplicate from 'wix-ui-icons-common/Duplicate';
 import Upload from 'wix-ui-icons-common/Upload';
-import Highlighter from 'wix-style-react/Highlighter';
 
 import ImagePlaceholder from '../../../stories/utils/ImagePlaceholder';
+
+import {
+  Table,
+  TableToolbar,
+  Dropdown,
+  Search,
+  Checkbox,
+  Card,
+  Page,
+  Button,
+  TextButton,
+  Text,
+  Highlighter,
+} from 'wix-style-react';
 
 const createDataSet = setIndex => [
   {
@@ -103,9 +99,9 @@ class ExampleStretchTable extends React.Component {
     return (
       <Card>
         <TableToolbar>
-          <ItemGroup position="start">
-            <Item>
-              <Label>
+          <TableToolbar.ItemGroup position="start">
+            <TableToolbar.Item>
+              <TableToolbar.Label>
                 Product
                 <span style={{ width: '150px' }}>
                   <Dropdown
@@ -117,10 +113,10 @@ class ExampleStretchTable extends React.Component {
                     roundInput
                   />
                 </span>
-              </Label>
-            </Item>
-            <Item>
-              <Label>
+              </TableToolbar.Label>
+            </TableToolbar.Item>
+            <TableToolbar.Item>
+              <TableToolbar.Label>
                 Color
                 <span style={{ width: '86px' }}>
                   <Dropdown
@@ -132,20 +128,20 @@ class ExampleStretchTable extends React.Component {
                     roundInput
                   />
                 </span>
-              </Label>
-            </Item>
-            <Item>
+              </TableToolbar.Label>
+            </TableToolbar.Item>
+            <TableToolbar.Item>
               <Checkbox
                 checked={this.state.inStock}
                 onChange={e => this.setState({ inStock: e.target.checked })}
               >
                 In Stock only
               </Checkbox>
-            </Item>
-          </ItemGroup>
-          <ItemGroup position="end">
-            <Item>{this.renderSearch(false)}</Item>
-          </ItemGroup>
+            </TableToolbar.Item>
+          </TableToolbar.ItemGroup>
+          <TableToolbar.ItemGroup position="end">
+            <TableToolbar.Item>{this.renderSearch(false)}</TableToolbar.Item>
+          </TableToolbar.ItemGroup>
         </TableToolbar>
       </Card>
     );
@@ -154,13 +150,13 @@ class ExampleStretchTable extends React.Component {
   renderBulkActionsToolbar(props) {
     return (
       <TableToolbar>
-        <ItemGroup position="start">
-          <Item>
-            <SelectedCount>{`${props.selectedCount} Selected`}</SelectedCount>
-          </Item>
-        </ItemGroup>
-        <ItemGroup position="end">
-          <Item layout="button">
+        <TableToolbar.ItemGroup position="start">
+          <TableToolbar.Item>
+            <TableToolbar.SelectedCount>{`${props.selectedCount} Selected`}</TableToolbar.SelectedCount>
+          </TableToolbar.Item>
+        </TableToolbar.ItemGroup>
+        <TableToolbar.ItemGroup position="end">
+          <TableToolbar.Item layout="button">
             <Button
               prefixIcon={<Upload />}
               skin="light"
@@ -171,8 +167,8 @@ class ExampleStretchTable extends React.Component {
             >
               Export
             </Button>
-          </Item>
-          <Item layout="button">
+          </TableToolbar.Item>
+          <TableToolbar.Item layout="button">
             <Button
               skin="light"
               priority="primary"
@@ -185,8 +181,8 @@ class ExampleStretchTable extends React.Component {
             >
               Duplicate
             </Button>
-          </Item>
-          <Item layout="button">
+          </TableToolbar.Item>
+          <TableToolbar.Item layout="button">
             <Button
               skin="light"
               priority="primary"
@@ -197,10 +193,10 @@ class ExampleStretchTable extends React.Component {
             >
               Edit
             </Button>
-          </Item>
-          <Divider />
-          <Item>{this.renderSearch(true)}</Item>
-        </ItemGroup>
+          </TableToolbar.Item>
+          <TableToolbar.Divider />
+          <TableToolbar.Item>{this.renderSearch(true)}</TableToolbar.Item>
+        </TableToolbar.ItemGroup>
       </TableToolbar>
     );
   }

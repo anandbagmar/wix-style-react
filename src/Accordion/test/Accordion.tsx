@@ -27,8 +27,13 @@ function AccordionWithAllProps() {
           title: <div />,
           disabled: true,
           onToggle: () => {},
+          onMouseEnter: () => {},
+          onMouseLeave: () => {},
           open: true,
           initiallyOpen: true,
+          className: 'class',
+          hideShadow: true,
+          skin: 'light',
         },
       ]}
     />

@@ -1,14 +1,13 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import StatusAlertSmall from 'wix-ui-icons-common/StatusAlertSmall';
-import classNames from 'classnames';
 
 import Input from '../Input';
 import LabelledElement from '../LabelledElement';
 import Text from '../Text';
 
 import InputWithOptions from '../InputWithOptions';
-import styles from './AutoCompleteWithLabel.scss';
+import { classes } from './AutoCompleteWithLabel.st.css';
 
 import dataHooks from './dataHooks';
 import { optionValidator } from '../DropdownLayout/DropdownLayout';
@@ -66,6 +65,10 @@ class AutoCompleteWithLabel extends React.PureComponent {
     onSelect: PropTypes.func,
     /** Indicates whether to render using the native select element */
     native: PropTypes.bool,
+    /** Value of rendered child input */
+    value: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+    /** Set the max height of the dropdownLayout in pixels */
+    maxHeightPixels: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
   };
 
   static defaultProps = {
@@ -111,6 +114,7 @@ class AutoCompleteWithLabel extends React.PureComponent {
       placeholder,
       native,
       onBlur,
+      maxHeightPixels,
     } = this.props;
     const { value } = this._isInputControlled() ? this.props : this.state;
     const predicate = this.state.isEditing
@@ -120,11 +124,7 @@ class AutoCompleteWithLabel extends React.PureComponent {
 
     const suffixContainer = suffix
       ? suffix.map((item, index) => {
-          return (
-            <div key={`${dataHook}-${index}`} className={styles.groupIcon}>
-              {item}
-            </div>
-          );
+          return <div key={`${dataHook}-${index}`}>{item}</div>;
         })
       : [];
 
@@ -155,13 +155,14 @@ class AutoCompleteWithLabel extends React.PureComponent {
                 placeholder={placeholder}
                 dataHook={dataHooks.inputWithLabel}
                 value={value}
-                className={classNames(styles.inputContainer, className)}
+                className={className}
                 suffix={suffixContainer}
                 status={status}
               />
             }
             options={filteredOptions}
             native={native}
+            maxHeightPixels={maxHeightPixels}
           />
         </LabelledElement>
         {status === Input.StatusError && statusMessage && (
@@ -169,14 +170,14 @@ class AutoCompleteWithLabel extends React.PureComponent {
             skin="error"
             weight="normal"
             size="small"
-            className={styles.statusMessage}
+            className={classes.statusMessage}
           >
-            <span className={styles.statusMessageIcon}>
+            <span className={classes.statusMessageIcon}>
               <StatusAlertSmall />
             </span>
             <span
               data-hook={dataHooks.errorMessage}
-              className={styles.errorMessageContent}
+              className={classes.errorMessageContent}
             >
               {statusMessage}
             </span>

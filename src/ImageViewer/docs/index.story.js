@@ -68,7 +68,7 @@ export default {
             description({
               title: 'Description',
               text:
-                'Image viewer is an container for an image with some functionality like add, update, remove, and status.',
+                'Image viewer is a container for an image with some functionality like add, update, remove, and status.',
             }),
           ]),
 

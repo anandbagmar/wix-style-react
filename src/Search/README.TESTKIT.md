@@ -28,8 +28,8 @@ import React from 'react';
 import ReactTestUtils from 'react-dom/test-utils';
 import {mount} from 'enzyme';
 
-import {searchTestkitFactory} from '../../testkit';
-import {searchTestkitFactory as enzymeSearchTestkitFactory} from '../../testkit/enzyme';
+import {SearchTestkit} from '../../testkit';
+import {SearchTestkit as EnzymeSearchTestkit} from '../../testkit/enzyme';
 
 import Search from './Search';
 
@@ -55,7 +55,7 @@ describe('Example of Search testkits usage', () => {
             />
         </div>
       ));
-      const testkit = searchTestkitFactory({wrapper, dataHook});
+      const testkit = SearchTestkit({wrapper, dataHook});
 
       testkit.inputDriver.focus();
       testkit.inputDriver.enterText('fox');
@@ -73,7 +73,7 @@ describe('Example of Search testkits usage', () => {
           options={options}
           />
       ));
-      const testkit = enzymeSearchTestkitFactory({wrapper, dataHook});
+      const testkit = EnzymeSearchTestkit({wrapper, dataHook});
 
       testkit.inputDriver.focus();
       testkit.inputDriver.enterText('fox');
@@ -86,14 +86,14 @@ describe('Example of Search testkits usage', () => {
 ### E2E testing example
 ```javascript
 import {
-    searchTestkitFactory,
+    SearchTestkit,
     waitForVisibilityOf
 } from '../../testkit/protractor';
 import eyes from 'eyes.it';
 
 describe('Example of Search Protractor testkit usage', () => {
   eyes.it('should show menu on trigger click', () => {
-    const testkit = searchTestkitFactory({dataHook: 'myDataHook'});
+    const testkit = SearchTestkit({dataHook: 'myDataHook'});
 
     waitForVisibilityOf(testkit.element(), 'Can not find Search element').then(() => {
       testkit.clickOnInput();

@@ -132,6 +132,13 @@ export default {
             text: 'When set to true, padding is removed',
             source: examples.removePadding,
           }),
+
+          example({
+            title: 'border radius',
+            text:
+              'Sets the border-radius css property, when set to 100%, the button is circled',
+            source: examples.borderRadius,
+          }),
         ],
       }),
 

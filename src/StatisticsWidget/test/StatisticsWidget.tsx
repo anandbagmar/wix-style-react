@@ -14,6 +14,8 @@ function StatisticsWidgetWithAllProps() {
   return (
     <StatisticsWidget
       dataHook="hook"
+      size="tiny"
+      alignItems="center"
       items={[
         { value: '' },
         {
@@ -24,6 +26,7 @@ function StatisticsWidgetWithAllProps() {
           percentage: 10,
           valueInShort: 'val',
           onClick: _ev => {},
+          children: <div>Child</div>
         },
       ]}
     />

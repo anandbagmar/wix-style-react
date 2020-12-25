@@ -3,13 +3,17 @@ import PropTypes from 'prop-types';
 import X from 'wix-ui-icons-common/X';
 import IconButton from '../IconButton';
 
-import styles from './ModalMobileLayout.st.css';
+import { st, classes } from './ModalMobileLayout.st.css';
 
 class ModalMobileLayout extends React.PureComponent {
   static displayName = 'ModalMobileLayout';
 
   static propTypes = {
+    /** Applied as data-hook HTML attribute that can be used in the tests */
     dataHook: PropTypes.string,
+
+    /** A css class to be applied to the component's root element */
+    className: PropTypes.string,
 
     /** title node to be displayed in the header strip */
     title: PropTypes.node,
@@ -45,6 +49,7 @@ class ModalMobileLayout extends React.PureComponent {
   render() {
     const {
       dataHook,
+      className,
       title,
       content,
       footer,
@@ -59,8 +64,8 @@ class ModalMobileLayout extends React.PureComponent {
       <div
         id="modalMobileLayout-root"
         data-hook={dataHook}
-        {...styles(
-          'root',
+        className={st(
+          classes.root,
           {
             fullscreen,
             stickyTitle,
@@ -68,15 +73,15 @@ class ModalMobileLayout extends React.PureComponent {
             noTitle: !title,
             noFooter: !footer,
           },
-          this.props,
+          className,
         )}
         onClick={({ target: { id } }) => {
           id === 'modalMobileLayout-root' && onOverlayClick && onOverlayClick();
         }}
       >
-        <div className={styles.container}>
+        <div className={classes.container}>
           {onCloseButtonClick && (
-            <div className={styles.close}>
+            <div className={classes.close}>
               <IconButton
                 dataHook="modalMobileLayout-close-button"
                 skin="light"
@@ -87,7 +92,10 @@ class ModalMobileLayout extends React.PureComponent {
             </div>
           )}
           {title && stickyTitle && this._renderTitle()}
-          <div className={styles.content} data-hook="modalMobileLayout-content">
+          <div
+            className={classes.content}
+            data-hook="modalMobileLayout-content"
+          >
             <div>
               {title && !stickyTitle && this._renderTitle()}
               {content}
@@ -102,7 +110,7 @@ class ModalMobileLayout extends React.PureComponent {
 
   _renderTitle = () => (
     <div
-      className={styles.title}
+      className={classes.title}
       data-hook="modalMobileLayout-title"
       data-sticky-title={this.props.stickyTitle}
     >
@@ -112,7 +120,7 @@ class ModalMobileLayout extends React.PureComponent {
 
   _renderFooter = () => (
     <div
-      className={styles.footer}
+      className={classes.footer}
       data-hook="modalMobileLayout-footer"
       data-sticky-footer={this.props.stickyFooter}
     >

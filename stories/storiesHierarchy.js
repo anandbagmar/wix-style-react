@@ -10,7 +10,7 @@ export const Category = {
   PLAYGROUND: 'Introduction|Playground',
   CHEATSHEET: 'Introduction|Cheatsheet',
   TESTING: 'Introduction|Testing',
-  TROUBLESHOOTING: 'Introduction|Troubleshooting',
+  SUPPORT: 'Introduction|Support',
   FOUNDATION: 'Design Guidelines|Foundation',
   LAYOUT: 'Design Guidelines|Layout',
   BUTTONS: 'Design Guidelines|Buttons',
@@ -26,4 +26,6 @@ export const Category = {
   WIP: 'Components API|Work in Progress',
   INTERNAL: 'Components API|Internal',
   DEPRECATED: 'Deprecated',
+  EDITOR_X_THEME: 'Themes|EditorX',
+  BUSINESS_DASHBOARD_THERE: 'Themes|Business Dashboard',
 };

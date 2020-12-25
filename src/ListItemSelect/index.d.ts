@@ -36,7 +36,7 @@ export const listItemSelectBuilder: (data: {
 }) => {
   id: string | number;
   disabled: boolean | undefined;
-  overrideStyle: true;
+  overrideOptionStyle: true;
   value: (props?: Partial<ListItemSelectProps>) => React.ReactNode;
 };
 

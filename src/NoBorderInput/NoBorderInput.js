@@ -1,12 +1,11 @@
 import React from 'react';
-import classNames from 'classnames';
 import omit from 'omit';
 import PropTypes from 'prop-types';
 import Input from '../Input/Input';
-import inputStyles from '../Input/Input.scss';
-import styles from './NoBorderInput.scss';
+import { st, classes } from './NoBorderInput.st.css';
 import Text from '../Text';
 import dataHooks from './dataHooks';
+import { FontUpgradeContext } from '../FontUpgrade/context';
 
 class NoBorderInput extends React.Component {
   static StatusError = Input.StatusError;
@@ -43,23 +42,17 @@ class NoBorderInput extends React.Component {
     ];
     const wsrInputProps = omit(rejectedProps, this.props);
 
-    const hasValue =
+    const hasValue = Boolean(
       (value && value.length) ||
-      (this.wsrInput && this.wsrInput.input && !!this.wsrInput.input.value);
-    const conditionalClasses = {
-      [styles.disabled]: disabled,
-      [styles.hasError]: status === NoBorderInput.StatusError,
-      [styles.hasFocus]: this.state.focus,
-      [styles.hasValue]: hasValue,
-      [styles.noLabel]: !label,
-    };
-
+        (this.wsrInput && this.wsrInput.input && !!this.wsrInput.input.value),
+    );
     const renderStatusLine = () =>
       !disabled &&
       status &&
       statusMessage && (
         <Text
           dataHook={dataHooks.statusMessage}
+          className={classes.statusMessage}
           size="tiny"
           weight="thin"
           skin="error"
@@ -69,48 +62,61 @@ class NoBorderInput extends React.Component {
       );
 
     return (
-      <div
-        className={classNames(
-          conditionalClasses,
-          styles.root,
-          inputStyles[`size-${size}`],
-          className,
+      <FontUpgradeContext.Consumer>
+        {({ active: isMadefor }) => (
+          <div
+            className={st(
+              classes.root,
+              {
+                isMadefor,
+                size,
+                focus: this.state.focus,
+                hasValue,
+                noLabel: !label,
+                status,
+                disabled,
+              },
+              className,
+            )}
+            data-hook={dataHook}
+            data-status={status}
+          >
+            <Text
+              tagName="label"
+              dataHook={dataHooks.label}
+              className={classes.label}
+              htmlFor={id}
+              size="medium"
+              weight={isMadefor ? 'thin' : 'normal'}
+              light
+              secondary
+              ellipsis
+              showTooltip={false}
+              skin={disabled ? 'disabled' : 'standard'}
+            >
+              {label}
+            </Text>
+            <Input
+              {...wsrInputProps}
+              ref={wsrInput => (this.wsrInput = wsrInput)}
+              onFocus={e => {
+                this.setState({ focus: true });
+                if (typeof onFocus === 'function') {
+                  onFocus(e);
+                }
+              }}
+              onBlur={e => {
+                this.setState({ focus: false });
+                if (typeof onBlur === 'function') {
+                  onBlur(e);
+                }
+              }}
+            />
+            <div className={classes.border} />
+            {renderStatusLine()}
+          </div>
         )}
-        data-hook={dataHook}
-        data-status={status}
-      >
-        <label
-          data-hook={dataHooks.label}
-          className={styles.label}
-          htmlFor={id}
-        >
-          {label}
-        </label>
-        <Input
-          className={styles.nbinput}
-          {...wsrInputProps}
-          ref={wsrInput => (this.wsrInput = wsrInput)}
-          onFocus={e => {
-            this.setState({ focus: true });
-            if (typeof onFocus === 'function') {
-              onFocus(e);
-            }
-          }}
-          onBlur={e => {
-            this.setState({ focus: false });
-            if (typeof onBlur === 'function') {
-              onBlur(e);
-            }
-          }}
-        />
-        <div
-          className={classNames(
-            styles.activationIndicator,
-            styles.activationIndicatorActive,
-          )}
-        />
-        {renderStatusLine()}
-      </div>
+      </FontUpgradeContext.Consumer>
     );
   }
 }
@@ -119,7 +125,7 @@ NoBorderInput.displayName = 'NoBorderInput';
 
 NoBorderInput.defaultProps = {
   autoSelect: true,
-  size: 'normal',
+  size: 'medium',
   statusMessage: '',
   textOverflow: 'clip',
   maxLength: 524288,

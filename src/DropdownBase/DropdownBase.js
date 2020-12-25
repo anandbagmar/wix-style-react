@@ -1,7 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import style from './DropdownBase.st.css';
-
+import { st, classes } from './DropdownBase.st.css';
 import Popover, { placements } from '../Popover';
 import DropdownLayout from '../DropdownLayout';
 
@@ -9,8 +8,10 @@ class DropdownBase extends React.PureComponent {
   static displayName = 'DropdownBase';
 
   static propTypes = {
+    /** Applied as data-hook HTML attribute that can be used in the tests */
     dataHook: PropTypes.string,
-
+    /** A css class to be applied to the component's root element */
+    className: PropTypes.string,
     /** A controlled prop to control whether the Popover should be opened*/
     open: PropTypes.bool,
     /** The Popover's placement */
@@ -47,6 +48,7 @@ class DropdownBase extends React.PureComponent {
      *  * `open` - will open the Popover
      *  * `close` - will close the Popover
      *  * `toggle` - will toggle the Popover
+     *  * `isOpen` - indicates whether the items list is currently open
      *  * `delegateKeyDown` - the underlying DropdownLayout's keydown handler. It can be called
      *                        inside another keyDown event in order to delegate it.
      *  * `selectedOption` - the currently selected option
@@ -121,6 +123,18 @@ class DropdownBase extends React.PureComponent {
 
     /** adds enter and exit animation */
     animate: PropTypes.bool,
+
+    /** Scroll to the selected option on opening the dropdown */
+    focusOnSelectedOption: PropTypes.bool,
+
+    /** Set this prop for lazy loading of the dropdown layout items.*/
+    infiniteScroll: PropTypes.bool,
+
+    /** A callback called when more items are requested to be rendered. */
+    loadMore: PropTypes.func,
+
+    /** Whether there are more items to be loaded. */
+    hasMore: PropTypes.bool,
   };
 
   static defaultProps = {
@@ -295,7 +309,7 @@ class DropdownBase extends React.PureComponent {
 
   _renderChildren() {
     const { children } = this.props;
-    const { selectedId } = this.state;
+    const { selectedId, open } = this.state;
 
     if (!children) {
       return null;
@@ -307,6 +321,7 @@ class DropdownBase extends React.PureComponent {
           open: this._open,
           close: this._close,
           toggle: this._toggle,
+          isOpen: Boolean(open),
 
           delegateKeyDown: this._delegateKeyDown,
 
@@ -333,12 +348,18 @@ class DropdownBase extends React.PureComponent {
       maxHeight,
       fluid,
       animate,
+      className,
+      focusOnSelectedOption,
+      infiniteScroll,
+      loadMore,
+      hasMore,
     } = this.props;
 
     const { open, selectedId } = this.state;
 
     return (
       <Popover
+        {...this.props} // backward compatible for migration stylable 1 to stylable 3
         animate={animate}
         dataHook={dataHook}
         shown={open}
@@ -355,13 +376,13 @@ class DropdownBase extends React.PureComponent {
         fixed={fixed}
         flip={flip}
         fluid={fluid}
-        {...style(
-          'root',
+        className={st(
+          classes.root,
           {
             withWidth: Boolean(minWidth || maxWidth),
             withArrow: showArrow,
           },
-          this.props,
+          className,
         )}
       >
         <Popover.Element>{this._renderChildren()}</Popover.Element>
@@ -375,6 +396,7 @@ class DropdownBase extends React.PureComponent {
           >
             <DropdownLayout
               dataHook="dropdown-base-dropdownlayout"
+              className={classes.list}
               ref={r => (this._dropdownLayoutRef = r)}
               selectedId={selectedId}
               options={options}
@@ -385,6 +407,10 @@ class DropdownBase extends React.PureComponent {
               inContainer
               visible
               overflow={overflow}
+              focusOnSelectedOption={focusOnSelectedOption}
+              infiniteScroll={infiniteScroll}
+              loadMore={loadMore}
+              hasMore={hasMore}
             />
           </div>
         </Popover.Content>

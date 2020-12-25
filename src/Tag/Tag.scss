@@ -28,13 +28,26 @@
 .tinySize {
   padding: 0 9px;
   border-radius: 9px;
+  max-height: 18px;
+
+  &.light-outlined-theme {
+    padding: 0 8px;
+  }
 
   &.withThumb {
     padding-left: 3px;
+
+    &.light-outlined-theme {
+      padding-left: 2px;
+    }
   }
 
   &.withRemoveButton {
     padding-right: 3px;
+
+    &.light-outlined-theme {
+      padding-right: 2px;
+    }
   }
 
   .thumb {
@@ -48,13 +61,26 @@
 .smallSize {
   padding: 3px 12px;
   border-radius: 12px;
+  max-height: 24px;
+
+  &.light-outlined-theme {
+    padding: 2px 11px;
+  }
 
   &.withThumb {
     padding-left: 3px;
+
+    &.light-outlined-theme {
+      padding-left: 2px;
+    }
   }
 
   &.withRemoveButton {
     padding-right: 3px;
+
+    &.light-outlined-theme {
+      padding-right: 2px;
+    }
   }
 
   .thumb {
@@ -72,13 +98,26 @@
 .mediumSize {
   padding: 6px 12px;
   border-radius: 15px;
+  max-height: 30px;
+
+  &.light-outlined-theme {
+    padding: 5px 11px;
+  }
 
   &.withThumb {
     padding-left: 6px;
+
+    &.light-outlined-theme {
+      padding-left: 5px;
+    }
   }
 
   &.withRemoveButton {
     padding-right: 6px;
+
+    &.light-outlined-theme {
+      padding-right: 5px;
+    }
   }
 
   .thumb {
@@ -96,13 +135,26 @@
 .largeSize {
   padding: 6px 18px;
   border-radius: 18px;
+  max-height: 36px;
+
+  &.light-outlined-theme {
+    padding: 5px 17px;
+  }
 
   &.withThumb {
     padding-left: 6px;
+
+    &.light-outlined-theme {
+      padding-left: 5px;
+    }
   }
 
   &.withRemoveButton {
     padding-right: 6px;
+
+    &.light-outlined-theme {
+      padding-right: 5px;
+    }
   }
 
   .thumb {
@@ -124,17 +176,17 @@
 
   //Themes
   &.standard-theme {
-    background-color: $B40;
+    background-color: var(--wsr-color-40, $B40);
 
-    &.clickable:hover {
-      background-color: $B30;
+    &.hoverable:hover {
+      background-color: var(--wsr-color-30, $B30);
     }
   }
 
   &.warning-theme {
     background-color: $Y40;
 
-    &.clickable:hover {
+    &.hoverable:hover {
       background-color: $Y30;
     }
   }
@@ -142,7 +194,7 @@
   &.error-theme {
     background-color: $R40;
 
-    &.clickable:hover {
+    &.hoverable:hover {
       background-color: $R30;
     }
   }
@@ -151,7 +203,7 @@
     background-color: $D20;
     color: $D80;
 
-    &.clickable:hover {
+    &.hoverable:hover {
       background-color: $D10;
     }
   }
@@ -159,7 +211,7 @@
   &.neutral-theme {
     background-color: $D70;
 
-    &.clickable:hover {
+    &.hoverable:hover {
       background-color: $D60;
     }
   }
@@ -167,8 +219,18 @@
   &.light-theme {
     background-color: $D80;
 
-    &.clickable:hover {
+    &.hoverable:hover {
       background-color: $B50;
+    }
+  }
+
+  &.light-outlined-theme {
+    border: 1px solid $D60;
+    background-color: $D80;
+
+    &.hoverable:hover {
+      background-color: $B50;
+      border-color: $B30;
     }
   }
 }
@@ -182,12 +244,24 @@
   .tinySize {
     padding: 0 9px;
 
+    &.light-outlined-theme {
+      padding: 0 8px;
+    }
+
     &.withThumb {
       padding-right: 3px;
+
+      &.light-outlined-theme {
+        padding-right: 2px;
+      }
     }
 
     &.withRemoveButton {
       padding-left: 3px;
+
+      &.light-outlined-theme {
+        padding-left: 2px;
+      }
     }
 
     .thumb {
@@ -199,12 +273,24 @@
   .smallSize {
     padding: 0 12px;
 
+    &.light-outlined-theme {
+      padding: 0 11px;
+    }
+
     &.withThumb {
       padding-right: 3px;
+
+      &.light-outlined-theme {
+        padding-right: 2px;
+      }
     }
 
     &.withRemoveButton {
       padding-left: 3px;
+
+      &.light-outlined-theme {
+        padding-left: 2px;
+      }
     }
 
     .thumb {
@@ -221,12 +307,24 @@
   .mediumSize {
     padding: 0 12px;
 
+    &.light-outlined-theme {
+      padding: 0 11px;
+    }
+
     &.withThumb {
       padding-right: 6px;
+
+      &.light-outlined-theme {
+        padding-right: 5px;
+      }
     }
 
     &.withRemoveButton {
       padding-left: 6px;
+
+      &.light-outlined-theme {
+        padding-left: 5px;
+      }
     }
 
     .thumb {
@@ -243,12 +341,24 @@
   .largeSize {
     padding: 0 18px;
 
+    &.light-outlined-theme {
+      padding: 0 17px;
+    }
+
     &.withThumb {
       padding-right: 6px;
+
+      &.light-outlined-theme {
+        padding-right: 5px;
+      }
     }
 
     &.withRemoveButton {
       padding-left: 6px;
+
+      &.light-outlined-theme {
+        padding-left: 5px;
+      }
     }
 
     .thumb {

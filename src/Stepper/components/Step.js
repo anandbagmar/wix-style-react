@@ -1,11 +1,11 @@
 import React from 'react';
 import { withFocusable } from 'wix-ui-core/dist/src/hocs/Focusable/FocusableHOC';
 import ChevronRight from 'wix-ui-icons-common/ChevronRight';
-
+import { FontUpgradeContext } from '../../FontUpgrade/context';
 import Text from '../../Text';
 import StepMarker from './StepMarker';
 import { Type, StepType, DataHook } from '../constants';
-import styles from './Step.st.css';
+import { st, classes } from './Step.st.css';
 
 class Step extends React.PureComponent {
   static displayName = 'Step';
@@ -67,56 +67,62 @@ class Step extends React.PureComponent {
       last,
       number,
       text,
+      className,
       ...otherProps
     } = this.props;
     const { isHovered, transitionSequence } = this.state;
     const isClickable = this._isClickable();
 
     return (
-      <button
-        {...styles(
-          'root',
-          {
-            type,
-            styleType,
-            selected: active,
-            hovered: isHovered,
-            clickable: isClickable,
-          },
-          otherProps,
-        )}
-        data-hook={DataHook.Step}
-        data-type={type}
-        data-active={active}
-        onMouseEnter={this._handleMouseEnter}
-        onMouseLeave={this._handleMouseLeave}
-        onClick={this._handleClick}
-        onTransitionEnd={this._handleTransitionEnd}
-        {...this._getFocusProps()}
-      >
-        <div className={styles.content}>
-          <StepMarker
-            number={number}
-            active={active}
-            type={type}
-            styleType={styleType}
-            hovered={isHovered && isClickable}
-            className={styles.marker}
-          />
-          <Text
-            key={transitionSequence}
-            ellipsis
-            weight="normal"
-            size={styleType === Type.Text ? 'medium' : 'small'}
-            showTooltip={!active}
-            dataHook={DataHook.StepText}
-            className={styles.text}
+      <FontUpgradeContext.Consumer>
+        {({ active: isMadefor }) => (
+          <button
+            className={st(
+              classes.root,
+              {
+                isMadefor,
+                type,
+                styleType,
+                selected: active,
+                hovered: isHovered,
+                clickable: isClickable,
+              },
+              className,
+            )}
+            data-hook={DataHook.Step}
+            data-type={type}
+            data-active={active}
+            onMouseEnter={this._handleMouseEnter}
+            onMouseLeave={this._handleMouseLeave}
+            onClick={this._handleClick}
+            onTransitionEnd={this._handleTransitionEnd}
+            {...this._getFocusProps()}
           >
-            {text}
-          </Text>
-        </div>
-        {!last && <ChevronRight className={styles.arrow} />}
-      </button>
+            <div className={classes.content}>
+              <StepMarker
+                number={number}
+                active={active}
+                type={type}
+                styleType={styleType}
+                hovered={isHovered && isClickable}
+                className={classes.marker}
+              />
+              <Text
+                key={transitionSequence}
+                ellipsis
+                weight={isMadefor ? 'thin' : 'normal'}
+                size={styleType === Type.Text ? 'medium' : 'small'}
+                showTooltip={!active}
+                dataHook={DataHook.StepText}
+                className={classes.text}
+              >
+                {text}
+              </Text>
+            </div>
+            {!last && <ChevronRight className={classes.arrow} />}
+          </button>
+        )}
+      </FontUpgradeContext.Consumer>
     );
   }
 }

@@ -46,42 +46,7 @@ export default withFocusable(Component);
 
 ## Testing
 
-1. In order to run general focusable tests - method `runFocusTests` is available in `FocusableTestsE2E.js`.
-
-```jsx
-import { runFocusTests } from "../common/Focusable/FocusableTestsE2E";
-
-describe("Component", () => {
-  describe("Focus tests", () => {
-    const driver = TestkitFactory({ dataHook: storySettings.dataHook });
-    runFocusTests(driver, storyUrl);
-  });
-});
-```
-
-2. By default the example above will not work. You will need to merge your testkit driver together with focusable driver for it to access specific methods.
-
-```js
-import { mergeDrivers } from "./test/utils/private-drivers";
-import focusableDriverFactory from "./common/Focusable/Focusable.protractor.driver";
-
-const MyDriverFactory = element => {
-  const focusableDriver = focusableDriverFactory({
-    rootElement: element,
-    nativeFocusableElement: element,
-    clickableElements: [element]
-  });
-  const publicDriver = {
-    click: () => element.click(),
-    element: () => element
-  };
-  return mergeDrivers(publicDriver, focusableDriver);
-};
-
-export default DriverFactory;
-```
-
-Notice that `focusableDriverFactory()` expects a `clickableElements`. This list of clickable elements (inside your component) is used to try and click any of the elements, and expect that the component would become focused.
+Use visual tests for testing focusable. Refer to [visual testing documentation](../../../docs/contribution/VISUAL_TESTING.md)
 
 ## Troubleshooting
 

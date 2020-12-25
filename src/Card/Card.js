@@ -4,10 +4,11 @@ import Content from './Content';
 import Header from './Header';
 import Subheader from './Subheader';
 import Divider from './Divider';
-import styles from './Card.st.css';
+import { st, classes } from './Card.st.css';
 
 const Card = ({
   stretchVertically,
+  showShadow,
   hideOverflow,
   className,
   children,
@@ -15,11 +16,15 @@ const Card = ({
   dataHook,
 }) => (
   <div
-    {...styles('card', { stretchVertically, hideOverflow }, { className })}
+    className={st(
+      classes.card,
+      { stretchVertically, hideOverflow, showShadow },
+      className,
+    )}
     children={children}
     data-hook={dataHook}
   >
-    {controls && <div className={styles.controls}>{controls}</div>}
+    {controls && <div className={classes.controls}>{controls}</div>}
     {children}
   </div>
 );
@@ -33,6 +38,8 @@ Card.propTypes = {
   controls: PropTypes.node,
   /** makes the card stretch to max height in a container */
   stretchVertically: PropTypes.bool,
+  /** makes the card have a box-shadow style */
+  showShadow: PropTypes.bool,
   /** makes the card's overflow content to be hidden */
   hideOverflow: PropTypes.bool,
   /** additional css classes */
@@ -42,6 +49,7 @@ Card.propTypes = {
 
 Card.defaultProps = {
   stretchVertically: false,
+  showShadow: false,
 };
 
 Card.Content = Content;

@@ -4,7 +4,8 @@ import defaultTo from 'lodash/defaultTo';
 import classNames from 'classnames';
 import { ScrollSync } from 'react-scroll-sync';
 
-import style from './Table.st.css';
+import deprecationLog from '../utils/deprecationLog';
+import { st, classes } from './Table.st.css';
 import DataTable from './DataTable';
 import Checkbox from '../Checkbox';
 import { TableContext } from './TableContext';
@@ -17,6 +18,7 @@ import {
   TableContent,
   TableEmptyState,
   TableBulkSelectionCheckbox,
+  TableSubToolbar,
 } from './components';
 
 const hasUnselectablesSymbol = Symbol('hasUnselectables');
@@ -78,7 +80,7 @@ export function getDataTableProps(tableProps) {
   } = tableProps;
   return {
     ...props,
-    rowClass: classNames(tableProps.rowClass, style.tableRow),
+    rowClass: classNames(tableProps.rowClass, classes.tableRow),
   };
 }
 
@@ -90,6 +92,7 @@ export class Table extends React.Component {
   static ToolbarContainer = TableToolbarContainer;
   static Titlebar = TableTitleBar;
   static Content = TableContent;
+  static SubToolbar = TableSubToolbar;
   static EmptyState = TableEmptyState;
   static BulkSelectionCheckbox = TableBulkSelectionCheckbox;
 
@@ -117,17 +120,8 @@ export class Table extends React.Component {
   }
 
   renderChildren() {
-    const { children, withWrapper, onRowClick, dataHook } = this.props;
-    return withWrapper ? (
-      <div
-        data-hook={dataHook}
-        {...style('root', { isRowClickable: !!onRowClick }, this.props)}
-      >
-        {children}
-      </div>
-    ) : (
-      children
-    );
+    const { children, withWrapper, dataHook } = this.props;
+    return withWrapper ? <div data-hook={dataHook}>{children}</div> : children;
   }
 
   render() {
@@ -142,7 +136,15 @@ export class Table extends React.Component {
       onSelectionChanged,
       hasMore,
       horizontalScroll,
+      hideHeader,
     } = this.props;
+
+    if (hideHeader) {
+      deprecationLog(
+        '<Table>\'s "hideHeader" prop is deprecated. To hide the table header, render "<Table.Content titleBarVisible={false}>" in its "children" prop',
+      );
+    }
+
     let hasUnselectables = null;
     let allIds = data.map((rowData, rowIndex) =>
       rowData.unselectable
@@ -206,6 +208,7 @@ Table.defaultProps = {
   showLastRowDivider: false,
   horizontalScroll: false,
   stickyColumns: 0,
+  isRowDisabled: () => false,
 };
 
 Table.propTypes = {
@@ -300,7 +303,7 @@ Table.propTypes = {
   isRowHighlight: PropTypes.func,
   /** Whether there are more items to be loaded. Event listeners are removed if false. */
   hasMore: PropTypes.bool,
-  /** Should we hide the header of the table. */
+  /** [deprecated] This prop has no affect. To hide the table header, render `<Table.Content titleBarVisible={false}>` in `children`. */
   hideHeader: PropTypes.bool,
   /** An id to pass to the table */
   id: PropTypes.string,
@@ -328,7 +331,7 @@ Table.propTypes = {
   /** Add scroll listeners to specified DOM Object. */
   scrollElement: PropTypes.object,
   /** Table cell vertical padding. should be 'medium' or 'large'  */
-  rowVerticalPadding: PropTypes.oneOf(['medium', 'large']),
+  rowVerticalPadding: PropTypes.oneOf(['small', 'medium', 'large']),
   /** Function that returns React component that will be rendered in row details section. Example: `rowDetails={(row, rowNum) => <MyRowDetailsComponent {...row} />}` */
   rowDetails: PropTypes.func,
   /** A string data-hook to apply to all table body rows. or a func which calculates the data-hook for each row  - Signature: `(rowData, rowNum) => string` */
@@ -355,6 +358,8 @@ Table.propTypes = {
   horizontalScroll: PropTypes.bool,
   /** Number of columns to sticky from the left (should be used with horizontal scroll). */
   stickyColumns: PropTypes.number,
+  /** a function which will be called for every row in `data` to specify if it should appear as disabled. Example: `isRowDisabled={(rowData) => !rowData.isEnabled}` */
+  isRowDisabled: PropTypes.func,
 };
 
 // export default Table;

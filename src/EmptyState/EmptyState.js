@@ -1,7 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import classNames from 'classnames';
-import styles from './EmptyState.scss';
+import { classes, st } from './EmptyState.st.css';
 
 import Heading from '../Heading';
 import Text from '../Text';
@@ -21,26 +20,24 @@ const EmptyState = ({
   align,
 }) => (
   <div
-    className={classNames(
-      styles.wrapper,
-      styles[theme],
-      styles[`align-${align}`],
-    )}
+    className={st(classes.root, { theme, align })}
     data-hook={dataHook}
+    data-theme={theme}
+    data-align={align}
   >
-    <div className={styles.container}>
+    <div className={classes.container}>
       {image && (
         <div
-          className={classNames(
-            styles.imageContainer,
-            styles[`align-${align}`],
+          className={st(
+            classes.imageContainer,
+            {},
             (classNamesProp && classNamesProp.imageContainer) || '',
           )}
           data-hook="empty-state-image-container"
         >
           {typeof image === 'string' ? (
             <img
-              className={styles.imageElement}
+              className={classes.imageElement}
               src={image}
               data-hook="image-element"
             />
@@ -54,34 +51,42 @@ const EmptyState = ({
 
       {title && (
         <div
-          className={styles.titleContainer}
+          className={classes.titleContainer}
           data-hook="empty-state-title-container"
         >
           {theme === 'section' ? (
             <FontUpgradeContext.Consumer>
-              {context => (
-                <Text weight={context.active ? 'bold' : 'normal'}>{title}</Text>
+              {({ active }) => (
+                <Text
+                  weight={active ? 'bold' : 'normal'}
+                  className={classes.sectionTitle}
+                >
+                  {title}
+                </Text>
               )}
             </FontUpgradeContext.Consumer>
           ) : (
-            <Heading appearance="H3">{title}</Heading>
+            <Heading className={classes.title} appearance="H3">
+              {title}
+            </Heading>
           )}
         </div>
       )}
 
-      <div
-        className={styles.subtitleContainer}
-        data-hook="empty-state-subtitle-container"
-      >
-        <Text secondary>{subtitle}</Text>
-      </div>
+      {subtitle && (
+        <div
+          className={classes.subtitleContainer}
+          data-hook="empty-state-subtitle-container"
+        >
+          <Text className={classes.subtitle} secondary>
+            {subtitle}
+          </Text>
+        </div>
+      )}
 
       {children && (
         <div
-          className={classNames(
-            styles.childrenContainer,
-            styles[`align-${align}`],
-          )}
+          className={classes.childrenContainer}
           data-hook="empty-state-children-container"
         >
           {children}

@@ -1,5 +1,6 @@
 import * as React from 'react';
 import PageHeader from '../PageHeader';
+import { ScrollableContainerCommonProps } from '../common';
 
 export type PageProps = {
   dataHook?: string;
@@ -13,6 +14,7 @@ export type PageProps = {
   scrollableContentRef?: (ref: HTMLElement) => void;
   zIndex?: number;
   horizontalScroll?: boolean;
+  scrollProps?: ScrollableContainerCommonProps;
 };
 
 export interface ContentProps {
@@ -25,6 +27,11 @@ export interface FixedContentProps {
   children: React.ReactElement;
 }
 declare const FixedContent: React.SFC<FixedContentProps>;
+
+export interface FixedFooterProps {
+  children: React.ReactElement;
+}
+declare const FixedFooter: React.SFC<FixedFooterProps>;
 
 export interface TailProps {
   children: React.ReactElement;
@@ -48,4 +55,5 @@ export default class Page extends React.PureComponent<PageProps> {
   static FixedContent: typeof FixedContent;
   static Tail: typeof Tail;
   static Sticky: typeof Sticky;
+  static FixedFooter: typeof FixedFooter;
 }

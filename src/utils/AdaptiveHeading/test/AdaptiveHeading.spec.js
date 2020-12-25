@@ -61,4 +61,12 @@ describe('AdaptiveHeading', () => {
 
     expect(await driver.getAppearance()).toBe('H6');
   });
+
+  it('should render a span element when appearance is "tiny"', async () => {
+    const { driver } = render(
+      <AdaptiveHeading text="long" textInShort="short" appearance="tiny" />,
+    );
+
+    expect(await driver.getAppearance()).toBe('SPAN');
+  });
 });

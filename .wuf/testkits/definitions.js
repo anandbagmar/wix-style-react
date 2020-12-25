@@ -6,11 +6,6 @@
  */
 
 module.exports = {
-  BadgeSelectItemBuilder: {
-    skipSanityTest: true,
-    noTestkit: true,
-  },
-
   BadgeSelect: {
     vanillaLegacyTestkit: true,
     enzymeLegacyTestkit: true,
@@ -33,7 +28,6 @@ module.exports = {
     enzymeLegacyTestkit: true,
     protractorLegacyTestkit: true,
     noPuppeteerTestkit: true, // was not exported before automation, keeping that way for now
-    noUnidriver: true,
   },
 
   MultiSelect: {
@@ -386,9 +380,6 @@ module.exports = {
   FormField: {
     vanillaLegacyTestkit: true,
     enzymeLegacyTestkit: true,
-    protractorLegacyTestkit: true,
-    puppeteerLegacyTestkit: true,
-    puppeteerTypeImportName: 'FormFieldPuppeteerDriver',
   },
 
   ToggleSwitch: {
@@ -402,7 +393,6 @@ module.exports = {
     enzymeLegacyTestkit: true,
     protractorLegacyTestkit: true,
     noPuppeteerTestkit: true,
-    noUnidriver: true,
   },
 
   ColorPicker: {
@@ -449,7 +439,6 @@ module.exports = {
   EditableSelector: {
     vanillaLegacyTestkit: true,
     enzymeLegacyTestkit: true,
-    protractorLegacyTestkit: true,
   },
 
   Tag: {
@@ -519,12 +508,25 @@ module.exports = {
     vanillaLegacyTestkit: true,
     enzymeLegacyTestkit: true,
     protractorLegacyTestkit: true,
-    noPuppeteerTestkit: true,
-    noUnidriver: true,
   },
 
   AutoCompleteWithLabel: {
     namedProtractorTestkitExport: true,
     namedPuppeteerTestkitExport: true,
   },
+
+  Themes: {
+    skipSanityTest: true,
+    noTestkit: true,
+  },
+
+  ThemeProvider: {
+    skipSanityTest: true,
+    noTestkit: true,
+  },
+
+  FailWhale: {
+    skipSanityTest: true,
+    noTestkit: true,
+  }
 };

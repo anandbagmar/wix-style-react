@@ -5,12 +5,13 @@ import { TooltipProps } from '../Tooltip';
 export type InputAreaStatus = InputStatus;
 
 export interface InputAreaProps {
+  dataHook?: string;
+  className?: string;
   ariaControls?: string;
   ariaDescribedby?: string;
   ariaLabel?: string;
   autoFocus?: boolean;
   autoSelect?: boolean;
-  dataHook?: string;
   size?: InputAreaSize;
   defaultValue?: string;
   disabled?: boolean;
@@ -39,6 +40,7 @@ export interface InputAreaProps {
   tabIndex?: number;
   tooltipPlacement?: TooltipProps['placement'];
   value?: string;
+  required?: boolean;
   status?: InputAreaStatus;
   statusMessage?: React.ReactNode;
 }
@@ -51,4 +53,4 @@ export default class InputArea extends React.PureComponent<InputAreaProps> {
   select: () => void;
 }
 
-export type InputAreaSize = 'small' | 'normal';
+export type InputAreaSize = 'small' | 'medium' | 'normal';

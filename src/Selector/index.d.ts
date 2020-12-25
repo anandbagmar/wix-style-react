@@ -1,6 +1,7 @@
 import * as React from 'react';
 
 export interface SelectorProps {
+  className?: string;
   dataHook?: string;
   id: string | number;
   title: string;

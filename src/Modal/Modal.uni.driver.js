@@ -1,31 +1,36 @@
 import { baseUniDriverFactory } from '../../test/utils/unidriver';
 
 export const modalUniDriverFactory = (base, body) => {
-  const getPortal = () => body.$('.portal');
+  const getPortal = async () => {
+    if (await base.exists()) {
+      const dataHook = !!base.attr && (await base.attr('data-hook'));
+      return dataHook
+        ? body.$(`.portal.portal-${dataHook}`)
+        : body.$('.portal');
+    }
+  };
   const getOverlay = () => body.$('.ReactModal__Overlay');
   const getContent = () => body.$('.ReactModal__Content');
   const getCloseButton = () => body.$('[data-hook="modal-close-button"]');
-
   const isOpen = () => getContent().exists();
 
   return {
     ...baseUniDriverFactory(base),
+
+    /** true if the modal is on the DOM */
+    exists: async () => !!(await getPortal()),
+
     /** true when the module is open */
     isOpen,
-    /** true if theme <arg> exists in the modal */
-    isThemeExist: theme =>
-      getPortal()
-        .$(`.${theme}`)
-        .exists(),
-    getChildBySelector: async selector =>
-      (await getPortal()
-        .$(selector)
-        .exists())
-        ? getPortal().$(selector)
-        : null,
+    getChildBySelector: async selector => {
+      const portal = await getPortal();
+      return (await portal.$(selector).exists()) ? portal.$(selector) : null;
+    },
     /** true if the modal is scrollable */
-    isScrollable: async () =>
-      !(await getPortal().hasClass('portalNonScrollable')),
+    isScrollable: async () => {
+      const content = await getPortal();
+      return !!(await content.$('[data-scrollable]').exists());
+    },
     closeButtonExists: () => getCloseButton().exists(),
     /** click on the modal overlay (helpful for testing if the modal is dismissed) */
     clickOnOverlay: () => getOverlay().click(),

@@ -2,6 +2,8 @@
 
 .input {
   flex-grow:1;
+  width: 1px;
+  min-width: 1px;
 
   .disabled & {
     visibility: hidden;
@@ -11,7 +13,7 @@
 // Override <Input>'s default focus style
 .input div {
   background-color: transparent !important;
-  border-color: transparent !important;
+  border: none !important;
   box-shadow: none !important;
 }
 
@@ -32,16 +34,38 @@
   position: absolute;
   top: 0;
   right: 6px;
-  height: 34px;
   box-sizing: border-box;
+  display: flex;
+  height: 34px;
 
-  &.sizeSmall {
-    height: 30px;
+  .menuArrow {
+    color: var(--wsr-color-10, $B10);
+    margin: auto 6px;
+
+    svg {
+      transform: translateY(-1px);
+    }
   }
 
-  &.sizeLarge {
+  .disabled & .menuArrow {
+    color: $D10-30;
+  }
+
+  .sizeSmall & {
+    height: 28px;
+  }
+
+  .sizeLarge & {
     height: 42px;
   }
+
+  .statusIndicator {
+    margin: auto 6px;
+  }
+}
+
+.suffixes {
+  height: 100%;
 }
 
 .hiddenDiv {
@@ -65,7 +89,7 @@
 
 .inputWithTagsContainer {
   width: 100%;
-  border: 1px solid $B30;
+  border: 1px solid var(--wsr-color-30, $B30);
   border-radius: 6px;
   display: flex;
   flex-wrap: wrap;
@@ -79,7 +103,7 @@
   }
 
   &:hover:not(.hasFocus):not(.disabled) {
-    background: $B50;
+    background: var(--wsr-color-50, $B50);
   }
 }
 
@@ -109,7 +133,7 @@
 }
 
 .hasFocus {
-  border-color: $B20;
+  border-color: var(--wsr-color-20, $B20);
 
   @include FocusBox;
 
@@ -123,7 +147,7 @@
 }
 
 .customSuffix {
-  margin: 0 6px;
+  margin: auto 6px;
 }
 
 .tagsContainer {
@@ -150,7 +174,7 @@
 
 @include withRTL() {
   .tag {
-    margin-left: 0px;
+    margin-left: 0;
     margin-right: 7px;
   }
 }

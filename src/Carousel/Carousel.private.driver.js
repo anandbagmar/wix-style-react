@@ -15,7 +15,7 @@ export default ({ element }) => {
     ...publicDriver({ element }),
     hasClass: className => isClassExists(element, className),
     getCurrentImageIndex: () => {
-      const currentSlide = element.querySelector('.slick-current');
+      const currentSlide = element.querySelector('[aria-hidden="false"]');
       return Number(currentSlide.dataset.index);
     },
     isPrevButtonDisabled: () => arrowButtonDriver('prev').isButtonDisabled(),
@@ -24,14 +24,6 @@ export default ({ element }) => {
       element
         .querySelectorAll('[data-hook="carousel-img"]')
         .forEach(img => ReactTestUtils.Simulate.load(img));
-    },
-    clickPrevious: () => {
-      const prevButton = element.querySelector('[data-hook="prev-button"]');
-      ReactTestUtils.Simulate.click(prevButton);
-    },
-    clickNext: () => {
-      const nextButton = element.querySelector('[data-hook="next-button"]');
-      ReactTestUtils.Simulate.click(nextButton);
     },
     mouseOver: () => {
       const imageContainer = element.querySelector('.slick-current');

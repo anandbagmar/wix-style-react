@@ -1,8 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { withFocusable } from 'wix-ui-core/dist/src/hocs/Focusable/FocusableHOC';
-
-import styles from './ToggleButton.st.css';
+import { FontUpgradeContext } from '../../FontUpgrade/context';
+import { st, classes } from './ToggleButton.st.css';
 
 import Text from '../../Text';
 
@@ -11,7 +11,7 @@ const addPrefix = icon =>
   React.cloneElement(icon, {
     width: '24',
     height: '24',
-    className: styles.prefix,
+    className: classes.prefix,
   });
 
 const ToggleButton = ({
@@ -22,28 +22,33 @@ const ToggleButton = ({
   focusableOnFocus,
   focusableOnBlur,
   disabled,
+  className,
   ...rest
 }) => (
-  <button
-    {...rest}
-    {...styles('root', { selected }, rest)}
-    data-hook={dataHook}
-    data-selected={selected}
-    disabled={disabled}
-    onFocus={focusableOnFocus}
-    onBlur={focusableOnBlur}
-    type="button"
-  >
-    {addPrefix(prefixIcon)}
-    <Text
-      ellipsis
-      size="medium"
-      weight="normal"
-      skin={disabled ? 'disabled' : 'standard'}
-    >
-      {children}
-    </Text>
-  </button>
+  <FontUpgradeContext.Consumer>
+    {({ active: isMadefor }) => (
+      <button
+        {...rest}
+        className={st(classes.root, { selected }, className)}
+        data-hook={dataHook}
+        data-selected={selected}
+        disabled={disabled}
+        onFocus={focusableOnFocus}
+        onBlur={focusableOnBlur}
+        type="button"
+      >
+        {addPrefix(prefixIcon)}
+        <Text
+          ellipsis
+          size="medium"
+          weight={isMadefor ? 'thin' : 'normal'}
+          skin={disabled ? 'disabled' : 'standard'}
+        >
+          {children}
+        </Text>
+      </button>
+    )}
+  </FontUpgradeContext.Consumer>
 );
 
 ToggleButton.propTypes = {

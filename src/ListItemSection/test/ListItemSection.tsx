@@ -25,7 +25,7 @@ function listItemSectionBuilderWithMandatoryProps() {
 }
 
 function listItemSectionBuilderWithAllProps() {
-  const { id, overrideStyle, value } = listItemSectionBuilder({
+  const { id, overrideOptionStyle, value } = listItemSectionBuilder({
     id: '1',
     className: 'cls',
     ellipsis: true,

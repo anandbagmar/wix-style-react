@@ -1,9 +1,42 @@
 import * as React from 'react';
-import { IconElement } from '../common';
-import { EllipsisHOCProps } from '../common/EllipsisHOC';
-import { ButtonWithAsProp } from '../Button';
+import { IconElement, OmitPolyfill } from '../common';
+import { EllipsisCommonProps } from '../common/Ellipsis';
 
-export type ListItemActionProps = ButtonWithAsProp<{
+export type ListItemActionWithAsProp<T> =
+  | ListItemActionAsButtonProps<T>
+  | ListItemActionAsAnchorProps<T>
+  | ListItemActionGenericProps<T>
+  | ListItemActionAsComponentProps<T>;
+
+type ListItemActionAsButtonProps<T> = React.ButtonHTMLAttributes<
+  HTMLButtonElement
+> &
+  T & {
+    as?: 'button';
+    onClick?: React.MouseEventHandler<HTMLButtonElement>;
+  };
+
+type ListItemActionAsAnchorProps<T> = React.AnchorHTMLAttributes<
+  HTMLAnchorElement
+> &
+  T & {
+    as: 'a';
+    onClick?: React.MouseEventHandler<HTMLAnchorElement>;
+  };
+
+type ListItemActionGenericProps<T> = T & {
+  as: keyof OmitPolyfill<HTMLElementTagNameMap, 'a' | 'button'>;
+  onClick?: React.MouseEventHandler<HTMLElement>;
+  [additionalProps: string]: any;
+};
+
+type ListItemActionAsComponentProps<T> = T & {
+  as: React.ComponentType<any>;
+  onClick?: React.MouseEventHandler<HTMLElement>;
+  [additionalProps: string]: any;
+};
+
+export type ListItemActionProps = ListItemActionWithAsProp<{
   title: string;
   dataHook?: string;
   skin?: ListItemActionSkin;
@@ -12,8 +45,9 @@ export type ListItemActionProps = ButtonWithAsProp<{
   autoFocus?: boolean;
   ellipsis?: boolean;
   disabled?: boolean;
-  tooltipModifiers?: EllipsisHOCProps;
+  tooltipModifiers?: EllipsisCommonProps;
   highlighted?: boolean;
+  subtitle?: string;
 }>;
 
 export default class ListItemAction extends React.PureComponent<
@@ -39,9 +73,10 @@ export const listItemActionBuilder: <T extends Partial<
   autoFocus?: boolean;
   className?: string;
   ellipsis?: boolean;
+  subtitle?: string;
 }) => {
   id: string | number;
   disabled: boolean | undefined;
-  overrideStyle: true;
+  overrideOptionStyle: true;
   value: (props: T) => React.ReactNode;
 };

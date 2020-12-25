@@ -10,6 +10,7 @@ export const SKINS = {
   success: 'success',
   premium: 'premium',
   disabled: 'disabled',
+  primary: 'primary',
 };
 
 export const WEIGHTS = {

@@ -1,27 +1,16 @@
 import React from 'react';
 
 import PropTypes from 'prop-types';
-import classNames from 'classnames';
 import { ResizeSensor } from 'css-element-queries';
-import s from './Page.scss';
+import { st, classes, stVars } from './Page.st.css';
 import { PageContext } from './PageContext';
 import PageHeader from '../PageHeader';
 import Content from './Content';
 import Tail from './Tail';
 import { PageSticky } from './PageSticky';
-
-import {
-  PAGE_SIDE_PADDING_PX,
-  PAGE_BOTTOM_PADDING_PX,
-  BACKGROUND_COVER_CONTENT_PX,
-  MINIMIZED_HEADER_WRAPPER_HEIGHT_PX,
-  MINIMIZED_HEADER_WRAPPER_WITH_TAIL_HEIGHT_PX,
-  HEADER_BOTTOM_PADDING_PX,
-} from './constants';
-import {
-  mainContainerMinWidthPx as GRID_MIN_WIDTH,
-  mainContainerMaxWidthPx as GRID_MAX_WIDTH,
-} from '../Grid/constants';
+import FixedFooter from './FixedFooter';
+import ScrollableContainer from '../common/ScrollableContainer';
+import { ScrollableContainerCommonProps } from '../common/PropTypes/ScrollableContainerCommon';
 
 /*
  * Page structure without mini-header-overlay:
@@ -58,13 +47,15 @@ import {
 
 class Page extends React.PureComponent {
   static defaultProps = {
-    minWidth: GRID_MIN_WIDTH,
-    maxWidth: GRID_MAX_WIDTH,
+    minWidth: parseInt(stVars.mainContainerMinWidth, 10),
+    maxWidth: parseInt(stVars.mainContainerMaxWidth, 10),
+    scrollProps: {},
   };
 
   constructor(props) {
     super(props);
 
+    this.scrollableContainerRef = React.createRef();
     this._handleScroll = this._handleScroll.bind(this);
     this._handleWidthResize = this._handleWidthResize.bind(this);
     this._handleWindowResize = this._handleWindowResize.bind(this);
@@ -77,6 +68,7 @@ class Page extends React.PureComponent {
       headerWrapperHeight: 0,
       tailHeight: 0,
       scrollBarWidth: 0,
+      footerHeight: 0,
       minimized: false,
     };
   }
@@ -95,6 +87,13 @@ class Page extends React.PureComponent {
     // Maybe there is a transition
     const ARBITRARY_SHORT_DURATION_MS = 100;
     setTimeout(this._calculateComponentsHeights, ARBITRARY_SHORT_DURATION_MS);
+
+    // This is done for backward compatibility only,
+    // Notifying current users that passed the `scrollableContentRef` prop about the ref current value.
+    // New users should be encouraged to use the new event handlers onScrollChanged/onScrollAreaChanged
+    // according to their use case.
+    this.props.scrollableContentRef &&
+      this.props.scrollableContentRef(this.scrollableContainerRef.current);
   }
 
   componentDidUpdate(prevProps) {
@@ -116,6 +115,7 @@ class Page extends React.PureComponent {
       headerWrapperHeight,
       tailHeight,
       pageHeight,
+      footerHeight,
       minimized,
     } = this.state;
 
@@ -133,37 +133,39 @@ class Page extends React.PureComponent {
       ? this.pageHeaderTailRef.offsetHeight
       : 0;
     const newPageHeight = this.pageRef ? this.pageRef.offsetHeight : 0;
+    const newFooterHeight = this.footerWrapperRef
+      ? this.footerWrapperRef.offsetHeight
+      : 0;
 
     if (
       headerContainerHeight !== newHeaderContainerHeight ||
       headerWrapperHeight !== newHeaderWrapperHeight ||
       tailHeight !== newTailHeight ||
-      pageHeight !== newPageHeight
+      pageHeight !== newPageHeight ||
+      footerHeight !== newFooterHeight
     ) {
       this.setState({
         headerContainerHeight: newHeaderContainerHeight,
         headerWrapperHeight: newHeaderWrapperHeight,
         tailHeight: newTailHeight,
         pageHeight: newPageHeight,
+        footerHeight: newFooterHeight,
       });
     }
   }
 
-  _setScrollContainer(scrollableContainerRef) {
-    this.scrollableContentRef = scrollableContainerRef;
-
-    this.props.scrollableContentRef &&
-      this.props.scrollableContentRef(scrollableContainerRef);
-  }
-
   _getScrollContainer() {
-    return this.scrollableContentRef;
+    return this.scrollableContainerRef.current;
   }
 
   _getMinimizedHeaderWrapperHeight() {
+    if (!this._hasHeader()) {
+      return 0;
+    }
+
     return this._hasTail()
-      ? MINIMIZED_HEADER_WRAPPER_WITH_TAIL_HEIGHT_PX
-      : MINIMIZED_HEADER_WRAPPER_HEIGHT_PX;
+      ? parseInt(stVars.minimizedHeaderWrapperWithTailHeightPx, 10)
+      : parseInt(stVars.minimizedHeaderWrapperHeightPx, 10);
   }
 
   _getMinimizationDiff() {
@@ -173,7 +175,7 @@ class Page extends React.PureComponent {
       : null;
   }
 
-  _handleScroll() {
+  _handleScroll(e) {
     const containerScrollTop = this._getScrollContainer().scrollTop;
 
     const { minimized } = this.state;
@@ -186,6 +188,13 @@ class Page extends React.PureComponent {
       this.setState({
         minimized: nextDisplayMiniHeader,
       });
+    }
+
+    const {
+      scrollProps: { onScrollChanged },
+    } = this.props;
+    if (onScrollChanged) {
+      onScrollChanged(e);
     }
   }
 
@@ -257,17 +266,25 @@ class Page extends React.PureComponent {
     const { PageContent } = this._getNamedChildren();
     const contentFullScreen = PageContent && PageContent.props.fullScreen;
 
-    const { className, horizontalScroll, ...rest } = props;
-    const mergedClassNames = classNames(className, s.contentHorizontalLayout, {
-      [s.contentFullWidth]: contentFullScreen,
-      [s.horizontalScroll]: horizontalScroll,
-    });
+    const { className, horizontalScroll, style, ...rest } = props;
 
-    const pageDimensionsStyle = this._getPageDimensionsStyle();
-    const style = contentFullScreen ? null : pageDimensionsStyle;
+    const pageDimensionsStyle = contentFullScreen
+      ? null
+      : this._getPageDimensionsStyle();
 
     return (
-      <div className={mergedClassNames} style={style} {...rest}>
+      <div
+        className={st(
+          classes.contentHorizontalLayout,
+          {
+            contentFullWidth: contentFullScreen,
+            horizontalScroll,
+          },
+          className,
+        )}
+        style={{ ...pageDimensionsStyle, ...style }}
+        {...rest}
+      >
         {props.children}
       </div>
     );
@@ -283,9 +300,7 @@ class Page extends React.PureComponent {
         <div
           data-hook={dataHook}
           key={dataHook}
-          className={classNames(s.headerWrapper, {
-            [s.minimized]: minimized,
-          })}
+          className={st(classes.headerWrapper, { minimized })}
           ref={ref => {
             this.headerWrapperRef = ref;
           }}
@@ -305,9 +320,9 @@ class Page extends React.PureComponent {
     return (
       <div
         data-hook="page-header-container"
-        className={classNames(s.pageHeaderContainer, {
-          [s.minimized]: minimized,
-          [s.hasTail]: this._hasTail(),
+        className={st(classes.pageHeaderContainer, {
+          minimized,
+          hasTail: this._hasTail(),
         })}
         ref={ref => (this.headerContainerRef = ref)}
         onWheel={event => {
@@ -325,26 +340,35 @@ class Page extends React.PureComponent {
   }
 
   _renderScrollableContainer() {
+    const {
+      scrollProps: { onScrollAreaChanged },
+    } = this.props;
     return (
-      <div
-        className={classNames(s.scrollableContainer, {
-          [s.hasTail]: this._hasTail(),
+      <ScrollableContainer
+        className={st(classes.scrollableContainer, {
+          hasTail: this._hasTail(),
         })}
-        data-hook="page-scrollable-content"
+        dataHook="page-scrollable-content"
         data-class="page-scrollable-content"
-        ref={r => this._setScrollContainer(r)}
-        onScroll={this._handleScroll}
+        ref={this.scrollableContainerRef}
+        onScrollAreaChanged={onScrollAreaChanged}
+        onScrollChanged={this._handleScroll}
       >
         {this._renderScrollableBackground()}
         {this._renderMinimizationPlaceholder()}
         {this._renderHeaderContainer()}
         {this._renderContentContainer()}
-      </div>
+        {this._renderFixedFooter()}
+      </ScrollableContainer>
     );
   }
 
   _hasTail() {
     return !!this._getNamedChildren().PageTail;
+  }
+
+  _hasHeader() {
+    return !!this._getNamedChildren().PageHeader;
   }
 
   _renderMinimizationPlaceholder() {
@@ -363,17 +387,17 @@ class Page extends React.PureComponent {
 
     const backgroundHeight = `${headerContainerHeight -
       tailHeight +
-      (this._hasTail() ? 0 : BACKGROUND_COVER_CONTENT_PX)}px`;
+      (this._hasTail() ? 0 : parseInt(stVars.backgroundCoverContentPx, 10))}px`;
 
     if (this._hasBackgroundImage()) {
       return (
         <div
-          className={s.imageBackgroundContainer}
+          className={classes.imageBackgroundContainer}
           style={{ height: backgroundHeight }}
           data-hook="page-background-image"
         >
           <div
-            className={s.imageBackground}
+            className={classes.imageBackground}
             style={{ backgroundImage: `url(${this.props.backgroundImageUrl})` }}
           />
         </div>
@@ -384,7 +408,11 @@ class Page extends React.PureComponent {
       return (
         <div
           data-hook="page-gradient-class-name"
-          className={`${s.gradientBackground} ${this.props.gradientClassName}`}
+          className={st(
+            classes.gradientBackground,
+            {},
+            this.props.gradientClassName,
+          )}
           style={{ height: backgroundHeight }}
         />
       );
@@ -400,7 +428,7 @@ class Page extends React.PureComponent {
         <div
           data-hook={dataHook}
           key={dataHook}
-          className={s.tail}
+          className={classes.tail}
           ref={r => (this.pageHeaderTailRef = r)}
         >
           {PageTail}
@@ -410,22 +438,10 @@ class Page extends React.PureComponent {
   }
 
   _renderContentContainer() {
+    const { footerHeight } = this.state;
     const { children } = this.props;
     const childrenObject = getChildrenObject(children);
     const { PageContent, PageFixedContent } = childrenObject;
-
-    const { headerWrapperHeight, tailHeight } = this.state;
-
-    const { pageHeight } = this.state;
-
-    const pageContentMarginTop = tailHeight ? HEADER_BOTTOM_PADDING_PX : 0;
-
-    const stretchToHeight =
-      pageHeight -
-      headerWrapperHeight -
-      tailHeight -
-      pageContentMarginTop -
-      PAGE_BOTTOM_PADDING_PX;
 
     return (
       <PageContext.Provider
@@ -437,15 +453,13 @@ class Page extends React.PureComponent {
         }}
       >
         {this._renderContentHorizontalLayout({
-          className: s.contentContainer,
+          className: classes.contentContainer,
+          style: {
+            paddingBottom: footerHeight || '48px',
+          },
           horizontalScroll: this.props.horizontalScroll,
           children: (
-            <div
-              style={{
-                minHeight: `${stretchToHeight}px`,
-              }}
-              className={s.contentFloating}
-            >
+            <div className={classes.contentFloating}>
               {PageFixedContent && (
                 <PageSticky data-hook="page-fixed-content">
                   {React.cloneElement(PageFixedContent)}
@@ -459,20 +473,45 @@ class Page extends React.PureComponent {
     );
   }
 
+  _renderFixedFooter = () => {
+    const { children } = this.props;
+    const childrenObject = getChildrenObject(children);
+    const { FixedFooter: FixedFooterChild, PageContent } = childrenObject;
+    const contentFullScreen = PageContent && PageContent.props.fullScreen;
+
+    const pageDimensionsStyle = contentFullScreen
+      ? null
+      : this._getPageDimensionsStyle();
+
+    if (FixedFooterChild) {
+      return (
+        <div
+          className={classes.fixedFooter}
+          ref={ref => {
+            this.footerWrapperRef = ref;
+          }}
+          style={pageDimensionsStyle}
+        >
+          {React.cloneElement(FixedFooterChild, {})}
+        </div>
+      );
+    }
+  };
+
   render() {
     const { dataHook, className, minWidth, zIndex, height } = this.props;
 
     return (
       <div
         data-hook={dataHook}
-        className={classNames(s.pageWrapper, className)}
+        className={st(classes.root, {}, className)}
         style={{ zIndex, height }}
       >
         <div
           data-hook="page"
-          className={s.page}
+          className={classes.page}
           style={{
-            minWidth: minWidth + 2 * PAGE_SIDE_PADDING_PX,
+            minWidth: minWidth + 2 * parseInt(stVars.pageSidePadding, 10),
           }}
           ref={ref => (this.pageRef = ref)}
         >
@@ -480,6 +519,15 @@ class Page extends React.PureComponent {
         </div>
       </div>
     );
+  }
+
+  /**
+   * Scrolls the page to a particular set of coordinates
+   * @param {ScrollToOptions} scrollTo { left: number, top: number, behavior: 'smooth' | 'auto' }
+   */
+  scrollTo(scrollTo) {
+    const scrollContainer = this._getScrollContainer();
+    scrollContainer.scrollTo(scrollTo);
   }
 }
 
@@ -494,6 +542,7 @@ Page.Header = PageHeader;
 Page.Content = Content;
 Page.FixedContent = FixedContent; // TODO: deprecate, use Page.Sticky instead
 Page.Tail = Tail;
+Page.FixedFooter = FixedFooter;
 Page.Sticky = PageSticky;
 
 const allowedChildren = [
@@ -501,6 +550,7 @@ const allowedChildren = [
   Page.Content,
   Page.FixedContent,
   Page.Tail,
+  Page.FixedFooter,
 ];
 
 Page.propTypes = {
@@ -522,8 +572,27 @@ Page.propTypes = {
   className: PropTypes.string,
   /** Header background color class name, allows to add a gradient to the header */
   gradientClassName: PropTypes.string,
-  /** Is called with the Page's scrollable content ref **/
+  /** Will be called with the Page's scrollable content ref after page mount.
+   *
+   * **Note** - If you need this ref just for listening to scroll events on the scrollable content then use the prop
+   * `scrollProps = {onScrollChanged/onScrollAreaChanged}` instead according to your needs. **/
   scrollableContentRef: PropTypes.func,
+  /** Props related to the scrollable content of the page.
+   *
+   * **onScrollAreaChanged** - A Handler for scroll area changes, will be triggered only when the user scrolls to a
+   * different area of the scrollable content, see signature for possible areas
+   * ##### Signature:
+   * `function({area: {y: AreaY, x: AreaX}, target: HTMLElement}) => void`
+   *
+   * `AreaY`: top | middle | bottom | none
+   *
+   * `AreaX`: start | middle | end | none (not implemented yet)
+   *
+   * **onScrollAreaChanged** - A Generic Handler for scroll changes with throttling (100ms)
+   * ##### Signature:
+   * `function({target: HTMLElement}) => void`
+   * */
+  scrollProps: PropTypes.shape(ScrollableContainerCommonProps),
 
   /** Accepts these components as children: `Page.Header`, `Page.Tail`, `Page.Content`, `Page.FixedContent`. Order is insignificant. */
   children: PropTypes.arrayOf((children, key) => {
@@ -562,6 +631,10 @@ function getChildrenObject(children) {
       }
       case 'Page.Tail': {
         acc.PageTail = child;
+        break;
+      }
+      case 'Page.FixedFooter': {
+        acc.FixedFooter = child;
         break;
       }
       default: {

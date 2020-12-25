@@ -30,6 +30,7 @@ function tableWithAllProps() {
       onMouseEnterRow={(_rowData, _rowNum) => {}}
       onMouseLeaveRow={(_rowData, _rowNum) => {}}
       onRowClick={(_rowData, _rowNum) => {}}
+      isRowDisabled={(_rowData) => false}
       onSelectionChanged={(_selectedIds, change) => {}}
       onSortClick={(_colData, colNum) => {}}
       rowClass="class"
@@ -57,7 +58,9 @@ function tableWithAllProps() {
         {
           align: 'center',
           important: true,
-          infoTooltipProps: {},
+          infoTooltipProps: {
+            content: 'some content'
+          },
           render: (_row, _rowNum) => <span />,
           sortDescending: true,
           sortable: true,

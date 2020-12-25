@@ -1,21 +1,29 @@
 import React from 'react';
 import { withFocusable } from 'wix-ui-core/dist/src/hocs/Focusable/FocusableHOC';
-import SortByArrowUp from 'wix-ui-icons-common/system/SortByArrowUp';
-import SortByArrowDown from 'wix-ui-icons-common/system/SortByArrowDown';
 import InfoCircleSmall from 'wix-ui-icons-common/InfoCircleSmall';
 
 import Heading from '../../Heading';
+import Text from '../../Text';
 import Tooltip from '../../Tooltip';
-import Badge from '../../Badge';
+import TrendIndicator from '../../TrendIndicator';
 import AdaptiveHeading from '../../utils/AdaptiveHeading';
 
 import DataHooks from '../dataHooks';
-import DataAttrs from '../dataAttrs';
 
-import styles from './StatisticsItem.st.css';
+import { st, classes } from './StatisticsItem.st.css';
+import { SIZES } from '../constants';
+
+const sizeToAppearance = {
+  [SIZES.tiny]: 'tiny',
+  [SIZES.large]: 'H1',
+};
 
 class StatisticsItem extends React.PureComponent {
   static displayName = 'StatisticsItem';
+  static defaultProps = {
+    size: 'large',
+    alignItems: 'center',
+  };
 
   _getFocusableProps = () => {
     const { onClick, focusableOnFocus, focusableOnBlur } = this.props;
@@ -40,33 +48,45 @@ class StatisticsItem extends React.PureComponent {
     }
   };
 
-  _renderValue = (value, valueInShort) => (
+  _renderValue = (value, valueInShort, size) => (
     <AdaptiveHeading
-      text={value}
+      text={value || '-'}
+      appearance={sizeToAppearance[size]}
       textInShort={valueInShort}
       dataHook={DataHooks.value}
     />
   );
 
-  _renderDescription = (description, subtitleContentInfo) => {
+  _renderDescription = (description, subtitleContentInfo, size, alignItems) => {
     if (!description) {
       return null;
     }
 
     return (
-      <div className={styles.description}>
-        <Heading ellipsis dataHook={DataHooks.description} appearance="H5">
-          {description}
-        </Heading>
+      <div className={st(classes.description, { alignItems })}>
+        {size === SIZES.tiny ? (
+          <Text
+            ellipsis
+            size="small"
+            dataHook={DataHooks.description}
+            secondary
+          >
+            {description}
+          </Text>
+        ) : (
+          <Heading ellipsis dataHook={DataHooks.description} appearance="H5">
+            {description}
+          </Heading>
+        )}
         {subtitleContentInfo && (
           <Tooltip
             textAlign="start"
-            {...styles('tooltip', {}, this.props)}
+            className={classes.tooltip}
             dataHook={DataHooks.tooltip}
             content={subtitleContentInfo}
           >
             <InfoCircleSmall
-              className={styles.info}
+              className={classes.info}
               data-hook={DataHooks.info}
             />
           </Tooltip>
@@ -75,46 +95,18 @@ class StatisticsItem extends React.PureComponent {
     );
   };
 
-  _renderPercents = (percentage, invertedPercentage = false) => {
-    if (isNaN(Number(percentage))) {
+  _renderPercents = (percentage, invertedPercentage) => {
+    if (percentage == null) {
       return null;
     }
 
-    let skin = 'neutral';
-    let trendIcon = null;
-
-    if (percentage > 0) {
-      trendIcon = <SortByArrowUp data-hook={DataHooks.trendUp} />;
-      skin = !invertedPercentage ? 'success' : 'danger';
-    } else if (percentage < 0) {
-      trendIcon = <SortByArrowDown data-hook={DataHooks.trendDown} />;
-      skin = !invertedPercentage ? 'danger' : 'success';
-    }
-
-    const badgeProps = {
-      type: 'transparent',
-      dataHook: DataHooks.percentage,
-      [DataAttrs.invertedPercentage]: invertedPercentage,
-      skin,
-    };
-
     return (
-      <Badge
-        {...badgeProps}
-        {...styles('percentage ', { clickable: !!this.props.onClick })}
-      >
-        <div className={styles.percentageInner}>
-          {!!percentage && (
-            <span
-              className={styles.trendIndicator}
-              data-hook={DataHooks.trendIndicator}
-            >
-              {trendIcon}
-            </span>
-          )}
-          {Math.abs(percentage)}%
-        </div>
-      </Badge>
+      <TrendIndicator
+        className={classes.percentage}
+        dataHook={DataHooks.percentage}
+        value={percentage}
+        inverted={invertedPercentage}
+      />
     );
   };
 
@@ -131,22 +123,33 @@ class StatisticsItem extends React.PureComponent {
       focusableOnFocus,
       focusableOnBlur,
       className,
+      size,
+      alignItems,
       ...rest
     } = this.props;
 
     const attrs = {
       ...this._getFocusableProps(),
-      ...styles('item', { clickable: !!onClick }, this.props),
       'data-hook': DataHooks.stat,
       onKeyDown: onClick ? this._getSpaceOrEnterHandler(onClick) : undefined,
       onClick,
       ...rest,
+      className: st(
+        classes.item,
+        { clickable: !!onClick, size, alignItems },
+        this.props.className,
+      ),
     };
 
     return (
       <div {...attrs}>
-        {this._renderValue(value, valueInShort)}
-        {this._renderDescription(description, descriptionInfo)}
+        {this._renderValue(value, valueInShort, size)}
+        {this._renderDescription(
+          description,
+          descriptionInfo,
+          size,
+          alignItems,
+        )}
         {this._renderPercents(percentage, invertedPercentage)}
         {children}
       </div>

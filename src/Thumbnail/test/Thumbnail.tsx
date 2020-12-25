@@ -14,6 +14,8 @@ function ThumbnailWithAllProps() {
   return (
     <Thumbnail
       dataHook="hook"
+      className="test"
+      size="small"
       title="title"
       description={<div>desc</div>}
       image={<div>image</div>}
@@ -24,6 +26,7 @@ function ThumbnailWithAllProps() {
       onClick={_ev => {}}
       width="10px"
       height="10px"
+      contentAlignment="center"
     />
   );
 }

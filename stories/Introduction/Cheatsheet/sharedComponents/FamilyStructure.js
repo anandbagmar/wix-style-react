@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { Container, Row, Col, Card, Heading } from 'wix-style-react';
+import { Container, Row, Col, Card, Text } from 'wix-style-react';
 
 const FamilyStructure = ({ title, children, showPreview }) => (
   <Card>
@@ -9,15 +9,15 @@ const FamilyStructure = ({ title, children, showPreview }) => (
       <Container fluid>
         <Row>
           <Col span={4}>
-            <Heading appearance="H5" light>
+            <Text size="small" skin="disabled" weight="bold">
               INDEX NAME & I.C.
-            </Heading>
+            </Text>
           </Col>
           <Col span={8}>
             {showPreview && (
-              <Heading appearance="H5" light>
+              <Text size="small" skin="disabled" weight="bold">
                 PREVIEW
-              </Heading>
+              </Text>
             )}
           </Col>
         </Row>

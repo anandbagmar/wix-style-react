@@ -1,0 +1,23 @@
+:import {
+  -st-from: "../../../LinearProgressBar/LinearProgressBar.st.css";
+  -st-default: LinearProgressBar;
+}
+
+:import {
+  -st-from: "../foundations/colors.st.css";
+  -st-named: G20, D60;
+}
+
+.root {
+  -st-extends: LinearProgressBar;
+  padding: 0 0 0 8px;
+  height: 16px;
+}
+
+.root:skin(success)::barForeground {
+  background: value(G20);
+}
+
+.root:skin(success)::barBackground {
+  background: value(D60);
+}

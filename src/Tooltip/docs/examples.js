@@ -189,3 +189,17 @@ export const a11y = `
 </Tooltip>
 </Layout>
 `;
+
+export const inlineFix = `
+  <Layout>
+    <Cell>
+      <Tooltip content="Oh no :("><Button skin="destructive">Wrong position</Button></Tooltip>
+    </Cell>
+
+    <Cell>
+      <Box inline>
+        <Tooltip content="Oh yes! ;)"><Button>Correct position!</Button></Tooltip>
+      </Box>
+    </Cell>
+  </Layout>
+`;

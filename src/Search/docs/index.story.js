@@ -92,7 +92,7 @@ export default {
           example({
             title: 'expandable',
             text:
-              'Search component can start as an icon and expanded when clicked.',
+              'Search component can start as an icon and expanded when clicked. In order for the expansion to be from right to left the `expandWidth` prop must be provided.',
             source: examples.expandable,
           }),
 

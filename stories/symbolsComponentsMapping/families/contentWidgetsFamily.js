@@ -41,10 +41,26 @@ export const contentWidgetsSymbolsToComponents = {
 
   [contentWidgetsSymbols.barChart]: [contentWidgetsComponentsNames.BarChart],
 
-  [contentWidgetsSymbols.arenaChart]: [],
+  [contentWidgetsSymbols.areaChart]: [contentWidgetsComponentsNames.AreaChart],
 
   [contentWidgetsSymbols.timeline]: [
     contentWidgetsComponentsNames.Timeline,
     buttonsComponentsNames.TextButton,
+  ],
+
+  [contentWidgetsSymbols.selectableAccordion]: [
+    contentWidgetsComponentsNames.SelectableAccordion,
+  ],
+
+  [contentWidgetsSymbols.sparklineChart]: [
+    contentWidgetsComponentsNames.SparklineChart,
+  ],
+
+  [contentWidgetsSymbols.stackedBarChart]: [
+    contentWidgetsComponentsNames.StackedBarChart,
+  ],
+
+  [contentWidgetsSymbols.funnelChart]: [
+    contentWidgetsComponentsNames.FunnelChart,
   ],
 };

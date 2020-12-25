@@ -1,12 +1,13 @@
 import * as React from 'react';
-import { ScrollChangedData } from '../../../common/ScrollableContainer';
+import { ScrollableContainerCommonProps } from '../../../common';
 
 export interface ContentProps {
   className?: string;
   dataHook?: string;
   content?: string | React.ReactNode;
-  contentHideDividers?: boolean;
-  onContentScrollPositionChanged?(scrollChangedData: ScrollChangedData): void;
+  hideTopScrollDivider?: boolean;
+  hideBottomScrollDivider?: boolean;
+  scrollProps?: ScrollableContainerCommonProps;
 }
 
 export const Content: React.FunctionComponent<ContentProps>;

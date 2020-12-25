@@ -13,7 +13,7 @@ const ExampleDatePicker = props => {
       value={value}
       dataHook={storySettings.dataHook}
       onChange={onChange}
-      dateFormat="YYYY/MM/DD"
+      dateFormatV2="yyyy/LL/dd"
       placeholderText="Select Date"
       shouldCloseOnSelect
       showYearDropdown={false}

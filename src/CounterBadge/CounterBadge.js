@@ -1,6 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import styles from './CounterBadge.st.css';
+import { st, classes } from './CounterBadge.st.css';
+import Caption from '../Text/Caption';
+import Text from '../Text/Text';
+import { dataHooks } from './constants';
 
 const MAX_NUMBER = 100;
 
@@ -8,16 +11,47 @@ const MAX_NUMBER = 100;
 class CounterBadge extends React.PureComponent {
   _renderNumberContent = n => (n < MAX_NUMBER ? n : `${MAX_NUMBER - 1}+`);
 
+  _renderCounterBadgeContent = (size, content) =>
+    size === 'small' ? (
+      <Caption
+        caption="c1"
+        light
+        dataHook={dataHooks.content}
+        className={classes.text}
+      >
+        {content}
+      </Caption>
+    ) : (
+      <Text
+        dataHook={dataHooks.content}
+        size="tiny"
+        weight="bold"
+        light
+        className={classes.text}
+      >
+        {content}
+      </Text>
+    );
+
   render() {
-    const { dataHook, skin, children } = this.props;
+    const { dataHook, size, skin, children, className } = this.props;
     const custom = isNaN(children);
+    const longNumber = !custom && Number(children) >= MAX_NUMBER;
+
+    const content = custom
+      ? children
+      : this._renderNumberContent(Number(children));
 
     return (
       <div
-        {...styles('root', { skin, custom }, this.props)}
+        className={st(
+          classes.root,
+          { skin, custom, size, longNumber },
+          className,
+        )}
         data-hook={dataHook}
       >
-        {custom ? children : this._renderNumberContent(Number(children))}
+        {this._renderCounterBadgeContent(size, content)}
       </div>
     );
   }
@@ -39,15 +73,20 @@ CounterBadge.propTypes = {
   skin: PropTypes.oneOf([
     'general',
     'standard',
+    'neutralStandard',
     'danger',
     'warning',
     'urgent',
     'success',
   ]),
+
+  /** The component's size. Can be small or medium */
+  size: PropTypes.oneOf(['small', 'medium']),
 };
 
 CounterBadge.defaultProps = {
   skin: 'general',
+  size: 'small',
 };
 
 export default CounterBadge;

@@ -2,10 +2,10 @@ import React, { cloneElement, PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { ButtonNext } from 'wix-ui-core/dist/src/components/button-next';
 import { withFocusable } from 'wix-ui-core/dist/src/hocs/Focusable/FocusableHOC';
-import styles from './ToggleButton.st.css';
+import { st, classes } from './ToggleButton.st.css';
 import Tooltip from '../Tooltip';
 import Text from '../Text';
-import { iconChildSize } from './constants';
+import { iconChildSize, dataHooks } from './constants';
 import { TooltipCommonProps } from '../common/PropTypes/TooltipCommon';
 
 class Icon extends PureComponent {
@@ -21,10 +21,10 @@ class Icon extends PureComponent {
       labelPlacement,
       focusableOnBlur,
       focusableOnFocus,
+      className,
     } = this.props;
     const iconSize = iconChildSize[size];
     const isLabelOutside = shape === 'round' && labelPlacement === 'end';
-    const labelContainerStyle = isLabelOutside ? styles('labelContainer') : {};
 
     const [icon, label] = React.Children.map(
       children,
@@ -36,16 +36,16 @@ class Icon extends PureComponent {
     return (
       children && (
         <Tooltip
-          {...styles('tooltip')}
+          className={st(classes.tooltip)}
           {...tooltipProps}
-          dataHook="toggle-button-tooltip"
+          dataHook={dataHooks.tooltip}
           size="small"
           content={labelValue}
           disabled={tooltipDisabled || tooltipProps.disabled}
         >
-          <span {...labelContainerStyle}>
+          <span className={isLabelOutside ? classes.labelContainer : ''}>
             <div
-              {...styles('icon', { size, border }, this.props)}
+              className={st(classes.icon, { size, border }, className)}
               tabIndex={1}
               onBlur={focusableOnBlur}
               onFocus={focusableOnFocus}
@@ -78,7 +78,13 @@ class ToggleButton extends PureComponent {
     /** Used for passing any wix-style-react icon. For external icon make sure to follow ux sizing guidelines */
     children: PropTypes.node,
     /** Button skins */
-    skin: PropTypes.oneOf(['standard', 'dark', 'inverted']),
+    skin: PropTypes.oneOf([
+      'standard',
+      'dark',
+      'inverted',
+      'destructive',
+      'success',
+    ]),
     /** Button size */
     size: PropTypes.oneOf(['tiny', 'small', 'medium', 'large']),
     /** Button shape */
@@ -127,9 +133,9 @@ class ToggleButton extends PureComponent {
     } = this.props;
     return (
       <Text
-        {...styles('label', { placement: labelPlacement, size }, this.props)}
+        className={st(classes.label, { placement: labelPlacement, size })}
         disabled={disabled}
-        dataHook="togglebutton-label"
+        dataHook={dataHooks.label}
         size="tiny"
         weight="thin"
         ellipsis={labelEllipsis}
@@ -158,7 +164,13 @@ class ToggleButton extends PureComponent {
     return (
       <ButtonNext
         {...rest}
-        {...styles('root', { disabled, selected, skin, labelPlacement, shape })}
+        className={st(classes.root, {
+          disabled,
+          selected,
+          skin,
+          labelPlacement,
+          shape,
+        })}
         tabIndex={-1}
         data-hook={dataHook}
         data-placement={labelPlacement}

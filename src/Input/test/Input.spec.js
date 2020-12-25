@@ -42,6 +42,16 @@ describe('Input', () => {
         expect(eventTarget.type).toEqual('text');
         expect(eventTarget.value).toEqual('some text');
       });
+
+      it('works with uncontrolled input', async () => {
+        const props = {
+          type: 'text',
+          name: 'gal',
+        };
+        const { driver } = render(<Input {...props} />);
+        await driver.enterText('some text');
+        expect(await driver.getValue()).toBe('some text');
+      });
     });
 
     describe('name attribute', () => {
@@ -283,7 +293,11 @@ describe('Input', () => {
 
         await driver.trigger('change', event);
 
-        expect(onChange).toBeCalled();
+        expect(onChange).toBeCalledWith(
+          expect.objectContaining({
+            target: expect.objectContaining({ value: 'world' }),
+          }),
+        );
       });
     });
 
@@ -367,9 +381,16 @@ describe('Input', () => {
     });
 
     describe('disable attribute', () => {
-      it('should have disabled class on input if disabled is true', async () => {
+      it('should not have disabled class and attribute on input if disabled is true', async () => {
+        const { driver } = render(<Input />);
+        expect(await driver.isDisabled()).toBe(false);
+        expect(await driver.getDisabled()).toBe(false);
+      });
+
+      it('should have disabled class and attribute on input if disabled is true', async () => {
         const { driver } = render(<Input disabled />);
         expect(await driver.isDisabled()).toBe(true);
+        expect(await driver.getDisabled()).toBe(true);
       });
     });
 
@@ -381,11 +402,11 @@ describe('Input', () => {
         rerender(<Input autoFocus />);
         expect(await driver.isFocus()).toBe(false);
       });
-      //
-      // it('Mounting an input element with autoFocus=true, gives it the focus', async () => {
-      //   const { driver } = render(<Input autoFocus />);
-      //   expect(await driver.isFocus()).toBe(true);
-      // });
+
+      it('Mounting an input element with autoFocus=true, gives it the focus', async () => {
+        const { driver } = render(<Input autoFocus />);
+        expect(await driver.isFocus()).toBe(true);
+      });
 
       describe('with value attribute', () => {
         const value = 'this is a string';
@@ -531,11 +552,6 @@ describe('Input', () => {
         expect(await driver.prefixComponentExists('.my-button')).toBe(true);
       });
 
-      it('should add `withPrefix` classname to input', async () => {
-        const { driver } = render(<Input prefix="hello" />);
-        expect(await driver.hasPrefixClass()).toBe(true);
-      });
-
       it('should invoke onInputClicked while click on custom affix', async () => {
         const onInputClicked = jest.fn();
         const { driver } = render(
@@ -595,21 +611,6 @@ describe('Input', () => {
         );
         expect(await driver.hasSuffix()).toBe(true);
         expect(await driver.suffixComponentExists('.my-button')).toEqual(true);
-      });
-
-      it('should add `withSuffix` classname to input', async () => {
-        const { driver } = render(<Input suffix="hello" />);
-        expect(await driver.hasSuffixClass()).toBe(true);
-      });
-
-      it('should add `withSuffixes` classname to input when more than 1 suffix applied', async () => {
-        const { driver } = render(<Input suffix="hello" status="error" />);
-        expect(await driver.hasSuffixesClass()).toBe(true);
-      });
-
-      it('should render menu arrow as the last suffix', async () => {
-        const { driver } = render(<Input suffix="hello" menuArrow />);
-        expect(await driver.isMenuArrowLast()).toBe(true);
       });
 
       it('should invoke onInputClicked while click on custom affix', async () => {
@@ -745,6 +746,7 @@ describe('Input', () => {
 
         const { driver } = render(<Input {...props} />);
         expect(await driver.getSize()).toEqual('' + props.size);
+        expect(await driver.isOfSize('large')).toBe(true);
       });
     });
   }

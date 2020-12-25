@@ -4,13 +4,16 @@ export type RichTextInputAreaStatus = 'error' | 'warning' | 'loading';
 
 export interface RichTextInputAreaProps {
   dataHook?: string;
+  className?: string;
   initialValue?: string;
   placeholder?: string;
   disabled?: boolean;
   status?: RichTextInputAreaStatus;
   statusMessage?: React.ReactNode;
   onChange?: Function;
+  minHeight?: string;
   maxHeight?: string;
+  spellCheck?: boolean;
   texts?: texts;
 }
 

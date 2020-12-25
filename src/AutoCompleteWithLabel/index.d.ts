@@ -23,9 +23,11 @@ export interface AutoCompleteWithLabelProps {
   disabled?: boolean;
   className?: string;
   maxLength?: number;
+  maxHeightPixels?: string | number;
   placeholder?: string;
   onSelect?: (option: DropdownLayoutValueOption) => void;
   native?: boolean;
+  value?: string | number;
 }
 
 export default class AutoCompleteWithLabel extends React.PureComponent<

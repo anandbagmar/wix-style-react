@@ -3,7 +3,7 @@ import { storiesOf } from '@storybook/react';
 import ScrollableContainer from '../ScrollableContainer';
 import { scrollableContainerPrivateDriverFactory } from './ScrollableContainer.private.driver';
 import { testkitFactoryCreator } from 'wix-ui-test-utils/vanilla';
-import { positionY } from '../constants';
+import { AreaY } from '../index';
 
 const commonProps = {
   style: {
@@ -29,24 +29,24 @@ const createDriver = () =>
 
 const tests = [
   {
-    describe: 'scroll-y position',
+    describe: 'scroll-y area',
     its: [
       {
         it: 'no scroll',
         props: {
           children: 'short text',
         },
-        expected: positionY.NONE,
+        expected: AreaY.NONE,
       },
       {
         it: 'scrolled to top',
         props: {},
-        expected: positionY.TOP,
+        expected: AreaY.TOP,
       },
       {
         it: 'scrolled to middle',
         props: {},
-        expected: positionY.MIDDLE,
+        expected: AreaY.MIDDLE,
         componentDidMount: () => {
           createDriver()._scrollContentTo({ y: 375 });
         },
@@ -54,7 +54,7 @@ const tests = [
       {
         it: 'scrolled to bottom',
         props: {},
-        expected: positionY.BOTTOM,
+        expected: AreaY.BOTTOM,
         componentDidMount: () => {
           createDriver()._scrollContentTo({ y: 99999 });
         },
@@ -77,16 +77,15 @@ const tests = [
 ];
 
 const ScrollableContainerWrapper = ({ expected, ...props }) => {
-  const [scrollPosition, setScrollPosition] = useState('');
+  const [scrollArea, setScrollArea] = useState('');
   const [scrollTop, setScrollTop] = useState(0);
-  const handleScrollPositionChanged = ({ position }) =>
-    setScrollPosition(position.y);
+  const handleScrollAreaChanged = ({ area }) => setScrollArea(area.y);
   const handleScrollChanged = ({ target }) => setScrollTop(target.scrollTop);
   return (
     <div>
       <ScrollableContainer
         {...props}
-        onScrollPositionChanged={handleScrollPositionChanged}
+        onScrollAreaChanged={handleScrollAreaChanged}
         onScrollChanged={handleScrollChanged}
       />
       <br />
@@ -94,8 +93,8 @@ const ScrollableContainerWrapper = ({ expected, ...props }) => {
         Scroll-Y:
         <ul>
           <li
-            data-test-ready={scrollPosition === expected}
-          >{`Position: ${scrollPosition}`}</li>
+            data-test-ready={scrollArea === expected}
+          >{`Area: ${scrollArea}`}</li>
           <li data-test-ready={scrollTop === expected}>
             {`scrollTop: ${scrollTop}`}
           </li>

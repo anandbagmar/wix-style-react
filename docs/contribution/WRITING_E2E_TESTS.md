@@ -14,7 +14,7 @@ import {
   waitForVisibilityOf,
   createStoryUrl
 } from 'wix-ui-test-utils/protractor';
-import { buttonTestkitFactory } from '../../../testkit/protractor';
+import { ButtonTestkit } from '../../../testkit/protractor';
 
 describe('Button', () => {
   const storyUrl = createStoryUrl({
@@ -23,7 +23,7 @@ describe('Button', () => {
     withExamples: false,
   });
 
-  const driver = buttonTestkitFactory({ dataHook: 'storybook-button' });
+  const driver = ButtonTestkit({ dataHook: 'storybook-button' });
 
   beforeAll(async () => {
     await browser.get(storyUrl);

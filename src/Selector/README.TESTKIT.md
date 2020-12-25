@@ -16,8 +16,8 @@
 
 ```javascript
   import React from 'react';
-  import {selectorTestkitFactory} from 'wix-style-react/dist/testkit';
-  import {selectorTestkitFactory as enzymeSelectorTestkitFactory} from 'wix-style-react/dist/testkit/enzyme';
+  import {SelectorTestkit} from 'wix-style-react/dist/testkit';
+  import {SelectorTestkit as EnzymeSelectorTestkit} from 'wix-style-react/dist/testkit/enzyme';
 
   /***************
    enzyme example
@@ -25,7 +25,7 @@
 
   const dataHook = 'myDataHook';
   const wrapper = mount(<div/><Selector {...props} dataHook={dataHook}/></div>);
-  const testkit = enzymeSelectorTestkitFactory({wrapper, dataHook});
+  const testkit = EnzymeSelectorTestkit({wrapper, dataHook});
 
   //Do tests
   expect(testkit.isOpen()).toBeFalsy();
@@ -39,7 +39,7 @@
   const wrapper = div.appendChild(
     ReactTestUtils.renderIntoDocument(<div/><Selector {...props} dataHook={dataHook}/></div>, {dataHook})
   );
-  const testkit = selectorTestkitFactory({wrapper, dataHook});
+  const testkit = SelectorTestkit({wrapper, dataHook});
 
   //Do tests
   expect(testkit.exists()).toBeTruthy();

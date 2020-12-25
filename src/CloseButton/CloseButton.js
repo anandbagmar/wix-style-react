@@ -1,13 +1,15 @@
 import React, { PureComponent } from 'react';
+import { ThemeProviderConsumerBackwardCompatible } from '../ThemeProvider/ThemeProviderConsumerBackwardCompatible';
 import { generateDataAttr } from '../utils/generateDataAttr';
 import { ButtonNext } from 'wix-ui-core/dist/src/components/button-next';
 import Close from 'wix-ui-icons-common/system/Close';
 import CloseLarge from 'wix-ui-icons-common/system/CloseLarge';
 import { SIZES } from './constants';
-import cx from 'classnames';
 
 import PropTypes from 'prop-types';
-import styles from './CloseButton.st.css';
+import { st, classes } from './CloseButton.st.css';
+
+const childSize = '18px';
 
 class CloseButton extends PureComponent {
   static displayName = 'CloseButton';
@@ -48,49 +50,50 @@ class CloseButton extends PureComponent {
     disabled: false,
   };
 
-  _renderCloseIcon(size) {
+  _renderCloseIcon(Icon, size) {
     let CloseIcon;
     if (size === SIZES.small) {
       // fallback to Close icon if children not provided (current behavior)
-      CloseIcon = <Close data-hook="close" />;
+      CloseIcon = <Icon data-hook="close" />;
     } else if (size === SIZES.medium) {
-      CloseIcon = <CloseLarge data-hook="close-medium" />;
+      CloseIcon = <Icon data-hook="close-medium" />;
     } else {
-      CloseIcon = <CloseLarge data-hook="close-large" size="12" />;
+      CloseIcon = <Icon data-hook="close-large" size="12" />;
     }
     return CloseIcon;
   }
 
   render() {
-    const {
-      skin,
-      size,
-      className: userClassName,
-      dataHook,
-      children,
-      ...rest
-    } = this.props;
-
-    const childSize = '18px';
-
-    const { className } = styles('root', { skin, size });
-    const classNames = cx(className, userClassName);
+    const { skin, size, className, dataHook, children, ...rest } = this.props;
 
     return (
       <ButtonNext
         {...rest}
-        {...styles('root', { skin, size }, this.props)}
+        className={st(classes.root, { skin, size }, className)}
         {...generateDataAttr(this.props, ['skin', 'size'])}
         data-hook={dataHook}
-        className={classNames}
       >
-        {children
-          ? React.cloneElement(children, {
-              size: childSize,
-              width: childSize,
-              height: childSize,
-            })
-          : this._renderCloseIcon(size)}
+        {children ? (
+          React.cloneElement(children, {
+            size: childSize,
+            width: childSize,
+            height: childSize,
+          })
+        ) : (
+          <ThemeProviderConsumerBackwardCompatible
+            defaultIcons={{
+              CloseButton: {
+                small: Close,
+                medium: CloseLarge,
+                large: CloseLarge,
+              },
+            }}
+          >
+            {({ icons }) =>
+              this._renderCloseIcon(icons.CloseButton[size], size)
+            }
+          </ThemeProviderConsumerBackwardCompatible>
+        )}
       </ButtonNext>
     );
   }

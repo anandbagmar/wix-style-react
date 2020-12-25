@@ -1,5 +1,6 @@
 import { PopoverProps } from './Popover';
 import { TooltipProps } from './Tooltip';
+import { ScrollableContainerProps } from './common/ScrollableContainer';
 
 export interface InjectedFocusableProps {
   onBlur?: () => void;
@@ -7,10 +8,6 @@ export interface InjectedFocusableProps {
 }
 
 export type IconElement = React.ReactElement<any>;
-
-export type WixComponentClickOutsideEventHandler = (
-  e: TouchEvent | MouseEvent,
-) => void;
 
 export type OmitPolyfill<T, K extends keyof any> = Pick<T, Exclude<keyof T, K>>;
 
@@ -55,6 +52,24 @@ export interface TooltipCommonProps {
   placement?: TooltipProps['placement'];
   textAlign?: TooltipProps['textAlign'];
   zIndex?: TooltipProps['zIndex'];
+  size?: TooltipProps['size'];
 }
 
 export type StatusIndications = 'error' | 'warning' | 'loading';
+
+export type Spacing =
+  | 'SP1'
+  | 'SP2'
+  | 'SP3'
+  | 'SP4'
+  | 'SP5'
+  | 'SP6'
+  | 'SP7'
+  | 'SP8'
+  | 'SP9'
+  | 'SP10';
+
+export interface ScrollableContainerCommonProps {
+  onScrollAreaChanged?: ScrollableContainerProps['onScrollAreaChanged'];
+  onScrollChanged?: ScrollableContainerProps['onScrollChanged'];
+}

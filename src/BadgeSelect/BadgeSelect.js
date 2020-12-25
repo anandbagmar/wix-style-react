@@ -1,12 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import ChevronDown from 'wix-ui-icons-common/ChevronDown';
-import style from './BadgeSelect.st.css';
+import { classes } from './BadgeSelect.st.css';
 
 import DropdownLayout from '../DropdownLayout';
 import Popover from '../Popover';
 import Badge from '../Badge';
-import { badgeSelectItemBuilder } from '../BadgeSelectItemBuilder';
+import { badgeSelectItemBuilder } from '../BadgeSelectItem';
 import * as DATA_ATTR from './DataAttr';
 
 import { PopoverCommonProps } from '../common/PropTypes/PopoverCommon';
@@ -89,7 +89,10 @@ class BadgeSelect extends React.Component {
 
   get options() {
     const { options } = this.props;
-    return Array.isArray(options) ? options.map(badgeSelectItemBuilder) : [];
+
+    return Array.isArray(options)
+      ? options.map(option => badgeSelectItemBuilder({ ...option }))
+      : [];
   }
 
   UNSAFE_componentWillReceiveProps(nextProps) {
@@ -112,7 +115,7 @@ class BadgeSelect extends React.Component {
         onKeyDown={this._onKeyDown}
         onClickOutside={this.hideDropdown}
         {...popoverProps}
-        {...style('root', {}, this.props)}
+        className={classes.root}
       >
         <Popover.Element>
           <Badge
@@ -169,8 +172,10 @@ BadgeSelect.propTypes = {
         'premium',
       ]).isRequired,
       text: PropTypes.string.isRequired,
+      subtitle: PropTypes.string,
+      ellipsis: PropTypes.bool,
     }),
-  ),
+  ).isRequired,
 
   /** The id of the selected option in the list */
   selectedId: PropTypes.string,
@@ -194,6 +199,10 @@ BadgeSelect.propTypes = {
   popoverProps: PropTypes.shape(PopoverCommonProps),
 };
 
-BadgeSelect.defaultProps = {};
+BadgeSelect.defaultProps = {
+  size: 'medium',
+  type: 'solid',
+  uppercase: true,
+};
 
 export default BadgeSelect;

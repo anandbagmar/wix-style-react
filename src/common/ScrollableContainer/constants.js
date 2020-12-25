@@ -1,11 +1,11 @@
-export const positionY = {
+export const AreaY = {
   TOP: 'top',
   MIDDLE: 'middle',
   BOTTOM: 'bottom',
   NONE: 'none',
 };
 
-export const positionX = {
+export const AreaX = {
   START: 'start',
   MIDDLE: 'middle',
   END: 'end',

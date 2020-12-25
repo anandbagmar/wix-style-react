@@ -1,6 +1,6 @@
 import React from 'react';
 
-import isSameDay from 'date-fns/is_same_day';
+import { isSameDay, format } from 'date-fns';
 import { createDriverFactory } from 'wix-ui-test-utils/driver-factory';
 
 import datePickerDriverFactory from '../DatePicker.driver';
@@ -11,8 +11,8 @@ import {
   requestAnimationFramePolyfill,
 } from '../../../testkit/polyfills';
 
-import isLocale from 'date-fns/locale/is';
-import { format } from 'date-fns';
+import { is as isLocale } from 'date-fns/locale';
+import { convertTokens } from '@date-fns/upgrade/v2';
 
 const noop = () => {};
 
@@ -431,7 +431,7 @@ describe('DatePicker', () => {
         });
       });
 
-      it('should navigate days correctly with keyboard - RTL mode(same as with LTR)', done => {
+      it('should navigate days correctly with keyboard - RTL mode', done => {
         const date = new Date(2018, 1, 5);
         const { calendarDriver, driver } = createDriver(
           <DatePicker onChange={noop} rtl value={date} />,
@@ -442,7 +442,7 @@ describe('DatePicker', () => {
         calendarDriver.pressLeftArrow();
         // we need setTimeout because pressLeftArrow trigger async actions
         setTimeout(() => {
-          expect(calendarDriver.getFocusedDay()).toEqual('4');
+          expect(calendarDriver.getFocusedDay()).toEqual('6');
           done();
         });
       });
@@ -495,7 +495,7 @@ describe('DatePicker', () => {
   });
 
   describe('`format` prop', () => {
-    it('should display date according to string format', () => {
+    it('should display date according to string format (dateFormat)', () => {
       const { inputDriver } = createDriver(
         <DatePicker
           onChange={noop}
@@ -507,7 +507,7 @@ describe('DatePicker', () => {
       expect(inputDriver.getValue()).toBe('02/10/2017');
     });
 
-    it('should ignore format from locale', () => {
+    it('should ignore format from locale (dateFormat)', () => {
       const date = new Date(2017, 9, 2);
       const { inputDriver } = createDriver(
         <DatePicker
@@ -521,18 +521,79 @@ describe('DatePicker', () => {
       expect(inputDriver.getValue()).toBe('2017/10/02');
     });
 
-    it('should display date according to custom function format', () => {
+    it('should display date according to custom function format (dateFormat)', () => {
       const date = new Date(2017, 9, 2);
       const { inputDriver } = createDriver(
         <DatePicker
           onChange={noop}
           locale="fr"
-          dateFormat={_date => format(_date, 'YYYY MMM DD')}
+          dateFormat={_date => format(_date, convertTokens('YYYY MMM DD'))}
           value={date}
         />,
       );
 
       expect(inputDriver.getValue()).toBe('2017 Oct 02');
+    });
+
+    it('should display date according to string format (dateFormatV2)', () => {
+      const { inputDriver } = createDriver(
+        <DatePicker
+          onChange={noop}
+          value={new Date(2017, 9, 2)}
+          dateFormatV2={'dd/LL/yyyy'}
+        />,
+      );
+
+      expect(inputDriver.getValue()).toBe('02/10/2017');
+    });
+
+    it('should ignore format from locale (dateFormatV2)', () => {
+      const date = new Date(2017, 9, 2);
+      const { inputDriver } = createDriver(
+        <DatePicker
+          onChange={noop}
+          locale="fr"
+          dateFormatV2="yyyy/LL/dd"
+          value={date}
+        />,
+      );
+
+      expect(inputDriver.getValue()).toBe('2017/10/02');
+    });
+
+    it('should display date according to custom function format (dateFormatV2)', () => {
+      const date = new Date(2017, 9, 2);
+      const { inputDriver } = createDriver(
+        <DatePicker
+          onChange={noop}
+          locale="fr"
+          dateFormatV2={_date => format(_date, 'yyyy LLL dd')}
+          value={date}
+        />,
+      );
+
+      expect(inputDriver.getValue()).toBe('2017 Oct 02');
+    });
+
+    it('should display date according to string format dateFormatV2 if both dateFormat and dateFormatV2 given', () => {
+      const { inputDriver } = createDriver(
+        <DatePicker
+          onChange={noop}
+          value={new Date(2017, 9, 2)}
+          dateFormat={'MM/DD/YYYY'}
+          dateFormatV2={'dd/LL/yyyy'}
+        />,
+      );
+
+      expect(inputDriver.getValue()).toBe('02/10/2017');
+    });
+
+    it('should fallback to default dateFormatV2 if both dateFormat and dateFormatV2 not given', () => {
+      const { inputDriver } = createDriver(
+        <DatePicker onChange={noop} value={new Date(2017, 9, 2)} />,
+      );
+
+      expect(inputDriver.getValue()).toBe('10/02/2017');
     });
   });
 
@@ -613,6 +674,21 @@ describe('DatePicker', () => {
       expect(onChange.mock.calls[0][0]).toEqual(
         new Date('2017-01-02T12:34:56.000Z'),
       );
+    });
+
+    it('should adjust time if no value given to midnight', () => {
+      const onChange = jest.fn();
+      const { calendarDriver, driver } = createDriver(
+        <DatePicker onChange={onChange} />,
+      );
+      driver.open();
+      calendarDriver.clickOnNthDay(1);
+
+      const chosenDate = onChange.mock.calls[0][0];
+      expect(chosenDate.getHours()).toEqual(0);
+      expect(chosenDate.getMinutes()).toEqual(0);
+      expect(chosenDate.getSeconds()).toEqual(0);
+      expect(chosenDate.getMilliseconds()).toEqual(0);
     });
   });
 
@@ -702,7 +778,7 @@ describe('DatePicker', () => {
 
       it('should display translated weekdays', () => {
         const { calendarDriver } = setup({ locale: isLocale });
-        expect(calendarDriver.getNthWeekDayName(0)).toEqual('má');
+        expect(calendarDriver.getNthWeekDayName(0)).toEqual('Má');
       });
     });
   });
@@ -763,6 +839,18 @@ describe('DatePicker', () => {
       );
       inputDriver.trigger('click');
       expect(calendarDriver.isTwoMonthsLayout()).toBe(true);
+    });
+  });
+
+  describe('firstDayOfWeek', () => {
+    it('should show correct first day of the week', async () => {
+      const { inputDriver, calendarDriver } = createDriver(
+        <DatePicker onChange={() => {}} firstDayOfWeek={0} />,
+      );
+
+      inputDriver.trigger('click');
+
+      expect(await calendarDriver.getNthWeekDayName(0)).toEqual('Su');
     });
   });
 });

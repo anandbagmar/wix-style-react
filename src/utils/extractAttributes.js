@@ -1,3 +1,5 @@
+import { filterObject } from './filterObject';
+
 /**
  * a generic utility to get a subset of the received props object according to the prefix of the prop name
  * @param props
@@ -5,8 +7,9 @@
  * @return {any}
  */
 export const extractAttributes = (props, prefix = '') =>
-  Object.fromEntries(
-    Object.entries(props).filter(entry => entry[0].indexOf(prefix) === 0),
+  filterObject(
+    props,
+    key => key.length >= prefix.length && key.indexOf(prefix) === 0,
   );
 
 /**

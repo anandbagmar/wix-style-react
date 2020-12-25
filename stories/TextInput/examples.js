@@ -10,7 +10,7 @@ export const sizes = `
 
   <Cell>
     <FormField label="Field label">
-      <Input size="normal" placeholder="Placeholder" />
+      <Input size="medium" placeholder="Placeholder" />
     </FormField>
   </Cell>
 
@@ -26,13 +26,13 @@ export const affix = `
 <Layout>
   <Cell>
     <FormField label="Field label">
-      <Input size="normal" placeholder="Placeholder" prefix={<Input.Affix>$</Input.Affix>}/>
+      <Input size="medium" placeholder="Placeholder" prefix={<Input.Affix>$</Input.Affix>}/>
       </FormField>
   </Cell>
 
   <Cell>
     <FormField label="Field label">
-      <Input size="normal" placeholder="Placeholder" suffix={<Input.Affix>Kg.</Input.Affix>}/>
+      <Input size="medium" placeholder="Placeholder" suffix={<Input.Affix>Kg.</Input.Affix>}/>
     </FormField>
   </Cell>
 </Layout>
@@ -48,7 +48,7 @@ export const charLimit = `
 
 export const required = `
 <FormField label="Field label" required>
-  <Input size="normal" placeholder="Placeholder" required/>
+  <Input size="medium" placeholder="Placeholder" required/>
 </FormField>
 `;
 

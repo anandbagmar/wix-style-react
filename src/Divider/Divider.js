@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import styles from './Divider.st.css';
+import { st, classes } from './Divider.st.css';
 import { directions, skins } from './constants';
 
 /** A component that separates content by a line horizontally or vertically */
@@ -14,7 +14,15 @@ class Divider extends React.PureComponent {
     /** Indicates whether to display the divider horizontally or vertically */
     direction: PropTypes.oneOf(['horizontal', 'vertical']),
     /** Sets the color of the divider */
-    skin: PropTypes.oneOf(['light', 'dark']),
+    skin: PropTypes.oneOf([
+      'light',
+      'dark',
+      'standard',
+      'warning',
+      'destructive',
+      'success',
+      'premium',
+    ]),
   };
 
   static defaultProps = {
@@ -23,12 +31,12 @@ class Divider extends React.PureComponent {
   };
 
   render() {
-    const { dataHook, direction, skin } = this.props;
+    const { dataHook, className, direction, skin } = this.props;
 
     return (
       <hr
         data-hook={dataHook}
-        {...styles('root', { direction, skin }, this.props)}
+        className={st(classes.root, { direction, skin }, className)}
       />
     );
   }

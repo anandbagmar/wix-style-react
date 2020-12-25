@@ -5,8 +5,29 @@
   "AddItem": {
     "path": "src/AddItem"
   },
+  "AddressInput": {
+    "path": "src/AddressInput"
+  },
+  "AddressInputItem": {
+    "path": "src/AddressInputItem"
+  },
+  "AnalyticsSummaryCard": {
+    "path": "src/AnalyticsSummaryCard"
+  },
+  "Animate": {
+    "path": "src/Animate",
+    "missingFiles": [
+      "docs"
+    ]
+  },
   "AnnouncementModalLayout": {
     "path": "src/AnnouncementModalLayout"
+  },
+  "AreaChart": {
+    "path": "src/AreaChart"
+  },
+  "AtlasAddressInput": {
+    "path": "src/AtlasAddressInput"
   },
   "AudioPlayer": {
     "path": "src/AudioPlayer"
@@ -26,11 +47,8 @@
   "BadgeSelect": {
     "path": "src/BadgeSelect"
   },
-  "BadgeSelectItemBuilder": {
-    "path": "src/BadgeSelectItemBuilder",
-    "missingFiles": [
-      "docs/index.story.js"
-    ]
+  "BadgeSelectItem": {
+    "path": "src/BadgeSelectItem"
   },
   "BarChart": {
     "path": "src/BarChart"
@@ -40,6 +58,9 @@
     "missingFiles": [
       "docs"
     ]
+  },
+  "BounceAnimation": {
+    "path": "src/BounceAnimation"
   },
   "Box": {
     "path": "src/Box"
@@ -64,6 +85,9 @@
   },
   "Card": {
     "path": "src/Card"
+  },
+  "CardFolderTabs": {
+    "path": "src/CardFolderTabs"
   },
   "CardGalleryItem": {
     "path": "src/CardGalleryItem"
@@ -104,6 +128,9 @@
       "docs/index.story.js"
     ]
   },
+  "CopyClipboard": {
+    "path": "src/CopyClipboard"
+  },
   "CounterBadge": {
     "path": "src/CounterBadge"
   },
@@ -123,10 +150,10 @@
     "path": "src/DropdownBase"
   },
   "DropdownLayout": {
-    "path": "src/DropdownLayout",
-    "missingFiles": [
-      "docs/index.story.js"
-    ]
+    "path": "src/DropdownLayout"
+  },
+  "Dropzone": {
+    "path": "src/Dropzone"
   },
   "EditableSelector": {
     "path": "src/EditableSelector"
@@ -143,8 +170,23 @@
       "docs/index.story.js"
     ]
   },
+  "FacesRatingBar": {
+    "path": "src/FacesRatingBar"
+  },
+  "FailWhale": {
+    "path": "src/FailWhale",
+    "missingFiles": [
+      "docs"
+    ]
+  },
+  "FeatureList": {
+    "path": "src/FeatureList"
+  },
   "FilePicker": {
     "path": "src/FilePicker"
+  },
+  "FileUpload": {
+    "path": "src/FileUpload"
   },
   "FillButton": {
     "path": "src/FillButton"
@@ -163,6 +205,9 @@
   },
   "FormField": {
     "path": "src/FormField"
+  },
+  "FunnelChart": {
+    "path": "src/FunnelChart"
   },
   "GenericModalLayout": {
     "path": "src/GenericModalLayout"
@@ -184,6 +229,9 @@
   },
   "Highlighter": {
     "path": "src/Highlighter"
+  },
+  "HorizontalTimeline": {
+    "path": "src/HorizontalTimeline"
   },
   "IconButton": {
     "path": "src/IconButton"
@@ -239,6 +287,12 @@
   "MarketingLayout": {
     "path": "src/MarketingLayout"
   },
+  "MarketingPageLayout": {
+    "path": "src/MarketingPageLayout"
+  },
+  "MarketingPageLayoutContent": {
+    "path": "src/MarketingPageLayoutContent"
+  },
   "MediaOverlay": {
     "path": "src/MediaOverlay"
   },
@@ -284,6 +338,9 @@
   "Page": {
     "path": "src/Page"
   },
+  "PageFooter": {
+    "path": "src/PageFooter"
+  },
   "PageHeader": {
     "path": "src/PageHeader"
   },
@@ -305,6 +362,9 @@
   "Proportion": {
     "path": "src/Proportion"
   },
+  "Radio": {
+    "path": "src/Radio"
+  },
   "RadioGroup": {
     "path": "src/RadioGroup"
   },
@@ -323,11 +383,17 @@
   "SegmentedToggle": {
     "path": "src/SegmentedToggle"
   },
+  "SelectableAccordion": {
+    "path": "src/SelectableAccordion"
+  },
   "Selector": {
     "path": "src/Selector",
     "missingFiles": [
       "docs"
     ]
+  },
+  "SelectorList": {
+    "path": "src/SelectorList"
   },
   "SidePanel": {
     "path": "src/SidePanel"
@@ -369,10 +435,16 @@
     ]
   },
   "SortableList": {
-    "path": "src/SortableList",
-    "missingFiles": [
-      "docs"
-    ]
+    "path": "src/SortableList"
+  },
+  "SparklineChart": {
+    "path": "src/SparklineChart"
+  },
+  "StackedBarChart": {
+    "path": "src/StackedBarChart"
+  },
+  "StarsRatingBar": {
+    "path": "src/StarsRatingBar"
   },
   "StatisticsWidget": {
     "path": "src/StatisticsWidget"
@@ -383,6 +455,9 @@
   "Stepper": {
     "path": "src/Stepper"
   },
+  "StyledNestableList": {
+    "path": "src/StyledNestableList"
+  },
   "Swatches": {
     "path": "src/Swatches"
   },
@@ -392,11 +467,11 @@
   "TableActionCell": {
     "path": "src/TableActionCell"
   },
+  "TableListItem": {
+    "path": "src/TableListItem"
+  },
   "TableToolbar": {
-    "path": "src/TableToolbar",
-    "missingFiles": [
-      "docs/index.story.js"
-    ]
+    "path": "src/TableToolbar"
   },
   "Tabs": {
     "path": "src/Tabs"
@@ -404,11 +479,20 @@
   "Tag": {
     "path": "src/Tag"
   },
+  "TagList": {
+    "path": "src/TagList"
+  },
+  "TestimonialList": {
+    "path": "src/TestimonialList"
+  },
   "Text": {
     "path": "src/Text"
   },
   "TextButton": {
     "path": "src/TextButton"
+  },
+  "ThemeProvider": {
+    "path": "src/ThemeProvider"
   },
   "Thumbnail": {
     "path": "src/Thumbnail"
@@ -431,6 +515,9 @@
   "Tooltip": {
     "path": "src/Tooltip"
   },
+  "TrendIndicator": {
+    "path": "src/TrendIndicator"
+  },
   "VariableInput": {
     "path": "src/VariableInput"
   },
@@ -439,5 +526,8 @@
   },
   "VerticalTabsItem": {
     "path": "src/VerticalTabsItem"
+  },
+  "WixStyleReactProvider": {
+    "path": "src/WixStyleReactProvider"
   }
 }

@@ -116,7 +116,7 @@ export default {
           example({
             title: 'Action Button Themes',
             text:
-              '`<FloatingHelper.Content/>` action button has 4 action themes: `white` (default) , `standard`, `premium` and `lightPrimary`.',
+              '`<FloatingHelper.Content/>` action button has 5 action themes: `white` (default) , `standard`, `standardPrimary`, `premium` and `lightPrimary`.',
             source: examples.actionThemes,
             previewProps,
           }),

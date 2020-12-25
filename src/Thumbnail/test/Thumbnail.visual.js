@@ -85,19 +85,20 @@ const tests = [
         },
       },
       {
-        it: 'Size',
+        it: 'Content aligned to top',
         props: {
-          size: 'tiny',
+          height: 250,
+          contentAlignment: 'top',
+          selected: true,
           title,
           description,
           image,
         },
       },
       {
-        it: 'RTL',
-        dir: 'rtl',
+        it: 'Size',
         props: {
-          selected: true,
+          size: 'tiny',
           title,
           description,
           image,
@@ -185,11 +186,11 @@ const tests = [
 ];
 
 tests.forEach(({ describe, its }) => {
-  its.forEach(({ it, props, dir }) => {
+  its.forEach(({ it, props }) => {
     storiesOf(`Thumbnail${describe ? '/' + describe : ''}`, module).add(
       it,
       () => (
-        <div dir={dir} style={{ width: '300px', padding: '15px' }}>
+        <div style={{ width: '300px', padding: '15px' }}>
           <Thumbnail {...props} />
         </div>
       ),

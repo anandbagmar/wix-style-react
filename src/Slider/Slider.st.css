@@ -1,6 +1,6 @@
 :import {
   -st-from: "../Foundation/stylable/colors.st.css";
-  -st-named: D10-10, D10, D50, B10, B40 ;
+  -st-named: D10-10, D10, D50, THEME-COLOR-10, THEME-COLOR-40 ;
 }
 
 :vars {
@@ -54,7 +54,7 @@
 :global(.wsr-slider-rail) {
   position: absolute;
   width: 100%;
-  background-color: value(B40);
+  background-color: value(THEME-COLOR-40);
   height: value(sliderRailHeight);
   border-radius: 10px;
   margin: value(sliderPadding) 0;
@@ -63,11 +63,10 @@
 :global(.wsr-slider-track) {
   position: absolute;
   left: 0;
-  background-color: value(B10);
+  background-color: value(THEME-COLOR-10);
   height: value(sliderRailHeight);
   border-radius: 10px;
   margin: value(sliderPadding) 0;
-  /*//transition: width 80ms;  Animation */
 }
 
 :global(.wsr-slider-mark) {

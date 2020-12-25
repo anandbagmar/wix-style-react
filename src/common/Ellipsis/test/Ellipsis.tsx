@@ -8,15 +8,17 @@ function EllipsisWithMandatoryProps() {
 function EllipsisWithAllProps() {
   return (
     <Ellipsis
+      maxLines={2}
       ellipsis
       showTooltip
-      wrapperClasses={{
-        className: 'string',
-        'data-key': 'value',
-      }}
+      wrapperClassName="test"
       fixed // A TooltipCommon prop
-      render={({ ref, ellipsisClasses }) => (
-        <div ref={ref} className={ellipsisClasses('another-class')}>
+      render={({ ref, ellipsisClasses, ellipsisInlineStyle }) => (
+        <div
+          ref={ref}
+          className={ellipsisClasses('another-class')}
+          style={ellipsisInlineStyle}
+        >
           hi
         </div>
       )}

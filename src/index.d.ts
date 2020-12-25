@@ -6,6 +6,12 @@ export * from './Accordion';
 export { default as AddItem } from './AddItem';
 export * from './AddItem';
 
+export {
+  default as AddressInputItem,
+  addressInputItemBuilder,
+} from './AddressInputItem';
+export * from './AddressInputItem';
+
 export { default as AnnouncementModalLayout } from './AnnouncementModalLayout';
 export * from './AnnouncementModalLayout';
 
@@ -27,8 +33,11 @@ export { BadgeProps, BadgeSize, BadgeSkin, BadgeType } from './Badge';
 export { default as BadgeSelect } from './BadgeSelect';
 export * from './BadgeSelect';
 
-export { badgeSelectItemBuilder } from './BadgeSelectItemBuilder';
-export * from './BadgeSelectItemBuilder';
+export {
+  default as BadgeSelectItem,
+  badgeSelectItemBuilder,
+} from './BadgeSelectItem';
+export * from './BadgeSelectItem';
 
 export { default as BarChart } from './BarChart';
 export * from './BarChart';
@@ -86,6 +95,9 @@ export * from './ColorPicker';
 
 export { default as ComposerHeader } from './ComposerHeader';
 export * from './ComposerHeader';
+
+export { default as ComposerSidebar } from './ComposerSidebar';
+export * from './ComposerSidebar';
 
 export { default as ContactItemBuilder } from './ContactItemBuilder';
 export * from './ContactItemBuilder';
@@ -169,6 +181,9 @@ export * from './Heading';
 export { default as Highlighter } from './Highlighter';
 export * from './Highlighter';
 
+export { default as HorizontalTimeline } from './HorizontalTimeline';
+export * from './HorizontalTimeline';
+
 export { default as IconButton } from './IconButton';
 export * from './IconButton';
 
@@ -223,6 +238,12 @@ export * from './Loader';
 
 export { default as MarketingLayout } from './MarketingLayout';
 export * from './MarketingLayout';
+
+export { default as TestimonialList } from './TestimonialList';
+export * from './TestimonialList';
+
+export { default as MarketingPageLayout } from './MarketingPageLayout';
+export * from './MarketingPageLayout';
 
 export { default as MediaOverlay } from './MediaOverlay';
 export * from './MediaOverlay';
@@ -307,6 +328,12 @@ export * from './SegmentedToggle';
 export { default as Selector } from './Selector';
 export * from './Selector';
 
+export { default as SelectorList } from './SelectorList';
+export * from './SelectorList';
+
+export { default as SelectableAccordion } from './SelectableAccordion';
+export * from './SelectableAccordion';
+
 export { default as SidePanel } from './SidePanel';
 export * from './SidePanel';
 
@@ -340,8 +367,14 @@ export * from './SocialButton';
 export { default as SocialPreview } from './SocialPreview';
 export * from './SocialPreview';
 
+export { default as SortableGrid } from './SortableGrid';
+export * from './SortableGrid';
+
 export { default as SortableList } from './SortableList';
 export * from './SortableList';
+
+export { default as StarsRatingBar } from './StarsRatingBar';
+export * from './StarsRatingBar';
 
 export { default as StatisticsWidget } from './StatisticsWidget';
 export * from './StatisticsWidget';
@@ -374,6 +407,9 @@ export * from './Tabs';
 
 export { default as Tag } from './Tag';
 export * from './Tag';
+
+export { default as TagList } from './TagList';
+export * from './TagList';
 
 export { default as Text } from './Text';
 export * from './Text';
@@ -417,11 +453,80 @@ export * from './VerticalTabsItem';
 export { default as clients } from './clients';
 export * from './clients';
 
-export { default as ComposerSidebar } from './ComposerSidebar';
-export * from './ComposerSidebar';
-
-export { default as SortableGrid } from './SortableGrid';
-export * from './SortableGrid';
-
 export { default as dndStyles } from './dnd-styles';
 export * from './dnd-styles';
+
+export { default as FileUpload } from './FileUpload';
+export * from './FileUpload';
+
+export { default as TableListItem } from './TableListItem';
+export * from './TableListItem';
+
+export { default as Dropzone } from './Dropzone';
+export * from './Dropzone';
+
+export { default as FacesRatingBar } from './FacesRatingBar';
+export * from './FacesRatingBar';
+
+export { default as ThemeProvider } from './ThemeProvider';
+
+export { default as AreaChart } from './AreaChart';
+export * from './AreaChart';
+
+export * from './ThemeProvider';
+
+export { default as FeatureList } from './FeatureList';
+export * from './FeatureList';
+
+export { default as MarketingPageLayoutContent } from './MarketingPageLayoutContent';
+export * from './MarketingPageLayoutContent';
+
+export { default as FunnelChart } from './FunnelChart';
+export * from './FunnelChart';
+
+export { default as AddressInput } from './AddressInput';
+export * from './AddressInput';
+
+export { default as AtlasAddressInput } from './AtlasAddressInput';
+export * from './AtlasAddressInput';
+
+export { default as SparklineChart } from './SparklineChart';
+export * from './SparklineChart';
+
+export { default as CardFolderTabs } from './CardFolderTabs';
+export * from './CardFolderTabs';
+
+export { default as StackedBarChart } from './StackedBarChart';
+
+export { default as PageFooter } from './PageFooter';
+
+export { default as AnalyticsSummaryCard } from './AnalyticsSummaryCard';
+export * from './AnalyticsSummaryCard';
+
+export * from './PageFooter';
+
+export { default as StyledNestableList } from './StyledNestableList';
+
+export { default as TrendIndicator } from './TrendIndicator';
+
+export { default as Radio } from './Radio';
+export * from './Radio';
+
+export { default as CopyClipboard } from './CopyClipboard';
+export * from './CopyClipboard';
+
+export {
+  default as WixStyleReactProvider,
+  FEATURES,
+} from './WixStyleReactProvider';
+export * from './WixStyleReactProvider';
+
+export { default as BounceAnimation } from './BounceAnimation';
+export * from './BounceAnimation';
+
+
+export * from './TrendIndicator';
+
+export * from './StyledNestableList';
+
+export * from './StackedBarChart';

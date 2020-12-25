@@ -11,9 +11,11 @@ function datePickerWithMandatoryProps() {
 function datePickerWithAllProps() {
   return (
     <DatePicker
+      className="datePicker"
       customInput="customInput"
       inputProps="{}"
       dateFormat="string | Function"
+      dateFormatV2="string | Function"
       locale="en"
       disabled
       inputDataHook="string"
@@ -40,6 +42,7 @@ function datePickerWithAllProps() {
         zIndex: 1,
         width: 100,
       }}
+      firstDayOfWeek={1}
     />
   );
 }

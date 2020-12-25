@@ -149,14 +149,25 @@ describe('Page', () => {
       });
     });
 
-    describe('2. Stretch Vertically', () => {
+    describe('2. With Footer', () => {
       eyes.it('should not have scroll', async () => {
         await initTest({
-          storyUrl: testScrollStoryUrl('2. Stretch Vertically'),
+          storyUrl: testScrollStoryUrl('2. With Footer'),
           dataHook,
         });
         await privateDriver.scrollVertically(ENOUGH_SCROLL_TO_MINIMIZE);
         expect(await privateDriver.getVerticalScroll()).toBe(0);
+      });
+    });
+
+    describe('2. With Footer - scroll', () => {
+      eyes.it('should have scroll', async () => {
+        await initTest({
+          storyUrl: testScrollStoryUrl('2. With Footer - scroll'),
+          dataHook,
+        });
+        await privateDriver.scrollVertically(ENOUGH_SCROLL_TO_MINIMIZE);
+        expect(await privateDriver.getVerticalScroll()).toBe(200);
       });
     });
 
@@ -248,6 +259,27 @@ describe('Page', () => {
           expect((await privateDriver.getVerticalScroll()) > 0).toBeTruthy();
         },
       );
+    });
+
+    describe('10. Multiple Stickies Without A Header', () => {
+      eyes.it('should scroll and trigger mini-header', async () => {
+        const GAP_HEIGHT_PX = 200;
+        const STICKY_HEIGHT = 50;
+
+        await initTest({
+          storyUrl: testScrollStoryUrl('7. Multiple Stickies'),
+          dataHook,
+        });
+        await privateDriver.scrollVertically(Constants.scrollTrigger + 1);
+        await browser.sleep(ANIMATION_DURATION_MS + 100); // eslint-disable-line no-restricted-properties
+        await eyes.checkWindow('trigger mini-header');
+
+        await privateDriver.scrollVertically(GAP_HEIGHT_PX / 2);
+        await eyes.checkWindow('first gap scrolled half way');
+
+        await privateDriver.scrollVertically(GAP_HEIGHT_PX / 2 + STICKY_HEIGHT);
+        await eyes.checkWindow('second sticky at top');
+      });
     });
   });
 });

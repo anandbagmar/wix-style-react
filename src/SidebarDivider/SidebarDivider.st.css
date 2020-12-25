@@ -1,7 +1,7 @@
 :import {
   -st-from: "../Divider/Divider.st.css";
   -st-default: Divider;
-};
+}
 
 :import {
   -st-from: "../Sidebar/colors.st.css";
@@ -9,7 +9,7 @@
 }
 
 :import {
-  -st-from: "../Sidebar/main.st.css";
+  -st-from: "../Sidebar/Sidebar.st.css";
   -st-named: sidebarWidth
 }
 

@@ -1,9 +1,8 @@
 import React from 'react';
 
 import PageHeader from '..';
-import Button from 'wix-style-react/Button';
-
 import Breadcrumbs from '../../Page/docs/Breadcrumbs';
+
 import './PageHeader.scss';
 import { storySettings } from './storySettings';
 import {
@@ -21,6 +20,7 @@ import {
 } from 'wix-storybook-utils/dist/src/Sections';
 import allComponents from '../../../stories/utils/allComponents';
 import * as examples from './examples';
+import { Button } from 'wix-style-react';
 
 const example = config => baseExample({ components: allComponents, ...config });
 
@@ -74,6 +74,13 @@ export default {
             title: 'Editable title',
             description: 'Title can be set with the EditableTitle component',
             source: examples.editableTitle,
+          }),
+          example({
+            title: 'Ellipsis',
+            description:
+              'Title is limited to a single line of text.\n' +
+              'Subtitle is limited to 2 lines of text.\n',
+            source: examples.ellipsis,
           }),
         ],
       }),

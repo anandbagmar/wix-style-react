@@ -5,11 +5,13 @@ export type PreviewWidgetContentOutline = 'shadow' | 'border';
 
 export interface PreviewWidgetProps {
   dataHook?: string;
+  className?: string;
   skin?: PreviewWidgetSkin;
   contentOutline?: PreviewWidgetContentOutline;
   backgroundColor?: string;
   height?: string;
   width?: string;
+  scrollable?: boolean;
   children: React.ReactNode;
 }
 

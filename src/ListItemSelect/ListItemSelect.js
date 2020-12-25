@@ -1,9 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-
 import Text from '../Text';
-import styles from './ListItemSelect.st.css';
-
+import { st, classes } from './ListItemSelect.st.css';
+import { FontUpgradeContext } from '../FontUpgrade/context';
 import Checkbox from '../Checkbox';
 import Box from '../Box';
 import { dataHooks } from './constants';
@@ -80,34 +79,38 @@ class ListItemSelect extends React.PureComponent {
     } = this.props;
 
     return (
-      <div
-        {...styles(
-          styles.root,
-          { checkbox, selected, highlighted, disabled },
-          className,
-        )}
-        data-hook={dataHook}
-        data-selected={selected}
-        onClick={disabled ? undefined : onClick}
-      >
-        {checkbox ? (
-          <Checkbox
-            dataHook={dataHooks.CHECKBOX}
-            className={styles.fullWidthContent}
-            size={size}
-            checked={selected}
-            disabled={disabled}
+      <FontUpgradeContext.Consumer>
+        {({ active: isMadefor }) => (
+          <div
+            className={st(
+              classes.root,
+              { checkbox, selected, highlighted, disabled },
+              className,
+            )}
+            data-hook={dataHook}
+            data-selected={selected}
+            onClick={disabled ? undefined : onClick}
           >
-            {this._renderContent()}
-          </Checkbox>
-        ) : (
-          this._renderContent()
+            {checkbox ? (
+              <Checkbox
+                dataHook={dataHooks.CHECKBOX}
+                className={classes.fullWidthContent}
+                size={size}
+                checked={selected}
+                disabled={disabled}
+              >
+                {this._renderContent({ isMadefor })}
+              </Checkbox>
+            ) : (
+              this._renderContent({ isMadefor })
+            )}
+          </div>
         )}
-      </div>
+      </FontUpgradeContext.Consumer>
     );
   }
 
-  _renderContent() {
+  _renderContent({ isMadefor }) {
     const {
       checkbox,
       prefix,
@@ -126,7 +129,7 @@ class ListItemSelect extends React.PureComponent {
       ellipsis,
       showDelay: 300,
       skin: disabled ? 'disabled' : 'standard',
-      weight: checkbox ? 'thin' : 'normal',
+      weight: isMadefor || checkbox ? 'thin' : 'normal',
       light: selected && !checkbox,
     };
 
@@ -137,10 +140,12 @@ class ListItemSelect extends React.PureComponent {
     };
 
     return (
-      <Box width="100%" className={styles.textsWrapper}>
+      <Box width="100%" className={classes.textsWrapper}>
         {prefix && (
           <Text
-            {...styles(styles.prefix, { subtitle })}
+            className={st(classes.prefix, {
+              subtitle: Boolean(subtitle),
+            })}
             dataHook={dataHooks.PREFIX}
             {...textProps}
             ellipsis={false}
@@ -149,19 +154,19 @@ class ListItemSelect extends React.PureComponent {
           </Text>
         )}
 
-        <Box
-          display="grid"
-          margin={subtitle ? '9px 6px' : '6px'}
-          className={styles.title}
-          direction="vertical"
-          lineHeight="initial"
-          fontSize="initial"
+        <div
+          className={st(classes.titleWrapper, { subtitle: Boolean(subtitle) })}
         >
-          <Text dataHook={dataHooks.TITLE} {...textProps}>
+          <Text
+            className={classes.title}
+            dataHook={dataHooks.TITLE}
+            {...textProps}
+          >
             {title}
           </Text>
           {subtitle && (
             <Text
+              className={classes.subtitle}
               dataHook={dataHooks.SUBTITLE}
               secondary
               {...secondaryTextProps}
@@ -170,11 +175,11 @@ class ListItemSelect extends React.PureComponent {
               {subtitle}
             </Text>
           )}
-        </Box>
+        </div>
         {suffix && (
           <Text
             dataHook={dataHooks.SUFFIX}
-            className={styles.suffix}
+            className={classes.suffix}
             {...secondaryTextProps}
           >
             {suffix}
@@ -193,9 +198,9 @@ export const listItemSelectBuilder = ({
   checkbox,
   prefix,
   title,
+  label,
   subtitle,
   suffix,
-  selected,
   disabled,
   size,
   ellipsis,
@@ -203,8 +208,9 @@ export const listItemSelectBuilder = ({
 }) => ({
   id,
   disabled,
-  overrideStyle: true,
-  value: props => (
+  overrideOptionStyle: true,
+  label,
+  value: ({ selected, hovered, ...rest }) => (
     <ListItemSelect
       dataHook={dataHook}
       className={className}
@@ -216,8 +222,8 @@ export const listItemSelectBuilder = ({
       size={size}
       ellipsis={ellipsis}
       selected={selected}
-      highlighted={props.hovered}
-      {...props}
+      highlighted={hovered}
+      {...rest}
     />
   ),
 });

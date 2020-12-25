@@ -1,0 +1,262 @@
+:import {
+  -st-from: '../Foundation/stylable/colors.st.css';
+  -st-named: F00, D80, D10, D60, THEME-COLOR-10, THEME-COLOR-20, THEME-COLOR-40,
+    THEME-COLOR-50, THEME-COLOR-60, D10-30, D10-05;
+}
+
+:import {
+  -st-from: 'wix-ui-core/hocs.st.css';
+  -st-named: Focusable;
+}
+
+.optionWrapper,
+.optionWrapper .radioWrapper {
+  cursor: initial;
+  box-sizing: border-box;
+  outline: none;
+}
+
+.vertical {
+  display: flex;
+  flex-direction: column;
+}
+
+.horizontal {
+  display: flex;
+}
+
+.horizontal .radioWrapper .labelInner {
+  margin-right: 20px;
+}
+
+.horizontal.selectionAreaAlways .radioWrapper .labelInner,
+.horizontal.selectionAreaHover .radioWrapper .labelInner {
+  margin-right: 18px;
+}
+
+.radioWrapper:not(.checked) .radio:hover:not(:active) {
+  background-color: value(THEME-COLOR-40);
+}
+
+.radioWrapper > input {
+  display: none;
+}
+
+.radioWrapper .label {
+  cursor: inherit;
+  display: block;
+}
+
+.radioWrapper.disabled .label {
+  cursor: default;
+  pointer-events: none;
+}
+
+.selectionAreaAlways .label,
+.selectionAreaHover .label {
+  padding: 2px;
+}
+
+.selectionAreaAlways .label .labelInner,
+.selectionAreaHover .label .labelInner {
+  padding: 10px 0 10px 14px;
+}
+
+.radioWrapper .label .labelInner {
+  display: flex;
+  flex-direction: row;
+  cursor: inherit;
+}
+
+.radioWrapper .label .labelInner.vcenter {
+  align-items: center;
+}
+
+.focusableRadioButton {
+  -st-extends: Focusable;
+}
+
+.focusableRadioButton:focus-visible .radioWrapper .radio {
+  border-color: value(THEME-COLOR-10);
+  box-shadow: 0 0 0 3px value(F00);
+}
+
+.radioWrapper {
+  outline: none;
+}
+
+.horizontal .children {
+  padding-left: 6px;
+}
+
+.children {
+  cursor: pointer;
+  padding-left: 12px;
+}
+
+.radio {
+  box-sizing: border-box;
+  display: inline-block;
+  position: relative;
+  min-width: 16px;
+  height: 16px;
+  border: 1px solid value(THEME-COLOR-10);
+  background-color: value(D80);
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+/* Margin between radios in a group */
+.vertical :not(:first-child).optionWrapper {
+  margin-top: 12px;
+}
+
+.selectionAreaAlways.vertical :not(:first-child).optionWrapper {
+  margin-top: 6px;
+}
+
+.selectionAreaAlways.horizontal :not(:first-child).optionWrapper {
+  margin-left: 6px;
+}
+
+.selectionAreaHover.vertical :not(:first-child).optionWrapper {
+  margin-top: 6px;
+}
+
+.selectionAreaHover.horizontal :not(:first-child).optionWrapper {
+  margin-left: 6px;
+}
+
+.disabled .radio {
+  color: value(D10-30);
+  border-color: value(D10-30);
+  background-color: value(D10-05);
+}
+
+.disabled.checked .radio::after {
+  background-color: value(D10-30);
+}
+
+.radio::after {
+  content: '';
+  display: block;
+  border-radius: 50%;
+  width: 10px;
+  height: 10px;
+  top: 0;
+  left: 0;
+  margin: 2px;
+}
+
+.checked:not(.disabled) .radioButtonChecked::after {
+  background-color: value(THEME-COLOR-10);
+}
+
+.radio:active::after {
+  background-color: value(THEME-COLOR-20);
+}
+
+.radioButtonWrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+:global([dir='rtl']) .horizontal .radioWrapper .labelInner {
+  margin-right: 0;
+  margin-left: 20px;
+}
+
+:global([dir='rtl']) .horizontal.selectionAreaAlways .radioWrapper .labelInner,
+:global([dir='rtl']) .horizontal.selectionAreaHover .radioWrapper .labelInner {
+  margin-right: 18px;
+}
+
+:global([dir='rtl']) .children {
+  padding-left: 0;
+  padding-right: 12px;
+}
+
+:global([dir='rtl']) .selectionAreaHover .children {
+  padding-left: 0;
+  padding-right: 12px;
+}
+
+:global([dir='rtl']) .selectionAreaAlways .children {
+  padding-left: 0;
+  padding-right: 12px;
+}
+
+/* Selection Area */
+.selectionAreaAlways .label,
+.selectionAreaHover .label {
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.selectionAreaAlways.selectionAreaOutlined .radioWrapper.disabled .label {
+  border: solid 1px value(D60);
+  padding: 1px;
+}
+
+.selectionAreaAlways.selectionAreaFilled .radioWrapper:not(.disabled).checked .label {
+  background-color: value(THEME-COLOR-40);
+}
+
+.selectionAreaAlways.selectionAreaOutlined .radioWrapper:not(.disabled).checked .label {
+  border: solid 2px value(THEME-COLOR-10);
+  padding: 0;
+}
+
+.selectionAreaAlways .children {
+  padding-left: 12px;
+}
+
+.selectionAreaAlways.selectionAreaFilled .radioWrapper:not(.disabled):not(.checked) .label:hover {
+  background-color: value(THEME-COLOR-50);
+}
+
+.selectionAreaAlways.selectionAreaOutlined .radioWrapper:not(.disabled):not(.checked) .label:hover {
+  border: solid 1px value(THEME-COLOR-20);
+  padding: 1px;
+}
+
+.selectionAreaHover .radioWrapper {
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.selectionAreaHover.selectionAreaFilled .radioWrapper:not(.disabled).checked .label {
+  background-color: value(THEME-COLOR-40);
+}
+
+.selectionAreaHover.selectionAreaOutlined .radioWrapper:not(.disabled).checked .label {
+  border: solid 2px value(THEME-COLOR-10);
+  padding: 0;
+}
+
+.selectionAreaHover .children {
+  padding-left: 12px;
+}
+
+.selectionAreaHover.selectionAreaFilled .radioWrapper:not(.disabled):not(.checked) .label:hover {
+  background-color: value(THEME-COLOR-50);
+}
+
+.selectionAreaHover.selectionAreaOutlined .radioWrapper:not(.disabled):not(.checked) .label:hover {
+  border: solid 1px value(THEME-COLOR-20);
+  padding: 1px;
+}
+
+.selectionAreaAlways.selectionAreaFilled .radioWrapper:not(.disabled) .label {
+  background-color: value(THEME-COLOR-60);
+}
+
+.selectionAreaAlways.selectionAreaOutlined .radioWrapper:not(.disabled) .label {
+  border: solid 1px value(THEME-COLOR-40);
+  padding: 1px;
+}
+
+.content {
+  margin-top: 6px;
+}

@@ -1,11 +1,12 @@
 :import {
-  -st-from: 'wix-ui-core/index.st.css';
-  -st-named: ButtonNext;
+  -st-from: 'wix-ui-core/dist/src/components/button-next/button-next.st.css';
+  -st-default: ButtonNext;
 }
 
 :import {
   -st-from: '../Foundation/stylable/colors.st.css';
-  -st-named: P10, P20, D80, B10, B20, D10, D20, F00, D10-30, D80-70, R10, R20;
+  -st-named: P10, P20, D80, D10, D20, F00, D10-30, D80-70, R10, R20,
+    THEME-COLOR-10, THEME-COLOR-20;
 }
 
 :import {
@@ -14,11 +15,16 @@
     text-small-normal, text-medium-thin, text-medium-normal;
 }
 
+:import {
+  -st-from: '../Foundation/stylable/easing.st.css';
+  -st-named: ease-9, speed-fast-1;
+}
+
 .root {
   -st-extends: ButtonNext;
-  -st-states: skin(string), underline(string), weight(string), size(string), fluid;
+  -st-states: skin(string), underline(string), weight(string), size(string), fluid, ellipsis;
 
-  color: value(B10);
+  color: value(THEME-COLOR-10);
   white-space: nowrap;
 
   background-color: transparent;
@@ -28,8 +34,8 @@
   border: none;
   border-radius: 2px;
 
-  transition-duration: 100ms;
-  transition-timing-function: linear;
+  transition-duration: value(speed-fast-1);
+  transition-timing-function: value(ease-9);
   transition-property: background-color, color, border-color;
 
   outline: none;
@@ -40,11 +46,11 @@
 }
 
 .root:hover {
-  color: value(B20);
+  color: value(THEME-COLOR-20);
 }
 
 .root:active {
-  color: value(B20);
+  color: value(THEME-COLOR-20);
 }
 
 .root:disabled {
@@ -55,7 +61,12 @@
   box-shadow: 0 0 0 3px value(F00);
 }
 
-.root:fluid, .root:fluid::content {
+.root:ellipsis {
+  max-width: 100%;
+}
+
+.root:fluid,
+.root:fluid::content {
   width: 100%;
 }
 
@@ -173,6 +184,7 @@
   -st-mixin: text-tiny-thin;
   height: 18px;
 }
+
 .root:size(tiny):weight(normal) {
   -st-mixin: text-tiny-normal;
   height: 18px;
@@ -181,6 +193,7 @@
 /* affixes */
 
 .root::prefix {
+  box-sizing: content-box;
   padding-right: 6px;
   margin: 0;
   width: 24px;
@@ -188,6 +201,7 @@
 }
 
 .root::suffix {
+  box-sizing: content-box;
   padding-left: 6px;
   margin: 0;
   width: 24px;

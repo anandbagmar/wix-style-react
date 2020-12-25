@@ -1,13 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
-
 import InputWithOptions from '../InputWithOptions/InputWithOptions';
-import DropdownLayout from '../DropdownLayout';
 import InputWithTags from './InputWithTags';
 import last from 'lodash/last';
 import difference from 'difference';
-
 import styles from './MultiSelect.scss';
 
 class MultiSelect extends InputWithOptions {
@@ -201,9 +198,9 @@ class MultiSelect extends InputWithOptions {
 MultiSelect.displayName = 'MultiSelect';
 
 MultiSelect.propTypes = {
-  selectedId: DropdownLayout.propTypes.selectedId,
-  closeOnSelect: DropdownLayout.propTypes.closeOnSelect,
-  selectedHighlight: DropdownLayout.propTypes.selectedHighlight,
+  selectedId: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+  closeOnSelect: PropTypes.bool,
+  selectedHighlight: PropTypes.bool,
 
   /** Callback predicate for the filtering options function */
   predicate: PropTypes.func,
@@ -236,6 +233,12 @@ MultiSelect.propTypes = {
    * Submit-Action triggers are: "Enter", "Tab", [typing any defined delimiters], Paste action.
    * `onManuallyInput(values: Array<string>): void - The array of strings is the result of splitting the input value by the given delimiters */
   onManuallyInput: PropTypes.func,
+
+  /** A callback which is called when options dropdown is shown */
+  onOptionsShow: PropTypes.func,
+
+  /** A callback which is called when options dropdown is hidden */
+  onOptionsHide: PropTypes.func,
 
   /** A callback which is called when the user selects an option from the list.
    * `onSelect(option: Option): void` - Option is the original option from the provided `options` prop.

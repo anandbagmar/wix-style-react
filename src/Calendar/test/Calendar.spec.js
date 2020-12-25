@@ -124,6 +124,20 @@ describe('Calendar', () => {
           monthNames[new Date().getMonth()],
         );
       });
+      it('should have 5 selected dates', async () => {
+        const { driver } = render(
+          <Calendar
+            value={{
+              from: new Date(2018, 10, 5),
+              to: new Date(2018, 10, 9),
+            }}
+            onChange={() => {}}
+            selectionMode={'range'}
+          />,
+        );
+
+        expect(await driver.getNumOfSelectedDays()).toBe(5);
+      });
     });
 
     describe('`filterDate` prop', () => {
@@ -717,6 +731,40 @@ describe('Calendar', () => {
             });
           });
         });
+      });
+    });
+
+    describe('firstDayOfWeek', () => {
+      it('should show correct first day of the week', async () => {
+        const { driver } = render(
+          <Calendar value={{}} onChange={() => {}} firstDayOfWeek={0} />,
+        );
+
+        expect(await driver.getNthWeekDayName(0)).toEqual('Su');
+      });
+    });
+
+    describe('Month & Year dropdowns', () => {
+      it('Should select a month & year', async () => {
+        const { driver } = render(
+          <Calendar
+            value="01.01.01"
+            onChange={() => {}}
+            showYearDropdown
+            showMonthDropdown
+          />,
+        );
+
+        const monthDropdownDriver = await driver.getMonthDropdownDriver();
+        const yearDropdownDriver = await driver.getYearDropdownDriver();
+
+        expect(await driver.getMonthDropdownLabel()).toBe('January');
+        await monthDropdownDriver.clickAtOptionWithValue('June');
+        expect(await driver.getMonthDropdownLabel()).toBe('June');
+
+        expect(await driver.getSelectedYear()).toBe('2001');
+        await yearDropdownDriver.clickAtOptionWithValue('2020');
+        expect(await driver.getSelectedYear()).toBe('2020');
       });
     });
   }

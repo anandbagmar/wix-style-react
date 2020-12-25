@@ -1,7 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-
-import styles from './styles.scss';
+import { classes } from './styles.st.css';
 
 const Layout = ({
   children,
@@ -9,17 +8,19 @@ const Layout = ({
   cols,
   justifyItems,
   alignItems,
+  rowHeight,
   dataHook,
 }) => (
   <div
     data-hook={dataHook}
     style={{
-      gridGap: gap,
+      gap,
       justifyItems,
       alignItems,
+      gridAutoRows: rowHeight,
       gridTemplateColumns: cols ? `repeat(${cols}, minmax(0, 1fr))` : undefined,
     }}
-    className={styles.root}
+    className={classes.root}
     children={children}
   />
 );
@@ -44,10 +45,14 @@ Layout.propTypes = {
 
   /** is used to aligns the grid items along the column axis */
   alignItems: PropTypes.string,
+
+  /** Sets all rows to a given height. */
+  rowHeight: PropTypes.string,
 };
 
 Layout.defaultProps = {
   gap: '30px',
+  rowHeight: 'auto',
 };
 
 export default Layout;

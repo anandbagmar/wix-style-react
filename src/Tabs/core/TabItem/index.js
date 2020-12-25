@@ -1,10 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import classNames from 'classnames';
 import pick from '../../../utils/operators/pick';
 import Text from '../../../Text';
 import * as TabPropTypes from '../constants/tab-prop-types';
-import styles from '../../Tabs.st.css';
+import { classes, st } from '../../Tabs.st.css';
+import { FontUpgradeContext } from '../../../FontUpgrade/context';
 
 class TabItem extends React.Component {
   getItemStyle() {
@@ -19,12 +19,15 @@ class TabItem extends React.Component {
   }
 
   render() {
-    const { item, onItemClick, isActive, dynamicProperties } = this.props;
+    const { item, onItemClick, isActive, dynamicProperties, size } = this.props;
 
     const containerProps = {
       key: item.id,
       onClick: () => onItemClick(item),
-      className: classNames(styles.tab, { [styles.active]: isActive }),
+      className: st(classes.tab, {
+        size,
+        active: isActive,
+      }),
       style: this.getItemStyle(),
       ...pick(this.props, dynamicProperties),
     };
@@ -36,9 +39,18 @@ class TabItem extends React.Component {
         {...containerProps}
         ref={this.createRef}
       >
-        <Text className={styles.tabText} weight="normal" ellipsis>
-          {item.title}
-        </Text>
+        <FontUpgradeContext.Consumer>
+          {({ active: isMadefor }) => (
+            <Text
+              size={size}
+              className={classes.tabText}
+              weight={isMadefor ? 'thin' : 'normal'}
+              ellipsis
+            >
+              {item.title}
+            </Text>
+          )}
+        </FontUpgradeContext.Consumer>
       </li>
     );
   }

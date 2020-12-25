@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { IconElement, OmitPolyfill } from '../common';
+import { IconElement, OmitPolyfill, TooltipCommonProps } from '../common';
 import { PopoverMenuProps } from '../PopoverMenu';
 
 type CommonTableActionCellProps = {
@@ -8,6 +8,7 @@ type CommonTableActionCellProps = {
   secondaryActions?: TableActionCellSecondaryAction[];
   numOfVisibleSecondaryActions?: number;
   alwaysShowSecondaryActions?: boolean;
+  size?: 'small' | 'medium';
 };
 
 export type TableActionCellProps = CommonTableActionCellProps & {
@@ -20,7 +21,7 @@ export default TableActionCell;
 export type TableActionCellPrimaryAction = {
   text: string;
   onClick: () => void;
-  theme?: 'whiteblue' | 'fullblue';
+  skin?: 'standard' | 'inverted';
   disabled?: boolean;
 };
 
@@ -29,5 +30,7 @@ export type TableActionCellSecondaryAction = {
   icon: IconElement;
   onClick: () => void;
   disabled?: boolean;
+  disabledDescription?: string;
+  tooltipProps?: TooltipCommonProps;
   dataHook?: string;
 };

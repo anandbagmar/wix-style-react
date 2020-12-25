@@ -1,10 +1,11 @@
 import React, { PureComponent } from 'react';
 import { ButtonNext } from 'wix-ui-core/dist/src/components/button-next';
+import Ellipsis from '../common/Ellipsis';
+import { TooltipCommonProps } from '../common/PropTypes/TooltipCommon';
 import PropTypes from 'prop-types';
-import cx from 'classnames';
 import { generateDataAttr } from '../utils/generateDataAttr';
 
-import styles from './TextButton.st.css';
+import { st, classes } from './TextButton.st.css';
 
 class TextButton extends PureComponent {
   static displayName = 'TextButton';
@@ -40,6 +41,12 @@ class TextButton extends PureComponent {
     dataHook: PropTypes.string,
     /** Stretches text button to its container width */
     fluid: PropTypes.bool,
+    /** should the text get ellipsized with tooltip, or should it get broken into lines when it reaches the end of its container */
+    ellipsis: PropTypes.bool,
+    /** True by default, set it to false in order to show ellipsis without a tooltip. */
+    showTooltip: PropTypes.bool,
+    /** Props that modify the Tooltip created from text ellipsis */
+    tooltipProps: PropTypes.shape(TooltipCommonProps),
   };
 
   static defaultProps = {
@@ -49,6 +56,7 @@ class TextButton extends PureComponent {
     size: 'medium',
     disabled: false,
     fluid: false,
+    tooltipProps: {},
   };
 
   render() {
@@ -58,37 +66,42 @@ class TextButton extends PureComponent {
       weight,
       size,
       children,
-      className: userClassName,
+      className,
       dataHook,
       fluid,
+      ellipsis,
+      showTooltip,
+      tooltipProps,
       ...rest
     } = this.props;
 
-    const { className } = styles('root', {
-      skin,
-      underline,
-      weight,
-      size,
-      fluid,
-    });
-
-    const classNames = cx(className, userClassName);
-
     return (
-      <ButtonNext
-        {...rest}
-        {...generateDataAttr(this.props, [
-          'skin',
-          'size',
-          'weight',
-          'underline',
-        ])}
-        {...styles('root', { skin, underline, weight, size, fluid }, rest)}
-        className={classNames}
-        data-hook={dataHook}
-      >
-        {children}
-      </ButtonNext>
+      <Ellipsis
+        ellipsis={ellipsis}
+        showTooltip={showTooltip}
+        {...tooltipProps}
+        render={({ ref, ellipsisClasses }) => (
+          <ButtonNext
+            {...rest}
+            {...generateDataAttr(this.props, [
+              'skin',
+              'size',
+              'weight',
+              'underline',
+            ])}
+            className={st(
+              classes.root,
+              { skin, underline, weight, size, fluid, ellipsis },
+              className,
+            )}
+            data-hook={dataHook}
+            contentClassName={ellipsisClasses()}
+            contentRef={ref}
+          >
+            {children}
+          </ButtonNext>
+        )}
+      />
     );
   }
 }

@@ -2,10 +2,11 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import { Tooltip as CoreTooltip } from 'wix-ui-core/dist/src/components/tooltip';
 import RawText from '../Text/RawText';
-import styles from './Tooltip.st.css';
+import { st, classes } from './Tooltip.st.css';
 import { dataHooks, TIMEOUT } from './constants';
 import { FontUpgradeContext } from '../FontUpgrade/context';
 import FontUpgrade from '../FontUpgrade';
+import { ThemeProviderConsumerBackwardCompatible } from '../ThemeProvider/ThemeProviderConsumerBackwardCompatible';
 
 /**
  * Next Tooltip
@@ -16,6 +17,8 @@ class Tooltip extends React.PureComponent {
   static propTypes = {
     /** applied as data-hook HTML attribute that can be used to create driver in testing */
     dataHook: PropTypes.string,
+    /** A css class to be applied to the component's root element */
+    className: PropTypes.string,
     /** tooltip trigger element. Can be either string or renderable node */
     children: PropTypes.node.isRequired,
     /** tooltip content. Can be either string or renderable node */
@@ -52,7 +55,7 @@ class Tooltip extends React.PureComponent {
     onHide: PropTypes.func,
     /** tooltip content placement in relation to target element */
     placement: PropTypes.string,
-    /** disables tooltip element trigger behaviour */
+    /** disables tooltip element trigger behaviour. If not specified, `disabled` prop of the `children` element will be used. */
     disabled: PropTypes.bool,
     /** sets size of the tooltip */
     size: PropTypes.oneOf(['small', 'medium']),
@@ -83,17 +86,21 @@ class Tooltip extends React.PureComponent {
   _renderContent = () => {
     const { content, textAlign, size } = this.props;
     const textSize = size === 'small' ? 'tiny' : 'small';
+
     return (
       <FontUpgradeContext.Consumer>
-        {context => {
+        {({ active: isMadefor }) => {
+          const textWeight =
+            size === 'small' ? 'normal' : isMadefor ? 'thin' : 'normal';
+
           return (
             <div style={{ textAlign }}>
-              <FontUpgrade active={!!context.active}>
+              <FontUpgrade active={!!isMadefor}>
                 {typeof content === 'string' ? (
                   <RawText
                     dataHook={dataHooks.tooltipText}
                     size={textSize}
-                    weight="normal"
+                    weight={textWeight}
                     light
                   >
                     {content}
@@ -118,27 +125,33 @@ class Tooltip extends React.PureComponent {
       size,
       dataHook,
       disabled,
+      className,
       ...rest
     } = this.props;
 
     return (
-      <CoreTooltip
-        {...rest}
-        {...(dataHook ? { 'data-hook': dataHook } : {})}
-        {...styles('root', { size }, this.props)}
-        content={this._renderContent()}
-        hideDelay={exitDelay}
-        showDelay={enterDelay}
-        disabled={
-          disabled === undefined
-            ? children.props && children.props.disabled
-            : disabled
-        }
-        showArrow
-        timeout={TIMEOUT}
-      >
-        {children}
-      </CoreTooltip>
+      <ThemeProviderConsumerBackwardCompatible>
+        {({ className: themeClassName }) => (
+          <CoreTooltip
+            {...rest}
+            data-hook={dataHook}
+            data-size={size}
+            className={st(classes.root, { size }, className, themeClassName)}
+            content={this._renderContent()}
+            hideDelay={exitDelay}
+            showDelay={enterDelay}
+            disabled={
+              disabled === undefined
+                ? children.props && children.props.disabled
+                : disabled
+            }
+            showArrow
+            timeout={TIMEOUT}
+          >
+            {children}
+          </CoreTooltip>
+        )}
+      </ThemeProviderConsumerBackwardCompatible>
     );
   }
 }

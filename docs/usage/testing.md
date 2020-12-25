@@ -55,7 +55,7 @@ This is a common prop which every wix-style-react component has:
 
 Now let's test that code using a testkit.
 
-Each component has a `TestkitFactory`, a small function to initialize testkit.
+Each component has a testkit factory, a small function to initialize testkit.
 
 There are 3 steps to use it:
 1. import testkit
@@ -70,47 +70,47 @@ For example:
 
 **ReactTestUtils / react-testing-library**
 ```js
-import { inputTestkitFactory } from 'wix-style-react/dist/testkit'
+import { InputTestkit } from 'wix-style-react/dist/testkit'
 ```
 
 **Enzyme**
 ```js
-import { inputTestkitFactory } from 'wix-style-react/dist/testkit/enzyme'
+import { InputTestkit } from 'wix-style-react/dist/testkit/enzyme'
 ```
 
 **Protractor**
 ```js
-import { inputTestkitFactory } from 'wix-style-react/dist/testkit/protractor'
+import { InputTestkit } from 'wix-style-react/dist/testkit/protractor'
 ```
 
 **Puppeteer**
 ```js
-import { inputTestkitFactory } from 'wix-style-react/dist/testkit/puppeteer'
+import { InputTestkit } from 'wix-style-react/dist/testkit/puppeteer'
 ```
 
 ### 2. Initialize Testkit
 
-Once you have imported the `TestkitFactory` (let's say, `inputTestkitFactory`) you need to initialize it:
+Once you have imported the testkit (let's say, `InputTestkit`) you need to initialize it:
 
 ```js
 // in this example we use testkit compatible with react-testing-library
-import { inputTestkitFactory } from 'wix-style-react/dist/testkit';
+import { InputTestkit } from 'wix-style-react/dist/testkit';
 import { render } from 'react-testing-library';
 
 import App from './App';
 
-const inputDriver = inputTestkitFactory({
+const inputDriver = InputTestkit({
   wrapper: render(<App />).baseElement,
   dataHook: 'title-changer-input',
 });
 ```
 
-`inputTestkitFactory` and all other testkits require two things:
+`InputTestkit` and all other testkits require two things:
 
 1. `wrapper` - a platform specific React node. (In this example we use `react-testing-library`). Inside node there should be a component, which has `dataHook="title-changer-input"`.
 2. `dataHook` - a string that matches `dataHook` of component
 
-This is a way of telling `inputTestkitFactory`: hey, here's a `wrapper`, please find component with `dataHook` in there and return me a testkit.
+This is a way of telling `InputTestkit`: hey, here's a `wrapper`, please find component with `dataHook` in there and return me a testkit.
 
 ### 3. Use Testkit
 
@@ -128,10 +128,10 @@ Full code of all steps for clarity:
 
 ```js
 // 1. import
-import { inputTestkitFactory } from 'wix-style-react/dist/testkit';
+import { InputTestkit } from 'wix-style-react/dist/testkit';
 
 // 2. initialize
-const inputDriver = inputTestkitFactory({
+const inputDriver = InputTestkit({
   wrapper: document.body, // possible with all document, but always prefer a more specific node
   dataHook: 'title-changer-input',
 });
@@ -152,19 +152,19 @@ import App from './App';
 
 // 1. importing testkits
 import {
-  inputTestkitFactory,
-  headingTestkitFactory,
+  InputTestkit,
+  HeadingTestkit,
 } from 'wix-style-react/dist/testkit';
 
 describe('App', () => {
   it('should update the title', async () => {
     // 2. initializing testkits
-    const inputDriver = inputTestkitFactory({
+    const inputDriver = InputTestkit({
       wrapper: render(<App />).baseElement,
       dataHook: 'title-changer-input',
     });
 
-    const headingDriver = headingTestkitFactory({
+    const headingDriver = HeadingTestkit({
       wrapper: baseElement,
       dataHook: 'app-title',
     });

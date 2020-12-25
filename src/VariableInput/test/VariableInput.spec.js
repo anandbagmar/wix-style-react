@@ -56,6 +56,15 @@ describe('VariableInput', () => {
       );
       expect(await driver.getContent()).toBe('hello world {{test.val}}');
     });
+    it('should ignore preceding and following brackets', async () => {
+      const driver = createDriver(
+        <VariableInput
+          initialValue={`hello world {{{page.name}}}`}
+          variableParser={variableParser}
+        />,
+      );
+      expect(await driver.getContent()).toBe('hello world { Page name }');
+    });
   });
   describe('insertVariable', () => {
     it('should invoke `onSubmit` with variable after insert variable', async () => {
@@ -233,6 +242,12 @@ describe('VariableInput', () => {
   describe('disabled', () => {
     it('should disable component when passing `disabled` prop', async () => {
       const driver = createDriver(<VariableInput disabled />);
+      expect(await driver.isDisabled()).toBe(true);
+    });
+  });
+  describe('readOnly', () => {
+    it('should disable component when passing `readOnly` prop', async () => {
+      const driver = createDriver(<VariableInput readOnly />);
       expect(await driver.isDisabled()).toBe(true);
     });
   });

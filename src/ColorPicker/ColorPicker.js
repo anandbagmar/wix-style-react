@@ -8,7 +8,7 @@ import ColorPickerHistory from './ColorPickerHistory';
 import ColorPickerConverter from './ColorPickerConverter';
 import ColorPickerActions from './ColorPickerActions';
 
-import styles from './ColorPicker.st.css';
+import { classes } from './ColorPicker.st.css';
 import { safeColor, isTransparent } from './utils';
 import { DataHooks } from './constants';
 
@@ -45,7 +45,7 @@ class ColorPicker extends React.PureComponent {
     const { current, previous } = this.state;
 
     return (
-      <div {...styles('root')} data-hook={dataHook}>
+      <div className={classes.root} data-hook={dataHook}>
         <ColorPickerHsb
           dataHook={DataHooks.hsb}
           current={current}
@@ -75,7 +75,7 @@ class ColorPicker extends React.PureComponent {
           hexPlaceholder={emptyPlaceholder}
         />
         {children && (
-          <div className={styles.children} data-hook={DataHooks.children}>
+          <div className={classes.children} data-hook={DataHooks.children}>
             {this._renderChildren()}
           </div>
         )}
@@ -118,18 +118,26 @@ class ColorPicker extends React.PureComponent {
       this.setState({ current: _color });
     }
   }
-
+  /**
+   * sets the selected color
+   * @param {object} color - An object that contains data for the selected color, model, and valpha.
+   */
   change = _color => {
     this.setState({ current: _color }, () => {
       this.props.onChange(_color);
     });
   };
-
+  /**
+   * confirms the selected color
+   */
   confirm = () => {
     this.setState({ previous: this.state.current });
     this.props.onConfirm(this.state.current);
   };
 
+  /**
+   * cancels the selected color
+   */
   cancel = () => {
     this.props.onCancel(this.state.previous);
   };
@@ -168,7 +176,7 @@ ColorPicker.propTypes = {
   /** Children would be rendered above action buttons */
   children: PropTypes.oneOfType([PropTypes.node, PropTypes.func]),
 
-  /** Content to show in add button tooltip. does not appear if `onAdd` is not passed. */
+  /** Content to show in add button tooltip. Does not appear if `onAdd` is not passed. */
   addTooltipContent: PropTypes.node,
 
   /** Allow to confirm when color is not selected. Returns color object with alpha equal to 0. */

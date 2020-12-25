@@ -23,7 +23,7 @@ function ListItemSelectWithMandatoryProps() {
 }
 
 function listItemSelectBuilderWithAllProps() {
-  const { disabled, id, overrideStyle, value } = listItemSelectBuilder({
+  const { disabled, id, overrideOptionStyle, value } = listItemSelectBuilder({
     id: '1',
     checkbox: true,
     className: 'cls',

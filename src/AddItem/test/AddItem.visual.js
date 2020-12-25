@@ -1,6 +1,8 @@
 import React from 'react';
 import { storiesOf } from '@storybook/react';
 import AddItem from '../index';
+import { Cell, Layout } from '../../Layout';
+import Box from '../../Box';
 
 const defaultProps = {
   label: 'String',
@@ -112,6 +114,29 @@ const tests = [
       },
     ],
   },
+  {
+    describe: 'children',
+    its: [
+      {
+        it: 'as a string',
+        props: { children: 'AddItem' },
+      },
+      {
+        it: 'as a node',
+        props: { children: <Box marginLeft="SP1">A node with marginLeft</Box> },
+      },
+      {
+        it: 'as a render function',
+        props: {
+          children: () => (
+            <div style={{ fontSize: '20px', color: 'blue' }}>
+              Text styles should not be applied!
+            </div>
+          ),
+        },
+      },
+    ],
+  },
 ];
 
 tests.forEach(({ describe, its }) => {
@@ -122,3 +147,28 @@ tests.forEach(({ describe, its }) => {
     );
   });
 });
+
+storiesOf('AddItem/borderRadius', module).add('borderRadius 100%', () => (
+  <Layout>
+    <Cell>
+      <div style={{ height: '40px', width: '40px' }}>
+        <AddItem size="tiny" removePadding borderRadius="100%" />
+      </div>
+    </Cell>
+    <Cell>
+      <div style={{ height: '80px', width: '80px' }}>
+        <AddItem size="small" removePadding borderRadius="100%" />
+      </div>
+    </Cell>
+    <Cell>
+      <div style={{ height: '120px', width: '120px' }}>
+        <AddItem size="medium" removePadding borderRadius="100%" />
+      </div>
+    </Cell>
+    <Cell>
+      <div style={{ height: '160px', width: '160px' }}>
+        <AddItem size="large" removePadding borderRadius="100%" />
+      </div>
+    </Cell>
+  </Layout>
+));

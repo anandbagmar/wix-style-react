@@ -1,10 +1,15 @@
 :import {
   -st-from: "../Foundation/stylable/colors.st.css";
   -st-named:
-    B10, B20, B30, B40, B50,
+    THEME-COLOR-10, THEME-COLOR-20, THEME-COLOR-30, THEME-COLOR-40, THEME-COLOR-50,
     D60, D70, D80,
     D10-05, D10-30,
     F00,
+}
+
+:import {
+  -st-from: '../Foundation/stylable/easing.st.css';
+  -st-named: ease-9;
 }
 
 :import {
@@ -23,8 +28,8 @@
 }
 
 :import {
-  -st-from: "wix-ui-core/hocs.st.css";
-  -st-named: Focusable;
+  -st-from: "wix-ui-core/dist/src/hocs/Focusable/Focusable.st.css";
+  -st-default: Focusable;
 }
 
 :import {
@@ -44,7 +49,7 @@
   align-items: center;
   justify-content: center;
   padding: 12px 30px;
-  color: value(B10);
+  color: value(THEME-COLOR-10);
 }
 
 .root:removePadding {
@@ -63,61 +68,61 @@
 }
 
 .root:theme(plain):hover {
-  background-color: value(B40);
+  background-color: value(THEME-COLOR-40);
 }
 
 .root:theme(plain):active {
-  background-color: value(B30);
+  background-color: value(THEME-COLOR-30);
 }
 
 .root:theme(plain):disabled {
   cursor: not-allowed;
-  background-color: value(D10-05);
+  background-color: value(D80);
   color: value(D10-30);
 }
 
 /* Theme dashes */
 
 .root:theme(dashes) {
-  border: dashed 1px value(B20);
+  border: dashed 1px value(THEME-COLOR-20);
   background-color: value(opacity48);
   border-radius: value(radius08);
 }
 
 .root:theme(dashes):hover {
-  background-color: value(B40);
+  background-color: value(THEME-COLOR-40);
 }
 
 .root:theme(dashes):active {
-  background-color: value(B30);
+  background-color: value(THEME-COLOR-30);
 }
 
 .root:theme(dashes):disabled {
   cursor: not-allowed;
   background-color: value(D10-05);
   color: value(D10-30);
-  border: dashed 1px value(D10-30);
+  border-color: value(D10-30);
 }
 
 .root:not(:disabled):focus-visible:theme(dashes) {
   box-shadow: 0 0 0 3px value(F00);
-  border: dashed 1px transparent;
+  border-color: transparent;
 }
 
 /* Theme filled */
 
 .root:theme(filled) {
-  background-color: value(B50);
+  background-color: value(THEME-COLOR-50);
   border-radius: value(radius08);
   border: none;
 }
 
 .root:theme(filled):hover {
-  background-color: value(B40);
+  background-color: value(THEME-COLOR-40);
 }
 
 .root:theme(filled):active {
-  background-color: value(B30);
+  background-color: value(THEME-COLOR-30);
 }
 
 .root:theme(filled):disabled {
@@ -133,19 +138,19 @@
   height: 100%;
   padding: 12px;
   border: none;
-  transition: background 0.2s linear;
+  transition: background 0.2s value(ease-9);
   backface-visibility: hidden;
   transform: translate3d(0, 0, 0);
-  background-color: value(B50);
+  background-color: value(THEME-COLOR-50);
   border-radius: value(radius08);
 }
 
 .root:theme(image):hover {
-  background-color: value(B40);
+  background-color: value(THEME-COLOR-40);
 }
 
 .root:theme(image):active {
-  background-color: value(B30);
+  background-color: value(THEME-COLOR-30);
 }
 
 .root:theme(image):disabled {
@@ -167,7 +172,7 @@
 
 /* Specific theme image classname */
 .content:theme(image) {
-  border: dashed 1px value(B20);
+  border: dashed 1px value(THEME-COLOR-20);
   border-radius: 3px;
   padding: 12px;
 }
@@ -195,40 +200,48 @@
   flex-direction: row;
 }
 
+.content:size(tiny) .icon {
+  flex-shrink: 0;
+}
+
 /* Text */
 
-.text {
+.textWrapper {
   -st-states:size(enum(tiny, small, medium, large));
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
-.text:size(tiny) {
+.textWrapper:size(tiny) {
   max-width: 100%;
   flex-basis: auto;
 }
 
-.text:size(small) {
+.textWrapper:size(small) {
   width: 100%;
   padding-top: 6px;
 }
 
-.text:size(medium) {
+.textWrapper:size(medium) {
   width: 100%;
   padding-top: 12px;
 }
 
-.text:size(large) {
+.textWrapper:size(large) {
   width: 100%;
   padding-top: 12px;
 }
 
-.text Text {
-  color: value(B10);
+.textContent {
+  -st-extends: Text;
 }
 
-.root:disabled .text Text {
+.textContent:skin(standard) {
+  color: value(THEME-COLOR-10);
+}
+
+.root:disabled .textContent:skin(standard) {
   color: value(D10-30);
 }
 

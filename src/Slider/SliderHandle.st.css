@@ -1,6 +1,11 @@
 :import {
   -st-from: "../Foundation/stylable/colors.st.css";
-  -st-named: F00,B00, B10, D10, D50, D80;
+  -st-named: F00, B00, THEME-COLOR-10, D10, D50, D80;
+}
+
+:import {
+  -st-from: '../Foundation/stylable/typography.st.css';
+  -st-named: text-small-normal;
 }
 
 :import {
@@ -22,7 +27,6 @@
   touch-action: pan-x;
   cursor: pointer;
   outline: none;
-  /*transition: transform 80ms, left 80ms;*/
   width: value(clickableAreaSize);
   height: value(clickableAreaSize);
   transform: translate(-6px, -6px);
@@ -34,6 +38,7 @@
 }
 
 .tooltip {
+  -st-mixin: text-small-normal;
   position: absolute;
   background-color: value(D10);
   color: value(D80);

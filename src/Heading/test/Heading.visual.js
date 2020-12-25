@@ -1,6 +1,7 @@
 import React from 'react';
 import { storiesOf } from '@storybook/react';
 import Heading, { APPEARANCES } from '..';
+import WixStyleReactProvider from '../../WixStyleReactProvider';
 
 const defaultProps = {
   light: false,
@@ -46,15 +47,37 @@ const tests = [
   },
 ];
 
+export const runTests = (
+  { themeName, testWithTheme } = { testWithTheme: i => i },
+) => {
+  tests.forEach(({ describe, its }) => {
+    its.forEach(({ it, props, container }) => {
+      storiesOf(
+        `${themeName ? `${themeName}|` : ''}Heading${
+          describe ? '/' + describe : ''
+        }`,
+        module,
+      ).add(it, () =>
+        testWithTheme(
+          <div {...container}>
+            <Heading {...defaultProps} {...props} />
+          </div>,
+        ),
+      );
+    });
+  });
+};
+
 tests.forEach(({ describe, its }) => {
   its.forEach(({ it, props, container }) => {
-    storiesOf(`Heading${describe ? '/' + describe : ''}`, module).add(
-      it,
-      () => (
+    storiesOf('Layout And Spacing| Heading', module).add(it, () => (
+      <WixStyleReactProvider
+        features={{ reducedSpacingAndImprovedLayout: true }}
+      >
         <div {...container}>
           <Heading {...defaultProps} {...props} />
         </div>
-      ),
-    );
+      </WixStyleReactProvider>
+    ));
   });
 });

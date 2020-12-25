@@ -43,6 +43,25 @@ const tests = [
           </div>
         ),
       },
+      {
+        it: 'dateFormatV2',
+        story: () => (
+          <div>
+            <br />
+            <h2>DD/MM/YY Format V2</h2>
+            <DateInput dateFormatV2="dd/LL/yy" {...defaultProps} />
+            <br />
+            <h2>HH:mm:SS Format V2</h2>
+            <DateInput dateFormatV2="HH:mm:SS" {...defaultProps} />
+            <br />
+            <h2>Function Format V2 (date.toISOString)</h2>
+            <DateInput
+              dateFormatV2={date => date.toISOString()}
+              {...defaultProps}
+            />
+          </div>
+        ),
+      },
     ],
   },
 ];

@@ -1,31 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import style from './Text.st.css';
-
-/*
- * Temporary fix: SIZES, SKINS, WEIGHTS constants are copied here from constants.js
- * in order to have AutoDocs able to parse them.
- * See this issue: https://github.com/wix/wix-ui/issues/784
- */
-export const SIZES = {
-  tiny: 'tiny',
-  small: 'small',
-  medium: 'medium',
-};
-
-export const SKINS = {
-  standard: 'standard',
-  error: 'error',
-  success: 'success',
-  premium: 'premium',
-  disabled: 'disabled',
-};
-
-export const WEIGHTS = {
-  thin: 'thin',
-  normal: 'normal',
-  bold: 'bold',
-};
+import { st, classes } from './Text.st.css';
 
 const getStyleDataAttributes = styleAttributes =>
   Object.keys(styleAttributes).reduce((acc, styleKey) => {
@@ -54,12 +29,13 @@ const RawText = React.forwardRef(
       maxWidth,
       zIndex,
       showTooltip,
+      listStyle,
       ...rest
     },
     ref,
   ) => {
     /* eslint-disable no-unused-vars */
-    const { dataHook, ...textProps } = rest;
+    const { dataHook, className, ...textProps } = rest;
 
     const styleAttributes = {
       size,
@@ -67,6 +43,7 @@ const RawText = React.forwardRef(
       skin,
       light,
       weight,
+      'list-style': listStyle,
     };
     const styleDataAttributes = getStyleDataAttributes(styleAttributes);
 
@@ -76,7 +53,7 @@ const RawText = React.forwardRef(
         ref,
         ...textProps,
         'data-hook': dataHook,
-        ...style('root', styleAttributes, rest),
+        className: st(classes.root, styleAttributes, className),
         ...styleDataAttributes,
       },
       children,
@@ -89,14 +66,18 @@ RawText.displayName = 'Text';
 RawText.propTypes = {
   /** Applied as data-hook HTML attribute that can be used in the tests */
   dataHook: PropTypes.string,
-  /** tag name that will be rendered */
-  tagName: PropTypes.string,
 
   /** class to be applied to the root element */
   className: PropTypes.string,
 
+  /** tag name that will be rendered */
+  tagName: PropTypes.string,
+
+  /** Styling to be applied to the root element */
+  style: PropTypes.object,
+
   /** font size of the text */
-  size: PropTypes.oneOf(Object.keys(SIZES)),
+  size: PropTypes.oneOf(['tiny', 'small', 'medium']),
 
   /** any nodes to be rendered (usually text nodes) */
   children: PropTypes.any,
@@ -105,22 +86,30 @@ RawText.propTypes = {
   secondary: PropTypes.bool,
 
   /** skin color of the text */
-  skin: PropTypes.oneOf(Object.keys(SKINS)),
+  skin: PropTypes.oneOf([
+    'standard',
+    'success',
+    'error',
+    'premium',
+    'disabled',
+    'primary',
+  ]),
 
   /** make the text color lighter */
   light: PropTypes.bool,
 
   /** font weight of the text */
-  weight: PropTypes.oneOf(Object.keys(WEIGHTS)),
+  weight: PropTypes.oneOf(['thin', 'normal', 'bold']),
 };
 
 RawText.defaultProps = {
-  size: SIZES.medium,
+  size: 'medium',
   secondary: false,
-  skin: SKINS.standard,
+  skin: 'standard',
   light: false,
-  weight: WEIGHTS.thin,
+  weight: 'thin',
   tagName: 'span',
+  listStyle: 'checkmark',
 };
 
 export default RawText;

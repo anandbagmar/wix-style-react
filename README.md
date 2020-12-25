@@ -12,7 +12,7 @@ A collection of React components that conform to Wix Style.
 
 <div align="center">
 
-![](https://flat.badgen.net/badge/React/16.8.3/blue)
+![](https://flat.badgen.net/badge/React/16.13.1/blue)
 [![](https://badgen.net/npm/v/wix-style-react/latest)](https://www.npmjs.com/package/wix-style-react)
 [![Dependencies](https://img.shields.io/david/wix/wix-style-react.svg?style=flat-square)](https://david-dm.org/wix/wix-style-react)
 [![DevDependencies](https://img.shields.io/david/dev/ant-design/ant-design.svg?style=flat-square)](https://david-dm.org/wix/wix-style-react?type=dev)
@@ -20,7 +20,7 @@ A collection of React components that conform to Wix Style.
 </div>
 
 <div align="center">
- <a href="https://wix.com/pages/wix-style-react">https://wix.com/pages/wix-style-react/</a>
+ <a href="https://wix-style-react.com">https://wix-style-react.com/</a>
 </div>
 
 ## 📦 Install
@@ -35,13 +35,13 @@ yarn add wix-style-react
 
 ## 🔨 Setup
 
-If 🐉yoshi build runner is used for your application then all required loaders are already defined. If you'd rather set up your project manually, take a look at our [webpack guide](https://github.com/wix/wix-style-react/blob/master/docs/usage-without-yoshi.md).
+wix-style-react is built with [Stylable](https://stylable.io/), therefore we recommend you build your project using a **Stylable compatible** template in order to save some configurations.
+Take a look at our usage guide [Create Stylable App](https://github.com/wix/wix-style-react/blob/master/docs/usage/usage-with-create-stylable-app.md) to create a new Stylable project from a boilerplate.
 
-Minimal Yoshi version to be used with wix-style-react:
+#### Requirements
+wix-style-react requires react version `16.13.1` and up.
 
-`Version 4 - ^4.1.0`
-
-`Version 3 - ^3.31.2`
+#### How to load wix-style-react compatible fonts:
 
 Load Wix fonts from CDN:<br/>
 - For Madefor font please visit [wix-fonts](https://wix-fonts.now.sh/).
@@ -60,30 +60,6 @@ Enable font smoothing with browser specific css properties:
   }
   ```
 
-Make sure that react and react-dom versions are not higher then:
-  ```html
-    //package.json
-   .
-   .
-   "react":"16.8.3",
-   "react-dom":"16.8.3"
-   .
-   .
-
-  ```
-## Upgrade from older versions
-
-**Read and follow our migration guides:**
-
-- From 7.x to 8.x read [V8 migration guide](https://github.com/wix/wix-style-react/blob/master/MIGRATION.md)
-- From 6.x to 7.x read [V7 migration guide](https://github.com/wix/wix-style-react/blob/version_7.x/docs/migration/v6-v7.md)
-- From 5.x to 6.x read [V6 migration guide](https://github.com/wix/wix-style-react/blob/version_7.x/docs/migration/v5-v6.md)
-- From 4.x to 5.x read [V5 migration guide](https://github.com/wix/wix-style-react/blob/version_7.x/docs/migration/v4-v5.md)
-
-**Older version Storybook:**
-
-- [V7 Storybook](https://wix-style-react-v7.now.sh)
-- [V6 Storybook](https://wix-wix-style-react-v6.surge.sh/)
 
 ## 🚀 Usage
 
@@ -107,10 +83,10 @@ A component testkit provides an interface to the component, enabling automated t
 //  Here is an example
 
 // 1. import
-import { inputTestkitFactory } from 'wix-style-react/dist/testkit';
+import { InputTestkit } from 'wix-style-react/dist/testkit';
 
 // 2. initialize
-const inputDriver = inputTestkitFactory({
+const inputDriver = InputTestkit({
   wrapper: document.body,
   dataHook: 'name-input',
 });
@@ -136,6 +112,9 @@ For any issues, check out our types [FAQ](https://github.com/wix/wix-style-react
 We welcome contributions to Wix-Style-React!
 
 Read our [contributing guide](https://github.com/wix/wix-style-react/blob/master/CONTRIBUTING.md) and help us build or improve our components.
+
+## 🙋 Support
+Check out our [support guide](https://github.com/wix/wix-style-react/blob/master/SUPPORT.md)
 
 ## 📝 License
 

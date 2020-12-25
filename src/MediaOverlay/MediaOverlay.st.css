@@ -19,13 +19,18 @@
 }
 
 :import {
-  -st-from: "wix-ui-core/hocs.st.css";
-  -st-named: Focusable;
+  -st-from: "wix-ui-core/dist/src/hocs/Focusable/Focusable.st.css";
+  -st-default: Focusable;
+}
+
+:import {
+  -st-from: '../Foundation/stylable/easing.st.css';
+  -st-named: ease-8;
 }
 
 .root {
   -st-extends: Focusable;
-  -st-states: clickable;
+  -st-states: clickable, removeRadius;
 
   display: block;
   position: relative;
@@ -46,6 +51,9 @@
 .root:clickable {
   cursor: pointer;
 }
+.root:removeRadius {
+  border-radius: 0;
+}
 
 .root:focus-visible {
   box-shadow: 0 0 0 3px value(F00);
@@ -62,7 +70,7 @@
   right: 0;
   bottom: 0;
   padding: value(spacing12);
-  transition: opacity 200ms ease-in-out;
+  transition: opacity 200ms value(ease-8);
 }
 
 .overlay:layer(hover) {

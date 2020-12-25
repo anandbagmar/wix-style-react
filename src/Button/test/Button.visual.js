@@ -8,6 +8,7 @@ import {
   getSkinBackground,
   renderButtonBlock,
 } from '../../utils/ButtonHelpers';
+import Box from '../../Box';
 
 const defaultProps = {
   children: 'Button',
@@ -18,24 +19,6 @@ const skins = Object.values(SKINS).reduce((output, skin) => {
 }, []);
 
 const sizes = Object.values(SIZES);
-
-const tests = [
-  {
-    describe: 'Sizes',
-    its: sizes.map(size => ({ it: size, props: { size } })),
-  },
-  {
-    describe: 'Affixes',
-    its: sizes.map(size => ({
-      it: size,
-      props: {
-        size,
-        prefixIcon: <AddChannel />,
-        suffixIcon: <AddChannel />,
-      },
-    })),
-  },
-];
 
 const blockOfTests = [
   {
@@ -53,16 +36,47 @@ const blockOfTests = [
   },
 ];
 
-visualize('Button', () => {
-  blockOfTests.forEach(({ it, render }) => {
-    snap(it, render);
-  });
+export const runTests = (
+  { themeName, testWithTheme } = { testWithTheme: i => i },
+) => {
+  visualize(`${themeName ? `${themeName}|` : ''}Button`, () => {
+    blockOfTests.forEach(({ it, render }) => {
+      snap(it, render);
+    });
 
-  tests.forEach(({ describe, its }) => {
-    story(describe, () => {
-      its.map(({ it, props }) =>
-        snap(it, () => <Button {...defaultProps} {...props} />),
+    story('Size and Affix', () => {
+      snap('Size and Affix', () =>
+        testWithTheme(
+          <Box direction="vertical">
+            {sizes.map(size => (
+              <Box margin={1} key={size}>
+                <Button {...defaultProps} size={size} />
+                <Box marginLeft={1}>
+                  <Button
+                    {...defaultProps}
+                    size={size}
+                    suffixIcon={<AddChannel />}
+                    prefixIcon={<AddChannel />}
+                  />
+                </Box>
+              </Box>
+            ))}
+          </Box>,
+        ),
+      );
+    });
+
+    story('Ellipsis', () => {
+      snap('Ellipsis', () =>
+        testWithTheme(
+          <Box width="300px">
+            <Button ellipsis>
+              This is a very very very very long text that will be cropped by
+              ellipsis at some point
+            </Button>
+          </Box>,
+        ),
       );
     });
   });
-});
+};

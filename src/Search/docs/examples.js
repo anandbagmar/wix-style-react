@@ -53,9 +53,16 @@ class MyComponent extends React.Component {
 
   render() {
     return (
-      <Search
-        expandable
-      />
+      <Layout>
+        <Cell>
+          <Search expandable />
+        </Cell>
+        <Cell>
+          <Box align="right">
+            <Search expandable expandWidth="400px" />
+          </Box>
+        </Cell>
+      </Layout>
     );
   }
 }

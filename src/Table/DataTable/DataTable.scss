@@ -148,6 +148,11 @@ $cellHorizontalEdgePadding: 30px;
     padding-bottom: 18px;
   }
 
+  &.smallVerticalPadding {
+    padding-top: 12px;
+    padding-bottom: 12px;
+  }
+
   // Cells alignment
   &.alignStart {
     text-align: left;
@@ -175,6 +180,22 @@ $cellHorizontalEdgePadding: 30px;
 .table:not(.showLastRowDivider) {
   & tr:not(:last-child) {
     td {
+      box-shadow: $columnShadow;
+    }
+  }
+}
+
+.table:not(.showLastRowDivider) {
+  & tr:nth-last-child(2) {
+    td.hasRowDetails {
+      box-shadow: none;
+    }
+  }
+}
+
+.table.showLastRowDivider {
+  & tr:nth-last-child(2) {
+    td.hasRowDetails {
       box-shadow: $columnShadow;
     }
   }
@@ -240,10 +261,6 @@ $cellHorizontalEdgePadding: 30px;
 
 .row-details:not(:last-child) {
   box-shadow: $activeColumnShadow;
-
-  .row-details-inner {
-    box-shadow: $rowShadow;
-  }
 }
 
 .animatedDataRow {
@@ -326,10 +343,9 @@ $cellHorizontalEdgePadding: 30px;
         background-color: $D80;
     }
 
-    .clickableDataRow:hover {
-      .stickyActionCell {
-          background-color: $B50;
-      }
+    &.clickableDataRow td {
+      cursor: pointer;
+      background-color: $B50;
     }
 
     .stickyActionCell [data-hook="table-action-cell-popover-menu"] {
@@ -341,5 +357,11 @@ $cellHorizontalEdgePadding: 30px;
     .stickyActionCell {
       background-color: $B60;
     }
+  }
+}
+
+.table tr td {
+  &.rowDetailsExtended {
+    box-shadow: none !important;
   }
 }

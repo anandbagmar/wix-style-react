@@ -41,6 +41,10 @@ export const layoutComponentsNames = {
   PageHeader: 'Page.Header',
   Grid: 'Grid',
   Layout: 'Layout',
+  MarketingPageLayout: 'MarketingPageLayout',
+  MarketingPageLayoutContent: 'MarketingPageLayoutContent',
+  TestimonialList: 'TestimonialList',
+  FeatureList: 'FeatureList',
   Card: 'Card',
   CardHeader: 'Card.Header',
   CardSubheader: 'Card.Subheader',
@@ -64,6 +68,9 @@ export const selectionComponentsNames = {
   SegmentedToggle: 'SegmentedToggle',
   Thumbnail: 'Thumbnail',
   Slider: 'Slider',
+  CheckToggle: 'CheckToggle',
+  StarsRatingBar: 'StarsRatingBar',
+  FacesRatingBar: 'FacesRatingBar',
 };
 
 /**
@@ -135,6 +142,7 @@ export const modalsComponentsNames = {
 export const pickerComponentsNames = {
   EditableSelector: 'EditableSelector',
   ModalSelectorLayout: 'ModalSelectorLayout',
+  SelectorList: 'SelectorList',
   ColorPicker: 'ColorPicker',
   Calendar: 'Calendar',
   CalendarPanel: 'CalendarPanel',
@@ -172,4 +180,21 @@ export const contentWidgetsComponentsNames = {
   MarketingLayout: 'MarketingLayout',
   BarChart: 'BarChart',
   Timeline: 'Timeline',
+  SparklineChart: 'SparklineChart',
+  SelectableAccordion: 'SelectableAccordion',
+  StackedBarChart: 'StackedBarChart',
+  FunnelChart: 'FunnelChart',
+  AreaChart: 'AreaChart',
+};
+
+/**
+ * Components Family IC
+ */
+export const internalComponentsNames = {
+  DropdownLayout: 'DropdownLayout',
+  TagList: 'TagList',
+  ListItemAction: 'ListItemAction',
+  ListItemEditable: 'ListItemEditable',
+  ListItemSection: 'ListItemSection',
+  ListItemSelect: 'ListItemSelect',
 };

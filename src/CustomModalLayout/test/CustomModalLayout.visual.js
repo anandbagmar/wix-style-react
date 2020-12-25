@@ -54,9 +54,28 @@ const tests = [
     describe: 'header',
     its: [
       {
-        it: 'should show a permanent divider below the header',
+        it: 'showHeaderDivider',
         props: {
           showHeaderDivider: true,
+        },
+      },
+    ],
+  },
+  {
+    describe: 'content',
+    its: [
+      {
+        it: 'hideContentDividers',
+        props: {
+          children: LONG_CONTENT,
+          hideContentDividers: true,
+        },
+      },
+      {
+        it: 'removeContentPadding',
+        props: {
+          children: LONG_CONTENT,
+          removeContentPadding: true,
         },
       },
     ],
@@ -77,6 +96,12 @@ const tests = [
           sideActions: <Checkbox>Check</Checkbox>,
         },
       },
+      {
+        it: 'showFooterDivider',
+        props: {
+          showFooterDivider: true,
+        },
+      },
     ],
   },
   {
@@ -91,23 +116,23 @@ const tests = [
     ],
   },
   {
-    describe: 'removeContentPadding',
-    its: [
-      {
-        it: 'true',
-        props: {
-          removeContentPadding: true,
-        },
-      },
-    ],
-  },
-  {
     describe: 'width',
     its: [
       {
         it: '800px',
         props: {
           width: '800px',
+        },
+      },
+    ],
+  },
+  {
+    describe: 'style',
+    its: [
+      {
+        it: 'custom style',
+        props: {
+          style: { backgroundColor: 'pink' },
         },
       },
     ],
@@ -147,6 +172,12 @@ const tests = [
           secondaryButtonText: false,
         },
       },
+      {
+        it: 'with help button',
+        props: {
+          onHelpButtonClick: () => {},
+        },
+      },
     ],
   },
 ];
@@ -167,15 +198,21 @@ const InteractiveCustomModalLayout = ({ wait, ...props }) => {
   );
 };
 
-tests.forEach(({ describe, its }) => {
-  its.forEach(({ it, props, componentDidMount }) => {
-    storiesOf(
-      `CustomModalLayout${describe ? '/' + describe : ''}`,
-      module,
-    ).add(
-      it,
-      () => <InteractiveCustomModalLayout {...commonProps} {...props} />,
-      { eyes: { waitBeforeScreenshot: `[data-test-ready="true"]` } },
-    );
+export const runTests = (
+  { themeName, testWithTheme } = { testWithTheme: i => i },
+) =>
+  tests.forEach(({ describe, its }) => {
+    its.forEach(({ it, props }) => {
+      storiesOf(
+        `${themeName ? `${themeName}|` : ''}CustomModalLayout/${describe}`,
+        module,
+      ).add(
+        it,
+        () =>
+          testWithTheme(
+            <InteractiveCustomModalLayout {...commonProps} {...props} />,
+          ),
+        { eyes: { waitBeforeScreenshot: `[data-test-ready="true"]` } },
+      );
+    });
   });
-});

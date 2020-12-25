@@ -5,9 +5,10 @@ import requestAnimationFramePolyfill from '../utils/request-animation-frame';
 
 import PropTypes from 'prop-types';
 
-import style from './Popover.st.css';
+import { st, classes } from './Popover.st.css';
 import { FontUpgradeContext } from '../FontUpgrade/context';
 import FontUpgrade from '../FontUpgrade';
+import { ThemeProviderConsumerBackwardCompatible } from '../ThemeProvider/ThemeProviderConsumerBackwardCompatible';
 
 export { placements } from './constants';
 /**
@@ -26,9 +27,9 @@ const ANIMATION_EXIT = 100;
 const ContentElement = ({ children }) => {
   return (
     <FontUpgradeContext.Consumer>
-      {context => {
+      {({ active }) => {
         return (
-          <FontUpgrade active={!!context.active}>
+          <FontUpgrade active={!!active}>
             <CorePopover.Content children={children} />
           </FontUpgrade>
         );
@@ -47,8 +48,10 @@ class Popover extends React.Component {
 
   static propTypes = {
     ...CorePopover.propTypes,
+    /** Applied as data-hook HTML attribute that can be used in the tests */
     dataHook: PropTypes.string,
 
+    /** Adds enter and exit animation */
     animate: PropTypes.bool,
 
     /** The theme of the popover */
@@ -96,26 +99,24 @@ class Popover extends React.Component {
   };
 
   render() {
-    const { dataHook, animate, theme, ...rest } = this.props;
+    const { dataHook, animate, theme, className, ...rest } = this.props;
 
     const timeout = animate
       ? { enter: ANIMATION_ENTER, exit: ANIMATION_EXIT }
       : undefined;
 
     return (
-      <CorePopover
-        disableClickOutsideWhenClosed
-        timeout={timeout}
-        {...(dataHook ? { 'data-hook': dataHook } : undefined)}
-        {...rest}
-        {...style(
-          'root',
-          {
-            theme,
-          },
-          this.props,
+      <ThemeProviderConsumerBackwardCompatible>
+        {({ className: themeClassName }) => (
+          <CorePopover
+            disableClickOutsideWhenClosed
+            timeout={timeout}
+            data-hook={dataHook}
+            {...rest}
+            className={st(classes.root, { theme }, className, themeClassName)}
+          />
         )}
-      />
+      </ThemeProviderConsumerBackwardCompatible>
     );
   }
 }

@@ -5,6 +5,7 @@ import Box from '../../Box';
 import { datePickerTestkitFactory } from '../../../testkit';
 import { storySettings } from '../docs/storySettings';
 import ExampleDatePicker from '../docs/ExampleDatePicker';
+import { RTLWrapper } from '../../../stories/utils/RTLWrapper';
 
 const createDriver = dataHook =>
   datePickerTestkitFactory({
@@ -114,6 +115,65 @@ testGroups.forEach(group => {
           </Box>
         ))}
       </Box>
+    ));
+  });
+});
+
+const rtlTests = [
+  {
+    describe: 'rtl',
+    its: [
+      {
+        it: 'rtl',
+        props: {
+          placeholderText: 'Select Date',
+          value: new Date('08/07/1986'),
+          rtl: true,
+          width: '250px',
+        },
+      },
+      {
+        it: 'with status error',
+        props: {
+          placeholderText: 'Select Date',
+          value: new Date('08/07/1986'),
+          rtl: true,
+          width: '250px',
+          status: 'error',
+        },
+      },
+      {
+        it: 'with status warning',
+        props: {
+          placeholderText: 'Select Date',
+          value: new Date('08/07/1986'),
+          rtl: true,
+          width: '250px',
+          status: 'warning',
+        },
+      },
+      {
+        it: 'with status loading',
+        props: {
+          placeholderText: 'Select Date',
+          rtl: true,
+          width: '250px',
+          status: 'loading',
+        },
+      },
+    ],
+  },
+];
+
+rtlTests.forEach(({ describe, its }) => {
+  its.forEach(({ it, props }) => {
+    storiesOf(
+      `${DatePicker.displayName}${describe ? '/' + describe : ''}`,
+      module,
+    ).add(it, () => (
+      <RTLWrapper rtl>
+        <DatePicker onChange={() => {}} {...props} />
+      </RTLWrapper>
     ));
   });
 });

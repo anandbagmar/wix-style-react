@@ -1,6 +1,6 @@
 :import {
   -st-from: "../Foundation/stylable/colors.st.css";
-  -st-named: F00, B30, D10-30, D80, D55;
+  -st-named: F00, D10-30, D80, D55,  THEME-COLOR-30;
 }
 
 .root {
@@ -11,7 +11,7 @@
   box-sizing: border-box;
   /* Border & Spacing */
   border-radius: 6px;
-  box-shadow: 0 0 0 1px value(B30);
+  box-shadow: 0 0 0 1px value(THEME-COLOR-30);
   /* Styles */
   background: value(D80);
   /* Disable native focus */
@@ -29,7 +29,7 @@
   width: 1px;
   min-width: 1px;
 
-  background-color: value(B30);
+  background-color: value(THEME-COLOR-30);
 }
 
 .divider:disabled {

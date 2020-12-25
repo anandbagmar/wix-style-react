@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import styles from './CustomModalLayout.st.css';
+import { st, classes } from './CustomModalLayout.st.css';
 
 import BaseModalLayout from '../BaseModalLayout';
 import Button from '../Button';
@@ -11,27 +11,53 @@ const CustomModalLayout = ({
   children,
   removeContentPadding,
   showHeaderDivider,
+  showFooterDivider,
   hideContentDividers,
   width,
+  height,
+  maxHeight,
+  className,
+  style,
   ...restProps
 }) => {
-  const style = width ? { width } : {};
   return (
     <BaseModalLayout
-      style={style}
-      data-contentpadding={!removeContentPadding}
-      {...styles('root', { removeContentPadding }, restProps)}
       {...restProps}
+      className={st(
+        classes.root,
+        {
+          removeContentPadding,
+          showHeaderDivider: showHeaderDivider === true,
+          showFooterDivider: showFooterDivider === true,
+        },
+        className,
+      )}
+      style={{
+        ...style,
+        width: width !== undefined ? width : style.width,
+        height: height !== undefined ? height : style.height,
+        maxHeight: maxHeight !== undefined ? maxHeight : style.maxHeight,
+      }}
+      data-contentpadding={!removeContentPadding}
     >
-      <BaseModalLayout.Header showHeaderDivider={showHeaderDivider} />
-      <BaseModalLayout.Content contentHideDividers={hideContentDividers}>
+      <BaseModalLayout.Header showHeaderDivider={showHeaderDivider === true} />
+      <BaseModalLayout.Content
+        hideTopScrollDivider={
+          hideContentDividers || showHeaderDivider !== 'auto'
+        }
+        hideBottomScrollDivider={
+          hideContentDividers || showFooterDivider !== 'auto'
+        }
+      >
         {children}
       </BaseModalLayout.Content>
-      <BaseModalLayout.Footer />
+      <BaseModalLayout.Footer showFooterDivider={showFooterDivider === true} />
       <BaseModalLayout.Footnote />
     </BaseModalLayout>
   );
 };
+
+CustomModalLayout.Title = BaseModalLayout.Header.Title;
 
 CustomModalLayout.displayName = 'CustomModalLayout';
 
@@ -43,6 +69,8 @@ CustomModalLayout.propTypes = {
   dataHook: PropTypes.string,
   /** callback for when the close button is clicked */
   onCloseButtonClick: PropTypes.func,
+  /** callback for when the help button is clicked */
+  onHelpButtonClick: PropTypes.func,
   /** a global theme for the modal, will be applied as stylable state and will affect footer buttons skin */
   theme: PropTypes.oneOf(['standard', 'premium', 'destructive']),
 
@@ -87,11 +115,25 @@ CustomModalLayout.propTypes = {
   /** CustomModalLayout */
   /** When set to true, there will be no content padding */
   removeContentPadding: PropTypes.bool,
-  /** The modal desired width */
-  width: PropTypes.string,
-  /** Shows a divider at the bottom of the Header*/
-  showHeaderDivider: PropTypes.bool,
-  /** Hides dividers that shows above/below the content while scrolling */
+  /** Modal desired width */
+  width: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+  /** Modal desired height */
+  height: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+  /** Modal desired max-height */
+  maxHeight: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+  /** whether to show divider above content (default: 'auto')
+   * when set to 'auto' - shows top divider when scroll position is greater than 0
+   * when set to true - top divider is always shown
+   * when set to false - top divider is never shown
+   */
+  showHeaderDivider: PropTypes.oneOf(['auto', true, false]),
+  /** whether to show divider below content (default: 'auto')
+   * when set to 'auto' - shows bottom divider until content is scrolled to the boottom
+   * when set to true - bottom divider is always shown
+   * when set to false - bottom divider is never shown
+   */
+  showFooterDivider: PropTypes.oneOf(['auto', true, false]),
+  /** Hides dividers that shows above/below the content */
   hideContentDividers: PropTypes.bool,
 };
 
@@ -99,8 +141,10 @@ CustomModalLayout.defaultProps = {
   theme: 'standard',
   actionsSize: 'small',
   removeContentPadding: false,
-  showHeaderDivider: false,
+  showHeaderDivider: 'auto',
+  showFooterDivider: 'auto',
   hideContentDividers: false,
+  style: {},
 };
 
 export default CustomModalLayout;

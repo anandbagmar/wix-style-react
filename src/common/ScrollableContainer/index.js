@@ -1,2 +1,2 @@
 export { default } from './ScrollableContainer';
-export { positionY } from './constants';
+export { AreaY } from './constants';

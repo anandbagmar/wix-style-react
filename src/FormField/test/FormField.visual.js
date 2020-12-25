@@ -159,6 +159,26 @@ const testGroups = [
       },
     ],
   },
+  {
+    describe: 'Label Placement',
+    tests: [
+      {
+        describe: 'should render',
+        labelPlacements: ['top', 'right', 'left'],
+        its: [
+          {
+            label: 'Label',
+            children: [<Input />],
+          },
+          {
+            label:
+              'A long label should not be wrapped when placement is left/right',
+            children: [<Input />],
+          },
+        ],
+      },
+    ],
+  },
 ];
 
 testGroups.forEach(group => {

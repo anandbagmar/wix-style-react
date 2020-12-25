@@ -9,7 +9,7 @@ describe('Layout', () => {
   describe('`gap` prop', () => {
     it('should set `gridGap` style', () => {
       const layout = shallow(<Layout gap="30px 20px" />);
-      expect(layout.prop('style').gridGap).toEqual('30px 20px');
+      expect(layout.prop('style').gap).toEqual('30px 20px');
     });
   });
 

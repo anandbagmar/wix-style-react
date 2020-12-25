@@ -31,6 +31,7 @@ import SegmentedToggle from '../../../dist/es/src/SegmentedToggle';
  */
 
 export default {
+
   ColorPicker: {
     props: {
       value: '#000',
@@ -307,6 +308,16 @@ export default {
   },
 
   ModalSelectorLayout: {
+    props: {
+      dataSource: () =>
+        Promise.resolve({
+          items: [],
+          totalCount: 0,
+        }),
+    },
+  },
+
+  SelectorList: {
     props: {
       dataSource: () =>
         Promise.resolve({

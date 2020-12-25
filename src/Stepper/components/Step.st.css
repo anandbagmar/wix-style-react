@@ -1,11 +1,16 @@
 :import {
-  -st-from: "wix-ui-core/hocs.st.css";
-  -st-named: Focusable;
+  -st-from: "wix-ui-core/dist/src/hocs/Focusable/Focusable.st.css";
+  -st-default: Focusable;
 }
 
 :import {
   -st-from: "../../Text/Text.st.css";
   -st-default: Text;
+}
+
+:import {
+  -st-from: '../../Foundation/stylable/typography.st.css';
+  -st-named: text-medium-normal, text-medium-thin , text-small-normal,  text-small-thin;
 }
 
 :import {
@@ -26,6 +31,7 @@
 .root {
   -st-extends: Focusable;
   -st-states:
+    isMadefor,
     type(enum(normal, error, disabled, completed)),
     styleType(enum(circle, text)),
     selected,
@@ -60,6 +66,22 @@
 
 .root:styleType(circle):focus-visible .marker {
   box-shadow: 0 0 0 3px value(F00);
+}
+
+.root:styleType(text) .marker {
+  -st-mixin: text-medium-normal;
+}
+
+.root:styleType(text):isMadefor .marker {
+  -st-mixin: text-medium-thin;
+}
+
+.root:styleType(circle) .marker {
+  -st-mixin: text-small-normal;
+}
+
+.root:styleType(circle):isMadefor .marker {
+  -st-mixin: text-small-thin;
 }
 
 .content {

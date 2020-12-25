@@ -3,16 +3,18 @@ import * as React from 'react';
 export interface LayoutProps {
   dataHook?: string;
   children?: React.ReactNode;
-  gap?: string | number;
+  gap?: React.CSSProperties['gap'];
   cols?: number;
-  justifyItems?: string;
-  alignItems?: string;
+  justifyItems?: React.CSSProperties['justifyItems'];
+  alignItems?: React.CSSProperties['alignItems'];
+  rowHeight?: React.CSSProperties['gridAutoRows'];
 }
 
 export interface CellProps {
   children?: React.ReactNode;
   span?: number;
   vertical?: boolean;
+  rows?: number;
 }
 
 export const Layout: React.SFC<LayoutProps>;

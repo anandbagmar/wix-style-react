@@ -28,15 +28,16 @@
 
 .value {
   overflow: hidden;
-  padding: 0 12px;
+  padding: 0 24px;
   height: value(height);
   display: flex;
+  align-items: center;
+  justify-content: center;
   margin-bottom: 12px;
 }
 
-.value > * {
+.value:empty {
   padding: 0 12px;
-  margin: auto;
 }
 
 .item:nth-child(6n-5) .value {

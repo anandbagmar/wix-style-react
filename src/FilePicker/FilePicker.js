@@ -3,10 +3,11 @@ import PropTypes from 'prop-types';
 import Add from 'wix-ui-icons-common/Add';
 import uniqueId from 'lodash/uniqueId';
 
-import styles from './FilePicker.st.css';
+import { classes } from './FilePicker.st.css';
 import FormField from '../FormField';
 import TextButton from '../TextButton';
 import Text from '../Text';
+import FileUpload from '../FileUpload';
 
 /**
  * # `<FilePicker/>`
@@ -22,6 +23,7 @@ class FilePicker extends React.PureComponent {
     this.id = props.id || uniqueId('file_picker_input_');
   }
 
+  /** A callback which is invoked every time a file is chosen */
   onChooseFile(file) {
     const { maxSize, onChange } = this.props;
 
@@ -45,44 +47,38 @@ class FilePicker extends React.PureComponent {
     } = this.props;
 
     return (
-      <FormField label={header} dataHook={dataHook}>
-        <label className={styles.label} htmlFor={this.id}>
-          {/* Icon */}
-          <div className={styles.icon}>
-            <Add />
-          </div>
+      <FileUpload
+        accept={supportedFormats}
+        onChange={files => this.onChooseFile(files[0])}
+        name={name}
+      >
+        {({ openFileUploadDialog }) => (
+          <FormField label={header} dataHook={dataHook}>
+            <label className={classes.label} onClick={openFileUploadDialog}>
+              <div className={classes.icon}>
+                <Add />
+              </div>
 
-          <div className={styles.content}>
-            {/* Title */}
-            <TextButton dataHook="main-label">{mainLabel}</TextButton>
-
-            {/* Subtitle */}
-            <Text
-              className={styles.info}
-              size="small"
-              secondary
-              dataHook="sub-label"
-            >
-              {this.state.selectedFileName}
-            </Text>
-
-            {/* Error */}
-            {error && (
-              <Text skin="error" size="small" dataHook="filePicker-error">
-                {errorMessage}
-              </Text>
-            )}
-          </div>
-        </label>
-        <input
-          id={this.id}
-          className={styles.input}
-          type="file"
-          accept={supportedFormats}
-          onChange={e => this.onChooseFile(e.target.files[0])}
-          name={name}
-        />
-      </FormField>
+              <div className={classes.content}>
+                <TextButton dataHook="main-label">{mainLabel}</TextButton>
+                <Text
+                  className={classes.info}
+                  size="small"
+                  secondary
+                  dataHook="sub-label"
+                >
+                  {this.state.selectedFileName}
+                </Text>
+                {error && (
+                  <Text skin="error" size="small" dataHook="filePicker-error">
+                    {errorMessage}
+                  </Text>
+                )}
+              </div>
+            </label>
+          </FormField>
+        )}
+      </FileUpload>
     );
   }
 }

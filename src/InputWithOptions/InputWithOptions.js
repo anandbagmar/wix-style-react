@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-
 import Input from '../Input';
 import omit from 'omit';
 import DropdownLayout, {
@@ -8,11 +7,8 @@ import DropdownLayout, {
 } from '../DropdownLayout/DropdownLayout';
 import Highlighter from '../Highlighter/Highlighter';
 import { chainEventHandlers } from '../utils/ChainEventHandlers';
-import styles from './InputWithOptions.st.css';
-import nativeStyles from './InputWithOptions.scss';
-import { placements } from '../Popover/constants';
+import { classes } from './InputWithOptions.st.css';
 import uniqueId from 'lodash/uniqueId';
-
 import Popover from '../Popover';
 
 export const DEFAULT_VALUE_PARSER = option => option.value;
@@ -101,7 +97,36 @@ class InputWithOptions extends Component {
     const inputAdditionalProps = this.inputAdditionalProps();
     const inputProps = Object.assign(
       omit(
-        Object.keys(DropdownLayout.propTypes).concat(['onChange', 'dataHook']),
+        [
+          'onChange',
+          'dataHook',
+          'dropDirectionUp',
+          'focusOnSelectedOption',
+          'onClose',
+          'onSelect',
+          'onOptionMarked',
+          'overflow',
+          'visible',
+          'options',
+          'selectedId',
+          'tabIndex',
+          'onClickOutside',
+          'fixedHeader',
+          'fixedFooter',
+          'maxHeightPixels',
+          'minWidthPixels',
+          'withArrow',
+          'closeOnSelect',
+          'onMouseEnter',
+          'onMouseLeave',
+          'itemHeight',
+          'selectedHighlight',
+          'inContainer',
+          'infiniteScroll',
+          'loadMore',
+          'hasMore',
+          'markedOption',
+        ],
         this.props,
       ),
       inputAdditionalProps,
@@ -154,7 +179,10 @@ class InputWithOptions extends Component {
   _renderDropdownLayout() {
     const inputOnlyProps = omit(['tabIndex'], Input.propTypes);
     const dropdownProps = Object.assign(
-      omit(Object.keys(inputOnlyProps).concat(['dataHook']), this.props),
+      omit(
+        Object.keys(inputOnlyProps).concat(['dataHook', 'onClickOutside']),
+        this.props,
+      ),
       this.dropdownAdditionalProps(),
     );
 
@@ -185,11 +213,11 @@ class InputWithOptions extends Component {
   _renderNativeSelect() {
     const { options, onSelect } = this.props;
     return (
-      <div className={nativeStyles.nativeSelectWrapper}>
+      <div className={classes.nativeSelectWrapper}>
         {this.renderInput()}
         <select
           data-hook="native-select"
-          className={nativeStyles.nativeSelect}
+          className={classes.nativeSelect}
           onChange={event => {
             this._onChange(event);
 
@@ -203,7 +231,7 @@ class InputWithOptions extends Component {
               data-index={index}
               key={option.id}
               value={option.value}
-              className={nativeStyles.nativeOption}
+              className={classes.nativeOption}
             >
               {option.value}
             </option>
@@ -225,7 +253,7 @@ class InputWithOptions extends Component {
     const body = popoverProps.appendTo === 'window';
     return !native ? (
       <Popover
-        {...styles('root', {}, this.props)}
+        className={classes.root}
         {...DEFAULT_POPOVER_PROPS}
         dynamicWidth={body}
         excludeClass={this.uniqueId}
@@ -461,21 +489,42 @@ InputWithOptions.defaultProps = {
 InputWithOptions.propTypes = {
   ...Input.propTypes,
   ...DropdownLayout.propTypes,
-  autocomplete: PropTypes.string,
+
+  /** Use a customized input component instead of the default wix-style-react <Input/> component */
   inputElement: PropTypes.element,
+
+  /** Closes DropdownLayout on option selection */
   closeOnSelect: PropTypes.bool,
+
+  /** A callback which is called when the user performs a Submit-Action.
+   * Submit-Action triggers are: "Enter", "Tab", [typing any defined delimiters], Paste action.
+   * `onManuallyInput(values: Array<string>): void - The array of strings is the result of splitting the input value by the given delimiters */
   onManuallyInput: PropTypes.func,
+
+  /** A callback which is called when options dropdown is shown */
   onOptionsShow: PropTypes.func,
+
+  /** A callback which is called when options dropdown is hidden */
   onOptionsHide: PropTypes.func,
-  /** Function that receives an option, and should return the value to be displayed. By default returns `option.value`. */
+
+  /** Function that receives an option, and should return the value to be displayed. */
   valueParser: PropTypes.func,
+
+  /** Sets the width of the dropdown */
   dropdownWidth: PropTypes.string,
+
+  /** Sets the offset of the dropdown from the left */
   dropdownOffsetLeft: PropTypes.string,
+
   /** Controls whether to show options if input is empty */
   showOptionsIfEmptyInput: PropTypes.bool,
+
+  /** Mark in bold word parts based on search pattern */
   highlight: PropTypes.bool,
+
   /** Indicates whether to render using the native select element */
   native: PropTypes.bool,
+
   /** common popover props */
   popoverProps: PropTypes.shape({
     appendTo: PropTypes.oneOf(['window', 'scrollParent', 'parent', 'viewport']),
@@ -483,7 +532,23 @@ InputWithOptions.propTypes = {
     minWidth: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
     flip: PropTypes.bool,
     fixed: PropTypes.bool,
-    placement: PropTypes.oneOf(placements),
+    placement: PropTypes.oneOf([
+      'auto-start',
+      'auto',
+      'auto-end',
+      'top-start',
+      'top',
+      'top-end',
+      'right-start',
+      'right',
+      'right-end',
+      'bottom-end',
+      'bottom',
+      'bottom-start',
+      'left-end',
+      'left',
+      'left-start',
+    ]),
     dynamicWidth: PropTypes.bool,
   }),
 };

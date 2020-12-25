@@ -13,6 +13,7 @@ function RichTextInputAreaWithMandatoryProps() {
 function RichTextInputAreaWithAllProps() {
   return (
     <RichTextInputArea
+      className="value"
       dataHook="value"
       initialValue="value"
       placeholder="value"
@@ -20,6 +21,7 @@ function RichTextInputAreaWithAllProps() {
       status="error"
       statusMessage="value"
       onChange={(value: any) => {}}
+      minHeight="value"
       maxHeight="value"
       texts={{
         toolbarButtons: {
@@ -39,6 +41,7 @@ function RichTextInputAreaWithAllProps() {
           },
         },
       }}
+      spellCheck
     />
   );
 }

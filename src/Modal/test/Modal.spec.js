@@ -58,10 +58,12 @@ describe('Modal', () => {
         props.isOpen = false;
 
         const { driver } = render(
-          <Modal {...props}>
+          <Modal dataHook="dataHook" {...props}>
             <div data-hook="inner-div" />
           </Modal>,
         );
+
+        expect(await driver.exists()).toBe(true);
 
         expect(
           await driver.getChildBySelector('[data-hook="inner-div"]'),
@@ -183,20 +185,6 @@ describe('Modal', () => {
           jest.advanceTimersByTime(100);
           expect(await driver.isOpen()).toBe(false);
         });
-      });
-    });
-
-    describe('theme', () => {
-      it('should set the theme by default to "blue"', async () => {
-        const { driver } = render(<Modal {...props} />);
-        expect(await driver.isThemeExist('blue')).toBe(true);
-      });
-
-      it('should allowing setting the theme', async () => {
-        props.theme = 'green';
-        const { driver } = render(<Modal {...props} />);
-        expect(await driver.isThemeExist('green')).toBe(true);
-        expect(await driver.isThemeExist('blue')).toBe(false);
       });
     });
 

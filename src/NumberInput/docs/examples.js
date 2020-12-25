@@ -90,7 +90,7 @@ export const sizes = `
   </Cell>
   <Cell>
     <NumberInput
-      size="normal"
+      size="medium"
       placeholder="They did not know it was impossible, so they did it!"
     />
   </Cell>
@@ -113,7 +113,7 @@ export const rounded = `
   </Cell>
   <Cell>
     <NumberInput
-      size="normal"
+      size="medium"
       placeholder="They did not know it was impossible, so they did it!"
       roundInput
     />
@@ -150,3 +150,5 @@ class ControlledNumberInput extends React.PureComponent {
 }
 render(<ControlledNumberInput />);
 `;
+
+export const stepper = `<NumberInput hideStepper prefix={<Input.Affix>$</Input.Affix>} placeholder="0" />`;

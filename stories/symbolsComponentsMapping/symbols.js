@@ -12,6 +12,7 @@ export const symbolsGroup = {
   pickers: '10. Pickers',
   other: '11. Other',
   contentWidgets: '12. Content Widgets',
+  internalComponents: 'Internal Components',
 };
 
 /**
@@ -28,6 +29,7 @@ export const foundationSymbols = {
  */
 export const layoutSymbols = {
   pageLayout: '2.1 Page Layout',
+  marketingPageLayout: '2.1f Marketing Page',
   cardLayout: '2.2 Card Layout',
   tableLayout: '2.3 Table Layout',
   sidePanel: '2.4 Side Panel',
@@ -67,6 +69,8 @@ export const selectionSymbols = {
   thumbnailSelect: '4.7 Thumbnail Select',
   slider: '4.8 Slider',
   checkToggle: '4.9 Check Toggle',
+  starsRatingBar: '4.10 Stars Rating Bar',
+  facesRatingBar: '4.11 Faces Rating Bar',
 };
 
 /**
@@ -169,6 +173,22 @@ export const contentWidgetsSymbols = {
   omniSetup: '12.8 Omni Setup',
   marketingCardLayout: '12.9 Marketing Card Layout',
   barChart: '12.10 Bar Chart',
-  arenaChart: '12.11 Arena Chart',
-  timeline: '12.12 Tineline',
+  areaChart: '12.11 Area Chart',
+  timeline: '12.12 Timeline',
+  sparklineChart: '12.17 Sparkline Chart',
+  funnelChart: '12.18 Funnel Chart',
+  stackedBarChart: '12.x Stacked Bar Chart',
+  selectableAccordion: '12.x Selectable Accordion',
+};
+
+/**
+ * Symbols Internal Components
+ */
+export const internalComponentsSymbols = {
+  dropdownLayout: 'I.C DropdownLayout',
+  tagList: 'IC. Tag List',
+  listItemSection: 'IC. ListItemSection',
+  listItemSelect: 'IC. ListItemSelect',
+  listItemAction: 'IC. ListItemAction',
+  listItemEditable: 'IC. ListItemEditable',
 };

@@ -52,8 +52,8 @@ beforeAll(() => {
 
 ```javascript
   import React from 'react';
-  import {datePickerTestkitFactory} from 'wix-style-react/dist/testkit';
-  import {datePickerTestkitFactory as enzymeDatePickerTestkitFactory} from 'wix-style-react/dist/testkit/enzyme';
+  import {DatePickerTestkit} from 'wix-style-react/dist/testkit';
+  import {DatePickerTestkit as EnzymeDatePickerTestkit} from 'wix-style-react/dist/testkit/enzyme';
 
   /***************
    enzyme example
@@ -61,7 +61,7 @@ beforeAll(() => {
 
   const dataHook = 'myDataHook';
   const wrapper = mount(<div/><DatePicker dataHook={dataHook}/></div>);
-  const {driver} = enzymeDatePickerTestkitFactory({wrapper, dataHook});
+  const {driver} = EnzymeDatePickerTestkit({wrapper, dataHook});
 
   //Do tests
   expect(driver.exists()).toBeTruthy();
@@ -75,7 +75,7 @@ beforeAll(() => {
   const wrapper = div.appendChild(
     ReactTestUtils.renderIntoDocument(<div/><DatePicker dataHook={dataHook}/></div>, {dataHook})
   );
-  const testkit = DatePickerTestkitFactory({wrapper, dataHook});
+  const testkit = DatePickerTestkit({wrapper, dataHook});
 
   //Do tests
   expect(testkit.driver.exists()).toBeTruthy();
@@ -118,10 +118,10 @@ beforeAll(() => {
    protractor example
   *******************/
 
-  import {DatePickerTestkitFactory, waitForVisibilityOf} from 'wix-style-react/dist/testkit/protractor';
+  import {DatePickerTestkit, waitForVisibilityOf} from 'wix-style-react/dist/testkit/protractor';
 
   //Create an element testkit via the data-hook attribute
-  const testkit = DatePickerTestkitFactory({dataHook: 'myDataHook'});
+  const testkit = DatePickerTestkit({dataHook: 'myDataHook'});
 
   browser.get(appUrl); //Your application url
 

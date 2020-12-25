@@ -2,9 +2,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { EditorState, Editor, CompositeDecorator } from 'draft-js';
 import { convertFromHTML } from 'draft-convert';
-import classNames from 'classnames';
-
-import styles from './RichTextInputArea.scss';
+import { FontUpgradeContext } from '../FontUpgrade/context';
+import { st, classes, vars } from './RichTextInputArea.st.css';
 import RichTextToolbar from './Toolbar/RichTextToolbar';
 import EditorUtilities from './EditorUtilities';
 import { RichTextInputAreaContext } from './RichTextInputAreaContext';
@@ -21,7 +20,7 @@ const decorator = new CompositeDecorator([
         <a
           data-hook="richtextarea-link"
           href={url}
-          className={styles.link}
+          className={classes.link}
           target="_blank"
           // Avoids a potentially serious vulnerability for '_blank' links
           rel="noopener noreferrer"
@@ -58,72 +57,89 @@ class RichTextInputArea extends React.PureComponent {
 
     // TODO: currently it treats the value as an initial value
     this._updateContentByValue(initialValue);
+    this.editorRef = React.createRef();
   }
 
   render() {
     const {
       dataHook,
+      className,
       placeholder,
       disabled,
+      minHeight,
       maxHeight,
       status,
       statusMessage,
+      spellCheck,
     } = this.props;
     const isEditorEmpty = EditorUtilities.isEditorEmpty(this.state.editorState);
 
     return (
-      <div
-        data-hook={dataHook}
-        className={classNames(styles.root, {
-          [styles.hidePlaceholder]: !isEditorEmpty,
-          [styles.disabled]: disabled,
-          [styles.hasError]: !disabled && status === 'error',
-          [styles.hasWarning]: !disabled && status === 'warning',
-        })}
-        // Using CSS variable instead of applying maxHeight on each child, down to the editor's content
-        style={{ '--max-height': maxHeight }}
-      >
-        <RichTextInputAreaContext.Provider
-          value={{
-            texts: this.state.texts,
-          }}
-        >
-          <RichTextToolbar
-            dataHook="richtextarea-toolbar"
-            className={styles.toolbar}
-            isDisabled={disabled}
-            editorState={this.state.editorState}
-            onBold={this._setEditorState}
-            onItalic={this._setEditorState}
-            onUnderline={this._setEditorState}
-            onLink={newEditorState => {
-              this._setEditorState(newEditorState, () =>
-                this.refs.editor.focus(),
-              );
+      <FontUpgradeContext.Consumer>
+        {({ active: isMadefor }) => (
+          <div
+            data-hook={dataHook}
+            className={st(
+              classes.root,
+              {
+                isMadefor,
+                hidePlaceholder: !isEditorEmpty,
+                disabled,
+                hasError: !disabled && status === 'error',
+                hasWarning: !disabled && status === 'warning',
+              },
+              className,
+            )}
+            // Using CSS variable instead of applying minHeight & maxHeight on each child, down to the editor's content
+            style={{
+              [vars.minHeight]: minHeight,
+              [vars.maxHeight]: maxHeight,
             }}
-            onBulletedList={this._setEditorState}
-            onNumberedList={this._setEditorState}
-          />
-        </RichTextInputAreaContext.Provider>
-        <div className={styles.editorWrapper}>
-          <Editor
-            ref="editor"
-            editorState={this.state.editorState}
-            onChange={this._setEditorState}
-            placeholder={placeholder}
-            readOnly={disabled}
-          />
-          {!disabled && status && (
-            <span className={styles.statusIndicator}>
-              <StatusIndicator
-                dataHook="richtextarea-status-indicator"
-                status={status}
-                message={statusMessage}
+          >
+            <RichTextInputAreaContext.Provider
+              value={{
+                texts: this.state.texts,
+              }}
+            >
+              <RichTextToolbar
+                dataHook="richtextarea-toolbar"
+                className={classes.toolbar}
+                isDisabled={disabled}
+                editorState={this.state.editorState}
+                onBold={this._setEditorState}
+                onItalic={this._setEditorState}
+                onUnderline={this._setEditorState}
+                onLink={newEditorState => {
+                  this._setEditorState(newEditorState, () =>
+                    this.editorRef.current.focus(),
+                  );
+                }}
+                onBulletedList={this._setEditorState}
+                onNumberedList={this._setEditorState}
               />
-            </span>
-          )}
-        </div>
-      </div>
+            </RichTextInputAreaContext.Provider>
+            <div className={classes.editorWrapper}>
+              <Editor
+                ref={this.editorRef}
+                editorState={this.state.editorState}
+                onChange={this._setEditorState}
+                placeholder={placeholder}
+                readOnly={disabled}
+                spellCheck={spellCheck}
+              />
+              {!disabled && status && (
+                <span className={classes.statusIndicator}>
+                  <StatusIndicator
+                    dataHook="richtextarea-status-indicator"
+                    status={status}
+                    message={statusMessage}
+                  />
+                </span>
+              )}
+            </div>
+          </div>
+        )}
+      </FontUpgradeContext.Consumer>
     );
   }
 
@@ -163,6 +179,8 @@ class RichTextInputArea extends React.PureComponent {
 RichTextInputArea.displayName = 'RichTextInputArea';
 
 RichTextInputArea.propTypes = {
+  /** A css class to be applied to the component’s root element */
+  className: PropTypes.string,
   /** Applied as data-hook HTML attribute that can be used in the tests */
   dataHook: PropTypes.string,
   /** Initial value to display in the editor */
@@ -177,8 +195,16 @@ RichTextInputArea.propTypes = {
   statusMessage: PropTypes.string,
   /** Callback function for changes: `onChange(htmlText, { plainText })` */
   onChange: PropTypes.func,
+  /** Defines a minimum height for the editor (it grows by default) */
+  minHeight: PropTypes.string,
   /** Defines a maximum height for the editor (it grows by default) */
   maxHeight: PropTypes.string,
+  /**
+   * Enables browser's spell checking.
+   * Doesn't affect IE.
+   * In Safari, autocorrects by default.
+   */
+  spellCheck: PropTypes.bool,
   /** Texts to be shown */
   texts: PropTypes.shape({
     toolbarButtons: PropTypes.shape({

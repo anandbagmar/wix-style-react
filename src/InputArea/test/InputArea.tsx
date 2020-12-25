@@ -13,13 +13,14 @@ function inputAreaWithMandatoryProps() {
 function InputAreaWithAllProps() {
   return (
     <InputArea
+      dataHook="hook"
+      className="cn"
       ariaControls="c"
       ariaDescribedby="c"
       ariaLabel="c"
       autoFocus
       autoGrow
       autoSelect
-      dataHook="hook"
       rows={InputArea.MIN_ROWS}
       defaultValue="value"
       disabled
@@ -30,6 +31,7 @@ function InputAreaWithAllProps() {
       maxHeight="10px"
       maxLength={10}
       menuArrow
+      required
       minHeight="10px"
       minRowsAutoGrow={2}
       name="name"
@@ -43,7 +45,7 @@ function InputAreaWithAllProps() {
       placeholder="placeholder"
       readOnly
       resizable
-      size="normal"
+      size="medium"
       tabIndex={4}
       tooltipPlacement="top"
       value="value"

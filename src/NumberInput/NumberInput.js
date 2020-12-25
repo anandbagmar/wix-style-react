@@ -110,23 +110,38 @@ class NumberInput extends React.PureComponent {
 
   render() {
     // <Input/> should always be controlled. Therefore, not passing defaultValue to <Input/>.
-    const { suffix, defaultValue, ...props } = this.props;
+    const {
+      suffix,
+      defaultValue,
+      strict,
+      max,
+      min,
+      hideStepper,
+      ...props
+    } = this.props;
+    const value = this._getInputValueFromState();
 
     return (
       <Input
         {...props}
+        max={max}
+        min={min}
         type="number"
-        value={this._getInputValueFromState()}
+        value={value}
         onChange={this._inputValueChanged}
         inputRef={this._getInputRef}
         suffix={
           <Input.Group>
             {suffix}
-            <Input.Ticker
-              onUp={this._increment}
-              onDown={this._decrement}
-              dataHook="number-input-ticker"
-            />
+            {!hideStepper && (
+              <Input.Ticker
+                onUp={this._increment}
+                onDown={this._decrement}
+                dataHook="number-input-ticker"
+                upDisabled={strict && max === value}
+                downDisabled={strict && min === value}
+              />
+            )}
           </Input.Group>
         }
       />
@@ -140,10 +155,13 @@ NumberInput.propTypes = {
   defaultValue: PropTypes.number,
   /** If set to true - typing values beyond `min`/`max` values will round to nearest range  */
   strict: PropTypes.bool,
+  /** If set to true - hides the stepper.*/
+  hideStepper: PropTypes.bool,
 };
 
 NumberInput.defaultProps = {
   step: 1,
   strict: false,
+  hideStepper: false,
 };
 export default NumberInput;

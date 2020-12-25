@@ -2,27 +2,39 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import CalendarIcon from 'wix-ui-icons-common/Date';
 import Input from '../../Input';
-import { formatDate } from '../../LocaleUtils';
+import { formatDate, formatDateV2 } from '../../LocaleUtils';
 
 class DateInput extends React.PureComponent {
   static displayName = 'DateInput';
   static defaultProps = {
     locale: 'en',
-    dateFormat: 'MM/DD/YYYY',
   };
+  static defaultDateFormatV2 = 'LL/dd/yyyy';
 
   _formatDateValue = () => {
-    const { value, dateFormat, locale } = this.props;
+    const { value, dateFormat, dateFormatV2, locale } = this.props;
 
     if (!value) {
       return '';
     }
 
-    if (typeof dateFormat === 'function') {
-      return dateFormat(value);
+    if (dateFormatV2) {
+      if (typeof dateFormatV2 === 'function') {
+        return dateFormatV2(value);
+      }
+
+      return formatDateV2(value, dateFormatV2, locale);
     }
 
-    return formatDate(value, dateFormat, locale);
+    if (dateFormat) {
+      if (typeof dateFormat === 'function') {
+        return dateFormat(value);
+      }
+
+      return formatDate(value, dateFormat, locale);
+    }
+
+    return formatDateV2(value, DateInput.defaultDateFormatV2, locale);
   };
 
   render() {
@@ -74,11 +86,15 @@ DateInput.propTypes = {
       format: PropTypes.object,
     }),
   ]),
-  /** Custom date format, can be either:
-   * * `string` of tokens (see [`date-fns` docs](https://date-fns.org/v1.29.0/docs/format) for list of supported tokens)
-   * * `function` of signature `Date -> String`
+  /** this prop is deprecated and should not be used
+   * @deprecated
    */
   dateFormat: PropTypes.oneOfType([PropTypes.string, PropTypes.func]),
+  /** Custom date format V2, can be either:
+   * * `string` of tokens (see [`date-fns V2` docs](https://date-fns.org/v2.15.0/docs/format) for list of supported tokens)
+   * * `function` of signature `Date -> String`
+   */
+  dateFormatV2: PropTypes.oneOfType([PropTypes.string, PropTypes.func]),
 };
 
 export default DateInput;

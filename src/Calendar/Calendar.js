@@ -1,16 +1,12 @@
-import styles from './Calendar.scss';
+import { st, classes, cssStates } from './Calendar.st.css';
 import React from 'react';
 import PropTypes from 'prop-types';
 import DayPicker from 'react-day-picker';
-import classNames from 'classnames';
-import addMonths from 'date-fns/add_months';
-import subMonths from 'date-fns/sub_months';
-import startOfMonth from 'date-fns/start_of_month';
-import parse from 'date-fns/parse';
-import isSameDay from 'date-fns/is_same_day';
+import { addMonths, subMonths, startOfMonth, isSameDay } from 'date-fns';
 import { CalendarView } from './utils';
 import localeUtilsFactory from '../LocaleUtils';
 import DatePickerHead from './DatePickerHead';
+import { legacyParse } from '@date-fns/upgrade/v2';
 
 export default class Calendar extends React.PureComponent {
   static displayName = 'Calendar';
@@ -27,6 +23,7 @@ export default class Calendar extends React.PureComponent {
     showMonthDropdown: false,
     showYearDropdown: false,
     numOfMonths: 1,
+    firstDayOfWeek: 1,
   };
 
   constructor(props) {
@@ -69,13 +66,21 @@ export default class Calendar extends React.PureComponent {
   }
 
   static renderDay(day, modifiers) {
-    const relevantModifiers = ['start', 'end', 'selected'];
+    const relevantModifiers = [
+      cssStates({ start: true }),
+      cssStates({ end: true }),
+      cssStates({ selected: true }),
+      cssStates({ outside: true }),
+    ];
+    const isOutsideDay = !!modifiers[cssStates({ outside: true })];
+
     for (const modifier of relevantModifiers) {
       if (modifier in modifiers) {
         return (
           <div
-            className={styles.dayCircle}
+            className={classes.dayCircle}
             data-date={`${day.getFullYear()}-${day.getMonth()}-${day.getDate()}`}
+            data-outsideday={isOutsideDay}
           >
             {day.getDate()}
           </div>
@@ -86,6 +91,7 @@ export default class Calendar extends React.PureComponent {
     return (
       <div
         data-date={`${day.getFullYear()}-${day.getMonth()}-${day.getDate()}`}
+        data-outsideday={isOutsideDay}
       >
         {day.getDate()}
       </div>
@@ -124,7 +130,7 @@ export default class Calendar extends React.PureComponent {
   };
 
   static optionalParse = dateOrString =>
-    typeof dateOrString === 'string' ? parse(dateOrString) : dateOrString;
+    typeof dateOrString === 'string' ? legacyParse(dateOrString) : dateOrString;
 
   /** Return a value in which all string-dates are parsed into Date objects */
   static parseValue = value => {
@@ -132,7 +138,7 @@ export default class Calendar extends React.PureComponent {
       return new Date();
     }
     if (typeof value === 'string') {
-      return parse(value);
+      return legacyParse(value);
     } else if (value instanceof Date) {
       return value;
     } else {
@@ -230,6 +236,7 @@ export default class Calendar extends React.PureComponent {
     return (
       <DatePickerHead
         {...{
+          className: classes.header,
           date: month,
           showYearDropdown,
           showMonthDropdown,
@@ -245,7 +252,14 @@ export default class Calendar extends React.PureComponent {
   };
 
   _createDayPickerProps = () => {
-    const { locale, filterDate, excludePastDates, numOfMonths } = this.props;
+    const {
+      locale,
+      filterDate,
+      excludePastDates,
+      numOfMonths,
+      firstDayOfWeek,
+      rtl,
+    } = this.props;
 
     const value = Calendar.parseValue(this.props.value);
 
@@ -275,7 +289,7 @@ export default class Calendar extends React.PureComponent {
       selectedDays,
       month,
       year: month,
-      firstDayOfWeek: 1,
+      firstDayOfWeek,
       locale: typeof locale === 'string' ? locale : '',
       fixedWeeks: true,
       onKeyDown: this._handleKeyDown,
@@ -286,9 +300,39 @@ export default class Calendar extends React.PureComponent {
       onCaptionClick: this._preventActionEventDefault,
       onDayKeyDown: this._handleDayKeyDown,
       numberOfMonths: numOfMonths,
-      className: numOfMonths > 1 ? styles.TwoMonths : '',
-      modifiers: { start: from, end: to, firstOfMonth, lastOfMonth, singleDay },
+      modifiers: {
+        [cssStates({ start: true })]: from,
+        [cssStates({ end: true })]: to,
+        [cssStates({ firstOfMonth: true })]: firstOfMonth,
+        [cssStates({ lastOfMonth: true })]: lastOfMonth,
+        [cssStates({ singleDay: true })]: singleDay,
+      },
       renderDay: Calendar.renderDay,
+      dir: rtl ? 'rtl' : 'ltr',
+      classNames: {
+        /* The classes: 'DayPicker', 'DayPicker-wrapper', 'DayPicker-Month', 'DayPicker-Weekday', 'DayPicker-Day', 'disabled'
+        are used as selectors for the elements at the drivers and at the e2e tests */
+
+        container: st('DayPicker', classes.container),
+        wrapper: 'DayPicker-wrapper',
+        interactionDisabled: 'DayPicker--interactionDisabled',
+
+        months: st(classes.months, cssStates({ twoMonths: numOfMonths > 1 })),
+        month: st('DayPicker-Month', classes.month),
+        weekdays: classes.weekdays,
+        weekdaysRow: classes.weekdaysRow,
+        weekday: st('DayPicker-Weekday', classes.weekday),
+        body: classes.body,
+        week: classes.week,
+        weekNumber: 'DayPicker-WeekNumber',
+        day: st('DayPicker-Day', classes.day),
+
+        // default modifiers
+        today: cssStates({ today: true }),
+        selected: cssStates({ selected: true }),
+        disabled: st('disabled', cssStates({ disabled: true })),
+        outside: cssStates({ outside: true }),
+      },
     };
   };
 
@@ -309,11 +353,12 @@ export default class Calendar extends React.PureComponent {
   _focusSelectedDay = () => {
     if (this.dayPickerRef) {
       const selectedDay = this.dayPickerRef.dayPicker.querySelector(
-        '.DayPicker-Day--selected',
+        `.${cssStates({ selected: true })}`,
       );
 
       if (selectedDay) {
-        selectedDay.classList.add('DayPicker-Day--unfocused');
+        // The 'unfocused' class is used as a selector at the drivers and e2e test
+        selectedDay.classList.add(cssStates({ unfocused: true }), 'unfocused');
         selectedDay.focus();
       }
     }
@@ -323,11 +368,15 @@ export default class Calendar extends React.PureComponent {
     this._preventActionEventDefault(event);
 
     const unfocusedDay = this.dayPickerRef.dayPicker.querySelector(
-      '.DayPicker-Day--unfocused',
+      `.${cssStates({ unfocused: true })}`,
     );
 
     if (unfocusedDay) {
-      unfocusedDay.classList.remove('DayPicker-Day--unfocused');
+      // The 'unfocused' class is used as a selector at the drivers and e2e test
+      unfocusedDay.classList.remove(
+        cssStates({ unfocused: true }),
+        'unfocused',
+      );
     }
   };
 
@@ -346,7 +395,7 @@ export default class Calendar extends React.PureComponent {
     return (
       <div
         data-hook={dataHook}
-        className={classNames(styles.calendar, className)}
+        className={st(classes.root, className)}
         onClick={this._preventActionEventDefault}
       >
         <DayPicker
@@ -367,6 +416,9 @@ Calendar.propTypes = {
 
   /** Display multiple months, currently allowing only 1 or 2 */
   numOfMonths: PropTypes.oneOf([1, 2]),
+
+  /** First day of the week, allowing only from 0 to 6 (Sunday to Saturday) */
+  firstDayOfWeek: PropTypes.oneOf([0, 1, 2, 3, 4, 5, 6]),
 
   /** A single CSS class name to be appended to the root element. */
   className: PropTypes.string,
@@ -436,6 +488,9 @@ Calendar.propTypes = {
       format: PropTypes.object,
     }),
   ]),
+
+  /** RTL mode. When true, the keyboard navigation will be changed means pressing on the right arrow will navigate to the previous day, and pressing on the left arrow will navigate to the next day. */
+  rtl: PropTypes.bool,
 };
 
 function nextDay(date) {

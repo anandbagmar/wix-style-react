@@ -33,7 +33,7 @@ class MyComponent extends React.Component {
           <Input
             size="small"
             value={firstInputText}
-            clearButton={true}
+            clearButton
             onChange={e => {
               this.setState({ firstInputText: e.target.value })
             }}
@@ -45,7 +45,7 @@ class MyComponent extends React.Component {
         <Cell>
           <Input
               value={secondInputText}
-              clearButton={true}
+              clearButton
               onChange={e => {
                 this.setState({ secondInputText: e.target.value })
               }}
@@ -58,7 +58,7 @@ class MyComponent extends React.Component {
           <Input
             size="large"
             value={thirdInputText}
-            clearButton={true}
+            clearButton
             onChange={e => {
               this.setState({ thirdInputText: e.target.value })
             }}
@@ -77,6 +77,9 @@ export const readOnly = `
 <Layout>
   <Cell>
     <Input readOnly value="Read Only Input"/>
+  </Cell>
+  <Cell>
+    <Input disabled value="Disabled Input"/>
   </Cell>
 </Layout>
 `;
@@ -209,7 +212,7 @@ export const sizes = `
   </Cell>
   <Cell>
     <Input
-      size="normal"
+      size="medium"
       placeholder="They did not know it was impossible, so they did it!"
     />
   </Cell>
@@ -232,7 +235,7 @@ export const rounded = `
   </Cell>
   <Cell>
     <Input
-      size="normal"
+      size="medium"
       placeholder="They did not know it was impossible, so they did it!"
       roundInput
     />

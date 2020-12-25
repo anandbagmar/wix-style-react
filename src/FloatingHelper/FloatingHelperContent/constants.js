@@ -11,4 +11,5 @@ export const actionButtonTheme = {
   white: 'white',
   premium: 'premium',
   lightPrimary: 'lightPrimary',
+  standardPrimary: 'standardPrimary',
 };

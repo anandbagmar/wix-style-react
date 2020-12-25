@@ -1,3 +1,8 @@
+# `wix-style-react` v9 Migration Guide
+This release upgrades Stylable version to 3.
+
+We decided to release this change as a major version although there are **no** breaking changes in any component API from 8 to 9!
+
 # `wix-style-react` v8 Migration Guide
 
 This guide will help to migrate `wix-style-react` from v7 to v8.
@@ -65,7 +70,7 @@ This is the recommended migration flow. Each step is described in more detail be
 
 1. Change from `PopoverMenu` to the `PopoverMenu` which is stated as `PopoverMenuNext` - it becomes the official `PopoverMenu` in wsr8.
 1. Change of all input/selection family components to "status message" standard by using `status` and `statusMessage` instead of `error` and `errorMessage`.
-1. Handle all other general changes as mentioned below. Just serach in your code for each component and apply the changes
+1. Handle all other general changes as mentioned below. Just search in your code for each component and apply the changes
 
 ---
 
@@ -157,7 +162,7 @@ npx wix-ui-codemod wix-style-react/migrate-wsr8 <path-to-your-project>
     - `<FooterLayout1/>`,
     - `<MessageBoxLayout2/>`,
     - `<MessageBoxLayout1/>`
-    
+
 6. `<DateInput/>` component which was under _WIP (Work In Progress)_ was removed. Use `<DatePicker/>` instead.
 
 ### API Changes for big components
@@ -1043,15 +1048,15 @@ import More from 'wix-ui-icons-common/More';
 
 ## \<SideMenu/>
 This component was deleted, use `<Sidebar/>` instead.
-For more information visit [\<Sidebar/>'s storybook page](https://wix.com/pages/wix-style-react/?path=/story/components-api-components--sidebar).
+For more information visit [\<Sidebar/>'s storybook page](https://wix-style-react.com/?path=/story/components-api-components--sidebar).
 
 ## \<SideMenuDrill/>
 This component was deleted, use `<Sidebar/>` instead.
-For more information visit [\<Sidebar/>'s storybook page](https://wix.com/pages/wix-style-react/?path=/story/components-api-components--sidebar).
+For more information visit [\<Sidebar/>'s storybook page](https://wix-style-react.com/?path=/story/components-api-components--sidebar).
 
 ## \<SlideAnimation/>
 This component was part of `<SideMenu/>` and was deleted, use `<Sidebar/>` instead.
-For more information visit [\<Sidebar/>'s storybook page](https://wix.com/pages/wix-style-react/?path=/story/components-api-components--sidebar).
+For more information visit [\<Sidebar/>'s storybook page](https://wix-style-react.com/?path=/story/components-api-components--sidebar).
 
 ## \<StatisticsWidget/>
 
@@ -1355,7 +1360,7 @@ This component was deleted, use `<TextButton as="a"/>` instead.
 Component is now upgraded by default.<br>
 The only change is that internally, the new `<PopoverMenu/>` is used.<br>
 Therefore the prop `popoverMenuProps` contains new values now.<br>
-For more information about `<PopoverMenu/>` visit [`<PopoverMenu/>`'s story page](https://wix.com/pages/wix-style-react/?path=/story/components-api-components--popovermenu)
+For more information about `<PopoverMenu/>` visit [`<PopoverMenu/>`'s story page](https://wix-style-react.com/?path=/story/components-api-components--popovermenu)
 
 *Props:*
 - removed `upgrade` - component is now upgraded by default
@@ -1505,10 +1510,10 @@ After:
 Testkit was rewritten and is now async, which means you should `await` for every method invocation.
 You should change the import path accordingly:
 
-- `ReactTestUtils` - `import {tooltipTestkitFactory} from 'wix-style-react/dist/testkit';`
-- `Enzyme` - `import {tooltipTestkitFactory} from 'wix-style-react/dist/testkit/enzyme';`
-- `Puppeteer` - `import {tooltipTestkitFactory} from 'wix-style-react/dist/testkit/puppeteer';`
-- `Protractor` - `import {tooltipTestkitFactory} from 'wix-style-react/dist/testkit/protractor';`
+- `ReactTestUtils` - `import {TooltipTestkit} from 'wix-style-react/dist/testkit';`
+- `Enzyme` - `import {TooltipTestkit} from 'wix-style-react/dist/testkit/enzyme';`
+- `Puppeteer` - `import {TooltipTestkit} from 'wix-style-react/dist/testkit/puppeteer';`
+- `Protractor` - `import {TooltipTestkit} from 'wix-style-react/dist/testkit/protractor';`
 
 ### New Testkit API
 API is slimmer and easier to interact it (with the recent types addition you can get an auto complete of these methods)

@@ -7,7 +7,6 @@ import {
   cleanup,
 } from '../../../test/utils/react';
 
-import styles from '../FormField.scss';
 import formFieldDriverFactory from '../FormField.driver';
 import { formFieldUniDriverFactory } from '../FormField.uni.driver';
 import FormField from '..';
@@ -28,7 +27,7 @@ describe('FormField', () => {
   });
 
   function runTests(render) {
-    afterEach(() => cleanup());
+    afterEach(cleanup);
 
     describe('`label` prop', () => {
       it('should render contents', async () => {
@@ -136,14 +135,6 @@ describe('FormField', () => {
         const text = 'hello';
         const { driver } = render(renderFormField({ children: text }));
         expect((await driver.getChildren()).textContent).toEqual(text);
-      });
-
-      it('should apply minHeight on label wrapper when there is no children', async () => {
-        const { driver } = render(<FormField label="Text" />);
-        expect(await driver.exists()).toEqual(true);
-        expect(
-          (await driver.element()).querySelector(`.${styles.minLabelHeight}`),
-        ).not.toBeNull();
       });
 
       describe('when function', () => {

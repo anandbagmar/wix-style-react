@@ -23,6 +23,11 @@ function AddItemWithAllProps() {
       theme="dashes"
       tooltipContent="content"
       tooltipProps={{}}
+      borderRadius="100%"
+      className="test"
+      children={<div id="add_item_label">Add Item</div>}
+      ariaLabel="Add Button"
+      ariaLabelledBy="add_item_label"
     />
   );
 }

@@ -1,6 +1,5 @@
-import React, { PureComponent } from 'react';
+import React, { PureComponent, useState } from 'react';
 import {
-  NotDeveloped,
   FamilyStructure,
   SingleComponentSideBySide,
   singleComponentSizes,
@@ -26,10 +25,13 @@ import { Category } from '../../../storiesHierarchy';
 import {
   Dropdown,
   MultiSelectCheckbox,
+  CheckToggle,
   Checkbox,
+  FacesRatingBar,
   RadioGroup,
   ToggleSwitch,
   SegmentedToggle,
+  StarsRatingBar,
   Thumbnail,
   Slider,
   FormField,
@@ -277,7 +279,7 @@ class ThumbnailWithTitleExample extends PureComponent {
   }
 }
 
-class ListSmallThumbnailaExmaple extends PureComponent {
+class ListSmallThumbnailExample extends PureComponent {
   state = { selected: 1 };
 
   render() {
@@ -285,7 +287,7 @@ class ListSmallThumbnailaExmaple extends PureComponent {
     return (
       <Box>
         {[1, 2, 3].map(n => (
-          <Box marginRight="30px">
+          <Box key={`list-thumbnail-box-${n}`} marginRight="30px">
             <Thumbnail
               key={`list-thumbnail-${n}`}
               title="Thumbnail Title"
@@ -314,7 +316,7 @@ const ThumbnailSelectExamples = () => {
   return (
     <SingleComponentSideBySide {...singleComponentProps}>
       <ThumbnailWithTitleExample />
-      <ListSmallThumbnailaExmaple />
+      <ListSmallThumbnailExample />
     </SingleComponentSideBySide>
   );
 };
@@ -354,20 +356,130 @@ class SliderExample extends PureComponent {
 }
 
 const CheckToggleExample = () => {
+  const [checkedMedium, setCheckedMedium] = useState(false);
+  const [checkedSuccessMedium, setCheckedSuccessMedium] = useState(true);
+  const [checkedStandart, setCheckedStandart] = useState(false);
+  const [checkedSuccess, setCheckedSuccess] = useState(true);
+
+  const tooltipContent = checked => (checked ? 'Checked' : 'Unchecked');
+
   const symbol = selectionSymbols.checkToggle;
   const components = selectionSymbolsToComponents[symbol];
 
   const singleComponentProps = {
     name: symbol,
-    componentsNames: components,
+    componentsNames: createLinkedComponentsNames(components),
   };
 
   return (
     <SingleComponentSideBySide {...singleComponentProps}>
-      <NotDeveloped />
+      <Layout>
+        <CheckToggle
+          size="medium"
+          checked={checkedMedium}
+          onChange={() => setCheckedMedium(!checkedMedium)}
+          tooltipContent={tooltipContent(checkedMedium)}
+        />
+        <CheckToggle
+          skin="success"
+          size="medium"
+          checked={checkedSuccessMedium}
+          onChange={() => setCheckedSuccessMedium(!checkedSuccessMedium)}
+          tooltipContent={tooltipContent(checkedSuccessMedium)}
+        />
+        <CheckToggle
+          checked={checkedStandart}
+          onChange={() => setCheckedStandart(!checkedStandart)}
+          tooltipContent={tooltipContent(checkedStandart)}
+        />
+        <CheckToggle
+          skin="success"
+          checked={checkedSuccess}
+          onChange={() => setCheckedSuccess(!checkedSuccess)}
+          tooltipContent={tooltipContent(checkedSuccess)}
+        />
+      </Layout>
     </SingleComponentSideBySide>
   );
 };
+
+class StarsRatingBarExample extends PureComponent {
+  state = { value: 2 };
+
+  onRatingChange = value => this.setState({ value });
+
+  render() {
+    const { value } = this.state;
+
+    const symbol = selectionSymbols.starsRatingBar;
+    const components = selectionSymbolsToComponents[symbol];
+
+    const singleComponentProps = {
+      name: symbol,
+      componentsNames: createLinkedComponentsNames(components),
+      size: singleComponentSizes.compact,
+    };
+
+    return (
+      <SingleComponentSideBySide {...singleComponentProps}>
+        <FormField
+          id="formFieldStarsRatingBarId"
+          infoContent="Tooltip text"
+          label="Stars Rating Bar Label"
+          required
+        >
+          <StarsRatingBar
+            value={value}
+            descriptionValues={['bad', 'not good', 'ok', 'good', 'excellent']}
+            onChange={this.onRatingChange}
+          />
+        </FormField>
+      </SingleComponentSideBySide>
+    );
+  }
+}
+
+class FacesRatingBarExample extends PureComponent {
+  state = { value: 2 };
+
+  onRatingChange = value => this.setState({ value });
+
+  render() {
+    const { value } = this.state;
+
+    const symbol = selectionSymbols.facesRatingBar;
+    const components = selectionSymbolsToComponents[symbol];
+
+    const singleComponentProps = {
+      name: symbol,
+      componentsNames: createLinkedComponentsNames(components),
+      size: singleComponentSizes.compact,
+    };
+
+    return (
+      <SingleComponentSideBySide {...singleComponentProps}>
+        <FormField
+          id="formFieldFacesRatingBarId"
+          infoContent="Tooltip text"
+          label="Stars Rating Bar Label"
+          required
+        >
+          <FacesRatingBar
+            value={value}
+            descriptionValues={[
+              'Strong Negative',
+              'Negative',
+              'Neutral',
+              'Positive',
+              'Strong Positive',
+            ]}
+            onChange={this.onRatingChange}
+          />
+        </FormField>
+      </SingleComponentSideBySide>
+    );
+  }
+}
 
 const SelectionFamily = () => (
   <FamilyStructure title={groupSymbol} showPreview>
@@ -380,6 +492,8 @@ const SelectionFamily = () => (
     <ThumbnailSelectExamples />
     <SliderExample />
     <CheckToggleExample />
+    <StarsRatingBarExample />
+    <FacesRatingBarExample />
   </FamilyStructure>
 );
 

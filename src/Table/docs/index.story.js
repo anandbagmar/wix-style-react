@@ -20,8 +20,11 @@ import contextReadmeApi from './CONTEXT_README.API.md';
 import testkitReadme from './README.TESTKIT.md';
 
 import TableExampleRaw from '!raw-loader!./examples/TableExample';
+import TableRowDetailsExampleRaw from '!raw-loader!./examples/TableRowDetailsExample';
 import TableSkinNeutralExample from '!raw-loader!./examples/TableSkinNeutralExample';
 import TableToolbarExampleRaw from '!raw-loader!./examples/TableToolbarExample';
+import TableSubToolbarExampleRaw from '!raw-loader!./examples/TableSubToolbarExample';
+import TableHideHeaderExampleRaw from '!raw-loader!./examples/TableHideHeaderExample';
 import TableBulkSelectionCheckboxExampleRaw from '!raw-loader!./examples/TableBulkSelectionCheckboxExample';
 import TableWithUnselectableRowsExampleRaw from '!raw-loader!./examples/TableWithUnselectableRowsExample';
 import TableEmptyStateExampleRaw from '!raw-loader!./examples/TableEmptyStateExample';
@@ -66,8 +69,9 @@ Technically, the following optional children are accepted:
 
 1. \`<Table.Content/>\` - the actual content
 2. \`<Table.ToolbarContainer/>\` - a container for the toolbar. It's also a consumer of the SelectionContext (see Context API)
-3. \`<Table.Titlebar/>\` -  the header of the table, which means, a row with the names of the columns. By default, \`<Table.Content/>\` is rendered with the header. It's mostly useful when setting \`titleBarVisible\` to false, so we can render the title bar independently
-4. \`<Table.EmptyState/>\` - a wrapper of the \`<EmptyState/>\` component for usage within the table
+3. \`<Table.SubToolbar/>\` - a container for the sub-toolbar
+4. \`<Table.Titlebar/>\` -  the header of the table, which means, a row with the names of the columns. By default, \`<Table.Content/>\` is rendered with the header. It's mostly useful when setting \`titleBarVisible\` to false, so we can render the title bar independently
+5. \`<Table.EmptyState/>\` - a wrapper of the \`<EmptyState/>\` component for usage within the table
 `;
 
 export default {
@@ -141,6 +145,19 @@ export default {
               compact: true,
             },
             {
+              title: 'Table with Sub-Toolbar',
+              description:
+                'A Table can contain a sticky sub-toolbar, an area for additional actions such as displaying a tag list of filtered items.',
+              source: TableSubToolbarExampleRaw,
+              compact: true,
+            },
+            {
+              title: 'Hidden Header',
+              description: 'A table with hidden header.',
+              source: TableHideHeaderExampleRaw,
+              compact: true,
+            },
+            {
               title: 'Table with EmptyState',
               description:
                 'This example shows the usage for displaying an empty state message. Notice that `<Card/>` and `<TableToolbar/>` are optional - we should use them as necessary.',
@@ -159,6 +176,13 @@ export default {
               description:
                 'Horizontal scroll can be enabled by providing `horizontalScroll` prop and defining `width` prop for all table columns. Combined column size should exceed available table size. In addition, you can "sticky" a number of columns from the left using `stickyColumns` prop. Sticky columns will remain and will not scroll with the rest of table columns.',
               source: TableStickyScrollExampleRaw,
+              compact: true,
+            },
+            {
+              title: 'Table with Expandable Rows',
+              description:
+                'A table with expandable rows. A row is expandable using the `renderRowDetails` prop.',
+              source: TableRowDetailsExampleRaw,
               compact: true,
             },
             {

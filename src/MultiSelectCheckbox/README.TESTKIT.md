@@ -25,8 +25,8 @@ The `<MultiSelectCheckbox/>` TestKit is exposing the following drivers:
 
 ```javascript
   import React from 'react';
-  import {multiSelectCheckboxTestkitFactory} from 'wix-style-react/dist/testkit';
-  import {multiSelectCheckboxTestkitFactory as enzymeMultiSelectCheckboxTestkitFactory} from 'wix-style-react/dist/testkit/enzyme';
+  import {MultiSelectCheckboxTestkit} from 'wix-style-react/dist/testkit';
+  import {MultiSelectCheckboxTestkit as EnzymeMultiSelectCheckboxTestkit} from 'wix-style-react/dist/testkit/enzyme';
 
   /***************
    enzyme example
@@ -35,7 +35,7 @@ The `<MultiSelectCheckbox/>` TestKit is exposing the following drivers:
   const dataHook = 'myDataHook';
   const selectedOptions = ['Alabama'];
   const wrapper = mount(<MultiSelectCheckbox selectedOptions={selectedOptions} dataHook={dataHook}/>);
-  const multiSelectCheckboxTestkit = enzymeMultiSelectCheckboxTestkitFactory({wrapper, dataHook});
+  const multiSelectCheckboxTestkit = EnzymeMultiSelectCheckboxTestkit({wrapper, dataHook});
 
 
   //Do tests

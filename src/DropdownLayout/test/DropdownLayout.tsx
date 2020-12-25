@@ -13,6 +13,7 @@ function DropdownLayoutWithMandatoryProps() {
 function DropdownLayoutWithAllProps() {
   return (
     <DropdownLayout
+      className="dropdownLayout"
       closeOnSelect
       dataHook="hook"
       dropDirectionUp
@@ -36,7 +37,6 @@ function DropdownLayoutWithAllProps() {
       selectedHighlight
       selectedId="1"
       tabIndex={2}
-      styles="font: 12px"
       visible
       withArrow
       overflow="scroll"
@@ -48,6 +48,7 @@ function DropdownLayoutWithAllProps() {
           linkTo: 'google.com',
           title: true,
           overrideStyle: true,
+          label: 'label',
         },
         {
           value: <div />,
@@ -56,6 +57,7 @@ function DropdownLayoutWithAllProps() {
           linkTo: 'google.com',
           title: true,
           overrideStyle: true,
+          label: 'label',
         },
         { value: '-', id: '2' },
         {
@@ -65,6 +67,7 @@ function DropdownLayoutWithAllProps() {
           linkTo: 'google.com',
           title: true,
           overrideStyle: true,
+          label: 'label',
         },
       ]}
     />

@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 import StatisticsItem from './StatisticsItem';
-import styles from './StatisticsWidget.st.css';
+import { classes } from './StatisticsWidget.st.css';
 
 class StatisticsWidget extends React.PureComponent {
   static displayName = 'StatisticsWidget';
@@ -10,6 +10,10 @@ class StatisticsWidget extends React.PureComponent {
   static propTypes = {
     /** Applied as data-hook HTML attribute that can be used to create driver in testing */
     dataHook: PropTypes.string,
+    /** Displayed value size (default: large) */
+    size: PropTypes.oneOf(['tiny', 'large']),
+    /** Alignment of inner items (default: center) */
+    alignItems: PropTypes.oneOf(['start', 'center', 'end']),
 
     /**
      * Array of statistic items
@@ -17,14 +21,14 @@ class StatisticsWidget extends React.PureComponent {
      *  * `valueInShort` - Short version of value. Will be applied when there is no space for long value. If not specified, part of the value will be hidden with ellipsis
      *  * `description` - Description of the statistic. Displayed in the second row.
      *  * `descriptionInfo` - More info about the description. Displayed as an info icon with this text inside a tooltip
-     *  * `percentage` - Change in percents. Positive number - arrow up, negative - arrow down
+     *  * `percentage` - Change in percents. Positive number - arrow up, negative - arrow down.
      *  * `invertedPercentage` - When set to true renders positive percentage in red and negative in green.
      *  * `onClick` - Callback to be executed on click (also on Enter/Space key press)
      *  * `children` - Node to render on bottom of section.
      */
     items: PropTypes.arrayOf(
       PropTypes.shape({
-        value: PropTypes.string.isRequired,
+        value: PropTypes.string,
         valueInShort: PropTypes.string,
         description: PropTypes.string,
         descriptionInfo: PropTypes.string,
@@ -36,7 +40,12 @@ class StatisticsWidget extends React.PureComponent {
     ),
   };
 
-  _renderStat = (stat, key) => <StatisticsItem {...stat} key={key} />;
+  _renderStat = (stat, key) => {
+    const { size, alignItems } = this.props;
+    return (
+      <StatisticsItem {...stat} key={key} size={size} alignItems={alignItems} />
+    );
+  };
 
   render() {
     const { dataHook } = this.props;
@@ -53,7 +62,7 @@ class StatisticsWidget extends React.PureComponent {
     const firstFive = items.slice(0, 5);
 
     return (
-      <div className={styles.root} data-hook={dataHook}>
+      <div className={classes.root} data-hook={dataHook}>
         {firstFive.map(this._renderStat)}
       </div>
     );

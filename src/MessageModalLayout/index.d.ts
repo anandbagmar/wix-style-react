@@ -1,14 +1,10 @@
 import * as React from 'react';
-import { ModalTheme } from '../BaseModalLayout';
+import { BaseModalLayoutProps } from '../BaseModalLayout';
 import { OmitPolyfill } from '../common';
 import { ButtonProps, ButtonSize } from '../Button';
 
-export interface MessageModalLayoutProps {
-  className?: string;
-  dataHook?: string;
-  theme?: ModalTheme;
-  onCloseButtonClick?(): void;
-  title?: string;
+export interface MessageModalLayoutProps extends BaseModalLayoutProps {
+  title?: string | React.ReactNode;
   content?: string | React.ReactNode;
   primaryButtonText?: string;
   primaryButtonProps?: OmitPolyfill<ButtonProps, 'dataHook'>;

@@ -1,9 +1,6 @@
 import React from 'react';
 
-import Box from 'wix-style-react/Box';
-import Button from 'wix-style-react/Button';
-import ModalMobileLayout from 'wix-style-react/ModalMobileLayout';
-import Text from 'wix-style-react/Text';
+import { Box, Button, ModalMobileLayout, Text } from 'wix-style-react';
 
 const style = {
   width: '375px',
@@ -25,7 +22,7 @@ export default () => (
     <ModalMobileLayout
       title={<Text weight="bold">Enter VAT ID</Text>}
       content={
-        <Text weight="normal" secondary>
+        <Text weight="thin" secondary>
           Enter a valid European Union VAT identification number for the
           ‘Reverse Charge’ mechanism in order to apply.
         </Text>

@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
 import { withFocusable } from 'wix-ui-core/dist/src/hocs/Focusable/FocusableHOC';
+import { ThemeProviderConsumerBackwardCompatible } from '../ThemeProvider/ThemeProviderConsumerBackwardCompatible';
 
 import AddItemLarge from 'wix-ui-icons-common/system/AddItemLarge';
 import AddItemMedium from 'wix-ui-icons-common/system/AddItemMedium';
@@ -14,21 +15,23 @@ import AddMedia from 'wix-ui-icons-common/system/AddMedia';
 import { dataHooks } from './constants';
 import { TooltipCommonProps } from '../common/PropTypes/TooltipCommon';
 
-import style from './AddItem.st.css';
+import { st, classes } from './AddItem.st.css';
 
-const ICONS = {
-  large: <AddItemLarge />,
-  medium: <AddItemMedium />,
-  small: <AddItemSmall />,
-  tiny: <Add width="26" height="26" style={{ flexShrink: 0 }} />,
-  custom: <AddMedia width="31" height="31" />,
+const AddItemButtonIcons = {
+  tiny: ({ className }) => <Add className={className} width="26" height="26" />,
+  small: AddItemSmall,
+  medium: AddItemMedium,
+  large: AddItemLarge,
+  image: ({ className }) => (
+    <AddMedia className={className} width="31" height="31" />
+  ),
 };
 
 class AddItem extends Component {
   static displayName = 'AddItem';
   static propTypes = {
-    /** any renderable node */
-    children: PropTypes.node,
+    /** any renderable node or a render function. In case of a render function, text styles will not be applied. */
+    children: PropTypes.oneOfType([PropTypes.node, PropTypes.func]),
 
     /** apply disabled styles */
     disabled: PropTypes.bool,
@@ -48,6 +51,9 @@ class AddItem extends Component {
     /** Applied as data-hook HTML attribute that can be used to create driver in testing */
     dataHook: PropTypes.string,
 
+    /** A css class to be applied to the component's root element */
+    className: PropTypes.string,
+
     /** When provided, hover will display a tooltip - relevant only for theme `image` */
     tooltipContent: PropTypes.node,
 
@@ -59,6 +65,15 @@ class AddItem extends Component {
 
     /** Removes padding */
     removePadding: PropTypes.bool,
+
+    /** sets the border-radius css property on the button element */
+    borderRadius: PropTypes.string,
+
+    /** Defines a string value that labels the add item element */
+    ariaLabel: PropTypes.string,
+
+    /** Identifies the element that labels the add item element */
+    ariaLabelledby: PropTypes.string,
   };
 
   static defaultProps = {
@@ -72,10 +87,20 @@ class AddItem extends Component {
   _renderIcon = () => {
     const { size, theme } = this.props;
 
-    const image = theme === 'image';
-    const iconElement = ICONS[image ? 'custom' : size];
+    const isImageIcon = theme === 'image';
 
-    return iconElement;
+    return (
+      <ThemeProviderConsumerBackwardCompatible
+        defaultIcons={{
+          AddItemButton: AddItemButtonIcons,
+        }}
+      >
+        {({ icons }) => {
+          const Icon = icons.AddItemButton[isImageIcon ? 'image' : size];
+          return <Icon className={classes.icon} />;
+        }}
+      </ThemeProviderConsumerBackwardCompatible>
+    );
   };
 
   _renderText = () => {
@@ -88,15 +113,21 @@ class AddItem extends Component {
     const textSize = size === 'tiny' ? 'small' : 'medium';
 
     return (
-      <div {...style('text', { size })}>
-        <Text
-          weight="thin"
-          size={textSize}
-          dataHook={dataHooks.itemText}
-          ellipsis
-        >
-          {children}
-        </Text>
+      <div className={st(classes.textWrapper, { size })}>
+        {typeof children === 'function' ? (
+          children()
+        ) : (
+          <Text
+            className={classes.textContent}
+            weight="thin"
+            skin="standard"
+            size={textSize}
+            dataHook={dataHooks.itemText}
+            ellipsis
+          >
+            {children}
+          </Text>
+        )}
       </div>
     );
   };
@@ -117,7 +148,7 @@ class AddItem extends Component {
 
     const container = (
       <div
-        {...style('content', {
+        className={st(classes.content, {
           theme,
           size,
           alignItems,
@@ -135,7 +166,7 @@ class AddItem extends Component {
         {...tooltipProps}
         content={content}
         dataHook={dataHooks.itemTooltip}
-        className={style.tooltip}
+        className={classes.tooltip}
       >
         {container}
       </Tooltip>
@@ -153,17 +184,28 @@ class AddItem extends Component {
       focusableOnFocus,
       focusableOnBlur,
       removePadding,
+      borderRadius,
+      className,
+      ariaLabel,
+      ariaLabelledBy,
     } = this.props;
 
     return (
       <button
-        {...style('root', { theme, removePadding }, this.props)}
+        className={st(
+          classes.root,
+          { theme, removePadding, borderRadius },
+          className,
+        )}
+        style={borderRadius && { borderRadius }}
         data-hook={dataHook}
         disabled={disabled}
         type="button"
         onClick={onClick}
         onFocus={focusableOnFocus}
         onBlur={focusableOnBlur}
+        aria-label={ariaLabel}
+        aria-labelledby={ariaLabelledBy}
       >
         {this._renderContent()}
       </button>

@@ -25,12 +25,13 @@ function ListItemActionWithAllProps() {
       as="button"
       onClick={_ev => {}}
       highlighted
+      subtitle="subtitle"
     />
   );
 }
 
 function ListItemActionBuilderWithAllProps() {
-  const { disabled, id, overrideStyle, value } = listItemActionBuilder({
+  const { disabled, id, overrideOptionStyle, value } = listItemActionBuilder({
     autoFocus: true,
     as: 'button',
     className: 'cls',
@@ -44,6 +45,7 @@ function ListItemActionBuilderWithAllProps() {
     skin: 'dark',
     tabIndex: 1,
     title: 'title',
+    subtitle: 'subtitle'
   });
 
   value({ as: 'a', href: '' });

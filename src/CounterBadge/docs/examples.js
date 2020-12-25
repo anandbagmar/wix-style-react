@@ -12,6 +12,18 @@ export const numbers = `
   <Cell span={1}>
     <CounterBadge>128</CounterBadge>
   </Cell>
+  <Cell span={1}>
+    <CounterBadge size="medium">0</CounterBadge>
+  </Cell>
+  <Cell span={1}>
+    <CounterBadge size="medium">5</CounterBadge>
+  </Cell>
+  <Cell span={1}>
+    <CounterBadge size="medium">36</CounterBadge>
+  </Cell>
+  <Cell span={1}>
+    <CounterBadge size="medium">128</CounterBadge>
+  </Cell>
 </Layout>
 `;
 
@@ -25,6 +37,10 @@ export const skins = `
     <CounterBadge skin="standard">1</CounterBadge>
   </Cell>
   <Cell span={3}>standard</Cell>
+  <Cell span={1}>
+    <CounterBadge skin="neutralStandard">1</CounterBadge>
+  </Cell>
+  <Cell span={3}>neutralStandard</Cell>
   <Cell span={1}>
     <CounterBadge skin="danger">1</CounterBadge>
   </Cell>

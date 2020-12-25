@@ -42,8 +42,8 @@
 > Unit Testing Example
 ```javascript
   import React from 'react';
-  import {dataTableTestkitFactory} from 'wix-style-react/dist/testkit';
-  import {dataTableTestkitFactory as enzymeDataTableTestkitFactory} from 'wix-style-react/dist/testkit/enzyme';
+  import {DataTableTestkit} from 'wix-style-react/dist/testkit';
+  import {DataTableTestkit as EnzymeDataTableTestkit} from 'wix-style-react/dist/testkit/enzyme';
 
   /***************
    enzyme example
@@ -51,7 +51,7 @@
 
   const dataHook = 'myDataHook';
   const wrapper = mount(<div/><DataTable {...props} dataHook={dataHook}/></div>);
-  const testkit = enzymeDataTableTestkitFactory({wrapper, dataHook});
+  const testkit = EnzymeDataTableTestkit({wrapper, dataHook});
 
   //Do tests
   expect(testkit.getRowsCount()).toBe(5);
@@ -65,7 +65,7 @@
   const wrapper = div.appendChild(
     ReactTestUtils.renderIntoDocument(<div/><DataTable {...props} dataHook={dataHook}/></div>, {dataHook})
   );
-  const testkit = dataTableTestkitFactory({wrapper, dataHook});
+  const testkit = DataTableTestkit({wrapper, dataHook});
 
   //Do tests
   expect(testkit.getRowsCount()).toBe(5);
@@ -81,10 +81,10 @@
    Protractor example
   **********************/
 
-  import {dataTableTestkitFactory, waitForVisibilityOf} from 'wix-style-react/dist/testkit/protractor';
+  import {DataTableTestkit, waitForVisibilityOf} from 'wix-style-react/dist/testkit/protractor';
 
   //Create an element testkit via the data-hook attribute
-  const testkit = dataTableTestkitFactory({dataHook: 'myDataHook'});
+  const testkit = DataTableTestkit({dataHook: 'myDataHook'});
 
   browser.get(appUrl);  //Your application url
 

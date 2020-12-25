@@ -225,8 +225,8 @@ class DataTable extends React.Component {
   );
 
   onRowClick = (rowData, rowNum) => {
-    const { onRowClick, rowDetails } = this.props;
-    onRowClick && onRowClick(rowData, rowNum);
+    const { onRowClick, rowDetails, isRowDisabled } = this.props;
+    onRowClick && !isRowDisabled(rowData) && onRowClick(rowData, rowNum);
     rowDetails && this.toggleRowDetails(rowData);
   };
 
@@ -243,6 +243,7 @@ class DataTable extends React.Component {
       columns,
       selectedRowsIds,
       isRowSelected,
+      isRowDisabled,
     } = this.props;
     const rowClasses = [rowClass];
     const key = defaultTo(rowData.id, rowNum);
@@ -265,7 +266,7 @@ class DataTable extends React.Component {
       }
     });
 
-    if (onRowClick) {
+    if (onRowClick && !isRowDisabled(rowData)) {
       rowClasses.push(this.style.clickableDataRow);
     }
 
@@ -342,14 +343,16 @@ class DataTable extends React.Component {
   };
 
   renderCell = (rowData, column, rowNum, colNum) => {
-    const { virtualized, stickyColumns, columns } = this.props;
+    const { virtualized, stickyColumns, columns, rowDetails } = this.props;
 
     const classes = classNames({
       [this.style.important]: column.important,
       [this.style.largeVerticalPadding]:
         this.props.rowVerticalPadding === 'large',
       [this.style.mediumVerticalPadding]:
-        this.props.rowVerticalPadding !== 'large',
+        this.props.rowVerticalPadding === 'medium',
+      [this.style.smallVerticalPadding]:
+        this.props.rowVerticalPadding === 'small',
 
       [this.style.alignStart]: column.align === 'start',
       [this.style.alignCenter]: column.align === 'center',
@@ -357,6 +360,9 @@ class DataTable extends React.Component {
       [this.style.sticky]: colNum < stickyColumns,
       [this.style.lastSticky]: colNum === stickyColumns - 1,
       [this.style.stickyActionCell]: column.stickyActionCell,
+      [this.style.hasRowDetails]: rowDetails,
+      [this.style.rowDetailsExtended]:
+        !!this.state.selectedRows.get(rowData) && rowDetails(rowData),
     });
 
     const width =
@@ -623,6 +629,7 @@ DataTable.defaultProps = {
   skin: 'standard',
   horizontalScroll: false,
   stickyColumns: 0,
+  isRowDisabled: () => false,
 };
 
 DataTable.propTypes = {
@@ -683,7 +690,7 @@ DataTable.propTypes = {
   /** Add scroll listeners to specified DOM Object. */
   scrollElement: PropTypes.object,
   /** Table cell vertical padding. should be 'medium' or 'large'  */
-  rowVerticalPadding: PropTypes.oneOf(['medium', 'large']),
+  rowVerticalPadding: PropTypes.oneOf(['small', 'medium', 'large']),
   /** this prop is deprecated and should not be used
    * @deprecated
    */
@@ -738,6 +745,8 @@ DataTable.propTypes = {
   ),
   /** A callback function called on each column title click. Signature `onSortClick(colData, colNum)` */
   onSortClick: PropTypes.func,
+  /** a function which will be called for every row in `data` to specify if it should appear as disabled. Example: `isRowDisabled={(rowData) => !rowData.isEnabled}` */
+  isRowDisabled: PropTypes.func,
 
   /* Horizontal scroll support props. */
   horizontalScroll: PropTypes.bool,

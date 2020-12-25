@@ -18,7 +18,7 @@ Every component folder should be a single component.
 
 | Prop Rule   | Description |
 | ---         | ---         |
-| *dataHook*  | Every component should accept a `dataHook` property which is applied as a `data-hook` attribute on the component's root element. This attribute is use as a selector in tests. A component can extend `WixComponent` in order to be a pure component and have the `dataHook` prop applied automatically.
+| *dataHook*  | Every component should accept a `dataHook` property which is applied as a `data-hook` attribute on the component's root element. This attribute is use as a selector in tests.
 | *className* | The convention for allowing styling of the component's root element is by exposing a `className` property.
 
 ### Props Guidelines
@@ -36,7 +36,7 @@ Every method that is set on a React class component is publically available on t
 ## Typography
 
 1. For common typography, components should use the `Text` or `Heading` components.
-1. In some cases where you can not use a component, you can use the `typography-helpers.scss` file directly.
+1. In some cases where you can not use a component, you can use the `Typography.st.css` file directly.
 
 ## Breaking Changes
 
@@ -56,7 +56,7 @@ Before the next major version - go over `Next` components and migrate - replace 
 
 ## Deprecation
 
-[Read here](https://github.com/wix/wix-style-react/blob/master/docs/internal/DEPRECATION_GUIDE.md)
+[Component deprecation guide](https://github.com/wix/wix-style-react/blob/master/docs/internal/DEPRECATION_GUIDE.md)
 
 ## WIP
 Work in progress - another section in storybook. Should be used when you start working on a component and would like to consume it before it’s perfect. It will be released but not officially used.

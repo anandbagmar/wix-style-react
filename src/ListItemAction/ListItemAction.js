@@ -1,8 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { withFocusable } from 'wix-ui-core/dist/src/hocs/Focusable/FocusableHOC';
-import styles from './ListItemAction.st.css';
+import { FontUpgradeContext } from '../FontUpgrade/context';
+import { st, classes } from './ListItemAction.st.css';
 import Text from '../Text';
+import Box from '../Box';
 
 /** ListItemAction */
 class ListItemActionComponent extends React.PureComponent {
@@ -48,6 +50,9 @@ class ListItemActionComponent extends React.PureComponent {
 
     /** On Click */
     onClick: PropTypes.func,
+
+    /** Text of the list item subtitle */
+    subtitle: PropTypes.string,
   };
 
   focus() {
@@ -56,28 +61,54 @@ class ListItemActionComponent extends React.PureComponent {
     }
   }
 
-  _renderText = () => {
-    const { title, size, ellipsis, tooltipModifiers } = this.props;
+  _renderText = ({ isMadefor }) => {
+    const {
+      title,
+      size,
+      ellipsis,
+      tooltipModifiers,
+      subtitle,
+      disabled,
+    } = this.props;
+
     return (
-      <Text
-        className={styles.text}
-        weight="normal"
-        size={size}
-        dataHook="list-item-action-title"
-        ellipsis={ellipsis}
-        placement="right"
-        {...tooltipModifiers}
-      >
-        {title}
-      </Text>
+      <Box direction="vertical" className={classes.textBox} width="100%">
+        <Text
+          className={st(classes.text, { subtitle: Boolean(subtitle) })}
+          dataHook="list-item-action-title"
+          size={size}
+          ellipsis={ellipsis}
+          weight={isMadefor ? 'thin' : 'normal'}
+          placement="right"
+          skin={disabled ? 'disabled' : 'standard'}
+          {...tooltipModifiers}
+        >
+          {title}
+        </Text>
+
+        {subtitle && (
+          <Text
+            dataHook="list-item-action-subtitle"
+            secondary
+            size="small"
+            ellipsis={ellipsis}
+            weight={isMadefor ? 'thin' : 'normal'}
+            placement="right"
+            skin={disabled ? 'disabled' : 'standard'}
+            light={!disabled}
+          >
+            {subtitle}
+          </Text>
+        )}
+      </Box>
     );
   };
 
   _renderPrefix = () => {
-    const { prefixIcon, size } = this.props;
+    const { prefixIcon, size, subtitle } = this.props;
     return React.cloneElement(prefixIcon, {
       size: size === 'medium' ? 24 : 18,
-      className: styles.prefixIcon,
+      className: st(classes.prefixIcon, { subtitle: Boolean(subtitle) }),
       'data-hook': 'list-item-action-prefix-icon',
     });
   };
@@ -103,26 +134,41 @@ class ListItemActionComponent extends React.PureComponent {
       onKeyDown,
       autoFocus,
       highlighted,
+      className,
+      subtitle,
+      ...others
     } = this.props;
 
+    // since we're spreading the "rest" props, we don't want to pass
+    const { selected, hovered, ellipsis, ...rest } = others;
+
     return (
-      <Component
-        {...styles('root', { skin, disabled, highlighted }, this.props)}
-        data-skin={skin}
-        data-disabled={disabled}
-        tabIndex={tabIndex}
-        ref={ref => (this.innerComponentRef = ref)}
-        autoFocus={autoFocus}
-        onFocus={focusableOnFocus}
-        onBlur={focusableOnBlur}
-        type={Component === 'button' ? 'button' : undefined}
-        data-hook={dataHook}
-        onKeyDown={!disabled ? onKeyDown : undefined}
-        onClick={!disabled ? onClick : undefined}
-      >
-        {prefixIcon && this._renderPrefix()}
-        {this._renderText()}
-      </Component>
+      <FontUpgradeContext.Consumer>
+        {({ active: isMadefor }) => (
+          <Component
+            {...rest}
+            className={st(
+              classes.root,
+              { skin, disabled, highlighted, ellipsis },
+              className,
+            )}
+            data-skin={skin}
+            data-disabled={disabled}
+            tabIndex={tabIndex}
+            ref={ref => (this.innerComponentRef = ref)}
+            autoFocus={autoFocus}
+            onFocus={focusableOnFocus}
+            onBlur={focusableOnBlur}
+            type={Component === 'button' ? 'button' : undefined}
+            data-hook={dataHook}
+            onKeyDown={!disabled ? onKeyDown : undefined}
+            onClick={!disabled ? onClick : undefined}
+          >
+            {prefixIcon && this._renderPrefix()}
+            {this._renderText({ isMadefor })}
+          </Component>
+        )}
+      </FontUpgradeContext.Consumer>
     );
   }
 }
@@ -143,13 +189,15 @@ export const listItemActionBuilder = ({
   autoFocus,
   className,
   ellipsis,
+  subtitle,
+  ...rest
 }) => ({
   id,
   disabled,
-  overrideStyle: true,
-  value: props => (
+  overrideOptionStyle: true,
+  value: ({ hovered }) => (
     <ListItemAction
-      {...props}
+      {...rest}
       ellipsis={ellipsis}
       className={className}
       autoFocus={autoFocus}
@@ -161,7 +209,9 @@ export const listItemActionBuilder = ({
       prefixIcon={prefixIcon}
       skin={skin}
       size={size}
-      highlighted={props.hovered}
+      highlighted={hovered}
+      disabled={disabled}
+      subtitle={subtitle}
     />
   ),
 });

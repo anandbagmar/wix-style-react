@@ -32,6 +32,8 @@ class VerticalTabs extends React.Component {
   }
 }
 
+VerticalTabs.displayName = 'VerticalTabs';
+
 VerticalTabs.propTypes = {
   /** Text Size (small, medium) */
   size: PropTypes.oneOf(['small', 'medium']),

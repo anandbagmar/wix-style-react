@@ -57,7 +57,7 @@ class TabsExample extends Component {
                   errorMessage=""
                   id="firstName"
                   placeholder="e.g. 100"
-                  size="normal"
+                  size="medium"
                   onChange={e => this.setState({ width: e.target.value })}
                   value={this.state.width}
                   suffix={

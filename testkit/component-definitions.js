@@ -8,6 +8,8 @@ import FloatingHelper from '../src/FloatingHelper';
 import VerticalTabs from '../src/VerticalTabs';
 import SegmentedToggle from '../src/SegmentedToggle';
 import PopoverMenu from '../src/PopoverMenu';
+import Dropzone from '../src/Dropzone';
+import CardFolderTabs from '../src/CardFolderTabs';
 
 /*
  * This file exports object with config for components.
@@ -28,6 +30,25 @@ import PopoverMenu from '../src/PopoverMenu';
  */
 
 export default {
+  Animate: {
+    props: {
+      children: <div />,
+    },
+  },
+
+  BounceAnimation: {
+    props: {
+      children: <div />,
+    },
+  },
+
+  BadgeSelectItem: {
+    props: {
+      skin: 'general',
+      text: 'Badge 1',
+    },
+  },
+
   AudioPlayer: {
     props: {
       src: 'example.mp3',
@@ -83,6 +104,12 @@ export default {
     },
   },
 
+  TagList: {
+    props: {
+      tags: [],
+    },
+  },
+
   Badge: {
     props: {
       children: 'hello',
@@ -101,10 +128,18 @@ export default {
     },
   },
 
+  FunnelChart: {
+    props: {
+      data: [
+        { value: 1000, label: 'visits' },
+        { value: 800, label: 'views' },
+      ],
+    },
+  },
+
   BadgeSelect: {
     props: {
       options: [{ id: '0', skin: 'general', text: 'general' }],
-      selectedId: '0',
     },
   },
 
@@ -305,6 +340,16 @@ export default {
     },
   },
 
+  SelectorList: {
+    props: {
+      dataSource: () =>
+        Promise.resolve({
+          items: [],
+          totalCount: 0,
+        }),
+    },
+  },
+
   Proportion: { props: { children: 'test' } },
 
   Box: {
@@ -316,6 +361,12 @@ export default {
   ColorInput: {
     props: {
       value: '#FFFFFF',
+    },
+  },
+
+  FacesRatingBar: {
+    props: {
+      value: 1,
     },
   },
 
@@ -347,6 +398,12 @@ export default {
   SidebarSectionTitle: {
     props: {
       children: 'test',
+    },
+  },
+
+  StarsRatingBar: {
+    props: {
+      value: 0,
     },
   },
 
@@ -656,6 +713,16 @@ export default {
     },
   },
 
+  HorizontalTimeline: {
+    props: {
+      items: [
+        { label: 'Instructions completed' },
+        { label: 'Domain check' },
+        { label: 'Site is live worldwide' },
+      ],
+    },
+  },
+
   TableActionCell: {
     props: {
       primaryAction: {
@@ -681,6 +748,108 @@ export default {
           children: 'text',
           expandLabel: 'Show More',
           collapseLabel: 'Less',
+        },
+      ],
+    },
+  },
+
+  FileUpload: {
+    props: {
+      onChange: () => {},
+      children: ({ openFileUploadDialog }) => (
+        <button onClick={openFileUploadDialog} />
+      ),
+    },
+  },
+
+  Dropzone: {
+    props: {
+      onDrop: () => {},
+      children: [
+        <Dropzone.Overlay>
+          <span />
+        </Dropzone.Overlay>,
+        <Dropzone.Content>
+          <span />
+        </Dropzone.Content>,
+      ],
+    },
+  },
+
+  TableListItem: {
+    props: {
+      draggable: true,
+      checkbox: true,
+      checked: true,
+      showDivider: true,
+      options: [
+        { value: 'Hello', align: 'right', width: 80 },
+        { value: 'World', align: 'center', width: '40%' },
+        { value: '!!!', align: 'left' },
+      ],
+    },
+  },
+
+  AreaChart: {
+    props: {
+      data: [
+        {
+          value: 100,
+          label: 'label_1',
+        },
+        {
+          value: 200,
+          label: 'label_2',
+        },
+        {
+          value: 300,
+          label: 'label_3',
+        },
+      ],
+    },
+  },
+
+  SparklineChart: {
+    props: {
+      data: [
+        { label: new Date('Thu Sep 4 2020'), value: 3 },
+        { label: new Date('Thu Sep 5 2020'), value: 17 },
+        { label: new Date('Thu Sep 6 2020'), value: 18 },
+      ],
+    },
+  },
+
+  CardFolderTabs: {
+    props: {
+      activeId: '1',
+      children: (
+        <CardFolderTabs.Tab id="1" key="1" name="Some tab">
+          xxx
+        </CardFolderTabs.Tab>
+      ),
+    },
+  },
+
+  TrendIndicator: {
+    props: {
+      value: 0,
+    },
+  },
+
+  CopyClipboard: {
+    props: {
+      value: 'https://www.wix.com',
+      children: ({ copyToClipboard }) => <button onClick={copyToClipboard} />,
+    },
+  },
+
+  AnalyticsSummaryCard: {
+    props: {
+      percentage: 0,
+      chartData: [
+        {
+          label: new Date(),
+          value: 0,
         },
       ],
     },

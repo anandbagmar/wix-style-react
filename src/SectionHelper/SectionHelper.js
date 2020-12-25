@@ -1,23 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import classNames from 'classnames';
 
 import Text from '../Text';
 import Button from '../Button';
 import CloseButton from '../CloseButton';
 import { Appearance } from './constants';
-import styles from './SectionHelper.scss';
+import { classes, st } from './SectionHelper.st.css';
 import { FontUpgradeContext } from '../FontUpgrade/context';
-
-const appearanceToStyleMap = {
-  [Appearance.Warning]: styles.warning,
-  [Appearance.Standard]: styles.standard,
-  [Appearance.Danger]: styles.danger,
-  [Appearance.Success]: styles.success,
-  [Appearance.Premium]: styles.premium,
-  [Appearance.Preview]: styles.preview,
-  [Appearance.ExperimentalDark]: styles.experimentalDark,
-};
 
 /**
  * Used in pages where you need to explain or mention things about the content or actions
@@ -41,16 +30,15 @@ class SectionHelper extends React.PureComponent {
       <div
         data-hook={dataHook}
         data-appearance={appearance}
-        className={classNames(styles.root, appearanceToStyleMap[appearance], {
-          [styles.showClose]: showCloseButton,
+        className={st(classes.root, {
+          appearance,
+          withCloseBtn: showCloseButton && !!onClose,
+          withTitle: !!title,
+          fullWidth,
         })}
       >
         {showCloseButton && onClose && (
-          <div
-            className={classNames(styles.close, {
-              [styles.closeWithTitle]: !!title,
-            })}
-          >
+          <div className={classes.close}>
             <CloseButton
               dataHook="sectionhelper-close-btn"
               size="medium"
@@ -61,14 +49,14 @@ class SectionHelper extends React.PureComponent {
         )}
 
         {title && (
-          <div className={styles.title}>
+          <div className={classes.title}>
             <FontUpgradeContext.Consumer>
-              {context => (
+              {({ active }) => (
                 <Text
                   light={isExperimentalDark}
                   dataHook="sectionhelper-title"
                   size="small"
-                  weight={context.active ? 'bold' : 'normal'}
+                  weight={active ? 'bold' : 'normal'}
                 >
                   {title}
                 </Text>
@@ -77,18 +65,14 @@ class SectionHelper extends React.PureComponent {
           </div>
         )}
 
-        <div
-          className={classNames(styles.content, {
-            [styles.fullWidth]: !!fullWidth,
-          })}
-        >
+        <div className={classes.content}>
           <Text size="small" light={isExperimentalDark}>
             {children}
           </Text>
         </div>
 
         {onAction && actionText && (
-          <div className={styles.action}>
+          <div className={classes.action}>
             <Button
               size="small"
               skin={isExperimentalDark ? 'standard' : 'dark'}
@@ -112,7 +96,15 @@ SectionHelper.propTypes = {
   dataHook: PropTypes.string,
 
   /** Sets the look and feel of the component */
-  appearance: PropTypes.oneOf(Object.values(Appearance)),
+  appearance: PropTypes.oneOf([
+    'warning',
+    'standard',
+    'danger',
+    'success',
+    'premium',
+    'preview',
+    'experimentalDark',
+  ]),
 
   /** Adds text as the title */
   title: PropTypes.node,
@@ -138,7 +130,8 @@ SectionHelper.propTypes = {
 
 SectionHelper.defaultProps = {
   showCloseButton: true,
-  appearance: Appearance.Warning,
+  appearance: 'warning',
+  fullWidth: false,
 };
 
 export default SectionHelper;

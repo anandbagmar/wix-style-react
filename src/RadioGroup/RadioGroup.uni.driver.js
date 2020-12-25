@@ -1,13 +1,6 @@
 import { baseUniDriverFactory } from 'wix-ui-test-utils/base-driver';
-import { radioButtonUniDriverFactory } from './RadioButton/RadioButton.uni.driver';
-import { dataHooks } from './constants';
-
-export const createRadioButtonsGetter = (base, body) => async () =>
-  base
-    .$$(`[data-hook="${dataHooks.RadioGroupRadioContainer}"]`)
-    .map(radio =>
-      Object.assign(radio, radioButtonUniDriverFactory(radio, body)),
-    );
+import { createRadioButtonsGetter } from './sharedDriverMethods';
+import { dataHooks as radioButtonDataHooks } from './RadioButton/constants';
 
 export const radioGroupUniDriverFactory = (base, body) => {
   const getRadioButtons = createRadioButtonsGetter(base, body);
@@ -27,6 +20,11 @@ export const radioGroupUniDriverFactory = (base, body) => {
         return radio;
       }
     }
+  };
+
+  const getRadioInputAt = async index => {
+    const radio = (await getRadioButtons())[index];
+    return radio.$(`[data-hook="${radioButtonDataHooks.RadioButtonInput}"]`);
   };
 
   return {
@@ -62,5 +60,19 @@ export const radioGroupUniDriverFactory = (base, body) => {
 
     /** Get the number of rendered radios */
     getNumberOfRadios: async () => (await getRadioButtons()).length,
+
+    /** Get the value of radio button id at the provided index */
+    getRadioIdAt: async index => {
+      const radioButtonInput = await getRadioInputAt(index);
+      const id = await radioButtonInput._prop('id');
+      return id;
+    },
+
+    /** Get the value of radio button name at the provided index */
+    getRadioName: async () => {
+      const radioButtonInput = await getRadioInputAt(0);
+      const name = await radioButtonInput._prop('name');
+      return name;
+    },
   };
 };

@@ -1,7 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import classNames from 'classnames';
-import styles from './Illustration.st.css';
+import { st, classes } from './Illustration.st.css';
 import { dataHooks } from '../../constants';
 import { useBaseModalLayoutContext } from '../../BaseModalLayoutContext';
 
@@ -10,13 +9,16 @@ export const Illustration = ({ dataHook, className, children }) => {
     illustrationClassName,
     illustration = children,
   } = useBaseModalLayoutContext();
-  className = classNames(illustrationClassName, className);
+
   return (
     (illustration && (
-      <div data-hook={dataHook} {...styles('root', {}, { className })}>
+      <div
+        data-hook={dataHook}
+        className={st(classes.root, illustrationClassName, className)}
+      >
         {typeof illustration === 'string' ? (
           <img
-            className={styles.image}
+            className={classes.image}
             src={illustration}
             data-hook={dataHooks.illustrationSrc}
           />
@@ -32,8 +34,10 @@ export const Illustration = ({ dataHook, className, children }) => {
 Illustration.propTypes = {
   /** additional css classes */
   className: PropTypes.string,
+
   /** data hook for testing */
   dataHook: PropTypes.string,
+
   /** The illustration src or the illustration node itself */
   illustration: PropTypes.oneOfType([PropTypes.string, PropTypes.node]),
 };

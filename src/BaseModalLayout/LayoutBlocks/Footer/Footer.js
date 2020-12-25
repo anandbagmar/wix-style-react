@@ -1,7 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import classNames from 'classnames';
-import styles from './Footer.st.css';
+import { st, classes } from './Footer.st.css';
 import Button from '../../../Button';
 import { dataHooks } from '../../constants';
 import Divider from '../../../Divider';
@@ -20,7 +19,6 @@ export const Footer = ({ dataHook, className, showFooterDivider }) => {
     primaryButtonOnClick,
     primaryButtonProps,
   } = useBaseModalLayoutContext();
-  className = classNames(footerClassName, className);
   const hasPrimaryButton =
     primaryButtonText || primaryButtonOnClick || primaryButtonProps;
   const hasSecondaryButton =
@@ -31,23 +29,28 @@ export const Footer = ({ dataHook, className, showFooterDivider }) => {
       <div
         data-hook={dataHook}
         data-divider={showFooterDivider}
-        {...styles('root', { showDivider: showFooterDivider }, { className })}
+        className={st(
+          classes.root,
+          { showDivider: showFooterDivider },
+          footerClassName,
+          className,
+        )}
       >
         <Divider
-          className={styles.divider}
+          className={classes.divider}
           dataHook={dataHooks.footerDivider}
         />
-        <div className={styles.innerContent}>
+        <div className={classes.innerContent}>
           {sideActions && (
             <div
               data-hook={dataHooks.footerSideActions}
-              className={styles.sideActions}
+              className={classes.sideActions}
             >
               {sideActions}
             </div>
           )}
           {(hasPrimaryButton || hasSecondaryButton) && (
-            <div className={styles.actions}>
+            <div className={classes.actions}>
               {hasSecondaryButton && (
                 <Button
                   skin={theme}
@@ -57,7 +60,8 @@ export const Footer = ({ dataHook, className, showFooterDivider }) => {
                   {...secondaryButtonProps}
                   dataHook={dataHooks.footerSecondaryButton}
                 >
-                  {secondaryButtonText}
+                  {secondaryButtonText ||
+                    (secondaryButtonProps && secondaryButtonProps.children)}
                 </Button>
               )}
               {hasPrimaryButton && (
@@ -68,7 +72,8 @@ export const Footer = ({ dataHook, className, showFooterDivider }) => {
                   {...primaryButtonProps}
                   dataHook={dataHooks.footerPrimaryButton}
                 >
-                  {primaryButtonText}
+                  {primaryButtonText ||
+                    (primaryButtonProps && primaryButtonProps.children)}
                 </Button>
               )}
             </div>
@@ -85,32 +90,43 @@ Footer.displayName = 'BaseModalLayout.Footer';
 Footer.propTypes = {
   /** additional css classes */
   className: PropTypes.string,
+
   /** data hook for testing */
   dataHook: PropTypes.string,
+
   /** a theme for the Footer, will affect footer action buttons skin */
   theme: PropTypes.oneOf(['standard', 'premium', 'destructive']),
+
   /** will determine the action buttons size*/
   actionsSize: Button.propTypes.size,
+
   /** a text for the primary action button */
   primaryButtonText: PropTypes.string,
+
   /** a callback for when the primary action button is clicked */
   primaryButtonOnClick: PropTypes.func,
+
   /** Passed to the primary action button as props without any filter / mutation */
   primaryButtonProps: (() => {
     const { dataHook, ...buttonProps } = Button.propTypes;
     return PropTypes.shape(buttonProps);
   })(),
+
   /** a text for the secondary action button */
   secondaryButtonText: PropTypes.string,
+
   /** callback for when the secondary action button is clicked */
   secondaryButtonOnClick: PropTypes.func,
+
   /** Passed to the secondary button as props without any filter / mutation */
   secondaryButtonProps: (() => {
     const { dataHook, ...buttonProps } = Button.propTypes;
     return PropTypes.shape(buttonProps);
   })(),
+
   /** side actions node, to be rendered as the first element on the same row as the action buttons */
   sideActions: PropTypes.node,
+
   /** shows the footer divider */
   showFooterDivider: PropTypes.bool,
 };

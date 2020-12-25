@@ -1,16 +1,20 @@
 export const skins = `
 <Layout cols={1} gap={10}>
-  <Text skin="standard">
-    Standard skin appears in all major text.
-  </Text>
+  <Text skin="standard">Standard skin appears in all major text.</Text>
   <Text skin="premium">
     Premium skin calls users to upgrade to get unlimited features.
   </Text>
   <Text skin="success">
-    Success skin alerts users that something went smooth.
+    Success skin indicated users that everything went smooth.
+  </Text>
+  <Text skin="error">
+    Error skin alerts users that something went wrong.
   </Text>
   <Text skin="disabled">
     Disabled skin indicates users that something cannot be accesed.
+  </Text>
+  <Text skin="primary">
+    Primary skin is for links.
   </Text>
 </Layout>
 `;
@@ -77,21 +81,38 @@ export const link = `
 
 export const ellipsis = `
 <Layout cols={2} gap={10}>
-  <Box width="100px">
-    <Text>Long text doesn't fit into a single line and then wraps.</Text>
+  <Box width="150px">
+    <Text>Text that wraps forever. It doesn't show any ellipsis.</Text>
   </Box>
-  <Box width="100px">
-    <Text ellipsis>Long text doesn't fit into a single line and then hides.</Text>
-  </Box>
-  <Box width="250px">
-    <Text ellipsis showTooltip={false}>Long text without tooltip. The next characters don't fit to the line.</Text>
+  <Box width="150px">
+    <Text ellipsis maxLines={2}>
+      Text with ellipsis. It can be set to wrap, but after some lines it turns
+      into ellipsis. Full text is revealed on hover.
+    </Text>
   </Box>
 </Layout>
 `;
 
+export const ellipsisNoTooltip = `
+<Layout cols={2} gap={10}>
+  <Box width="120px">
+    <Text ellipsis>I show tooltip on hover</Text>
+  </Box>
+  <Box width="120px">
+    <Text ellipsis tooltipProps={{ disabled: true }}>I don't show anything on hover</Text>
+  </Box>
+</Layout>
+`;
+
+export const smallTooltip = `
+<Box width="120px">
+  <Text ellipsis size="tiny" tooltipProps={{ size:'small' }}>I am tiny and I show small tooltip</Text>
+</Box>
+`;
+
 export const maxwidth = `
 <Box width="120px">
-  <Text ellipsis maxWidth="360px">Long text doesn't fit into 120px</Text>
+  <Text ellipsis tooltipProps={{ maxWidth: '360px' }}>Long text doesn't fit into 120px</Text>
 </Box>
 `;
 
@@ -102,12 +123,52 @@ export const custom = `
 `;
 
 export const list = `
-<Text>
-  The list below is built using standard "ul" and "li" HTML tags.
-  <ul>
-    <li>First list item</li>
-    <li>Second list item</li>
-    <li>Third list item</li>
-  </ul>
-</Text>
+<div>
+  <Text listStyle="checkmark">
+    The list below is built using standard "ul" and "li" HTML tags.
+    <ul>
+      <li>First list item</li>
+      <li>
+        Second list item
+        <ul>
+          <li>First sub list item</li>
+          <li>Second sub list item</li>
+        </ul>
+      </li>
+
+      <li>Third list item</li>
+    </ul>
+  </Text>
+  <br />
+  <Text listStyle="circle">
+    <ul>
+      <li>First list item</li>
+      <li>
+        Second list item
+        <ul>
+          <li>First sub list item</li>
+          <li>Second sub list item</li>
+        </ul>
+      </li>
+
+      <li>Third list item</li>
+    </ul>
+  </Text>
+  <br />
+  <Text>
+    The list below is built using standard "ol" and "li" HTML tags.
+    <ol>
+      <li>First list item</li>
+      <li>
+        Second list item
+        <ol type="I">
+          <li>First sub list item</li>
+          <li>Second sub list item</li>
+        </ol>
+      </li>
+
+      <li>Third list item</li>
+    </ol>
+  </Text>
+</div>
 `;

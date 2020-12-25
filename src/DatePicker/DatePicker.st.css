@@ -3,7 +3,23 @@
   -st-default: Popover;
 }
 
+:import {
+  -st-from: "../Calendar/Calendar.st.css";
+  -st-default: Calendar;
+}
+
 .root {
+}
+
+.popover {
   -st-extends: Popover;
   display: block;
+}
+
+.inputContainer {
+  width: 100%;
+}
+
+.calendar {
+  -st-extends: Calendar;
 }

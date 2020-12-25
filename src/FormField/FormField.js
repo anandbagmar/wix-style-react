@@ -1,10 +1,9 @@
-import classnames from 'classnames';
 import PropTypes from 'prop-types';
 import React from 'react';
 import InfoIcon from '../InfoIcon';
 import Text, { SIZES, SKINS, WEIGHTS } from '../Text';
 import { dataHooks } from './constants';
-import styles from './FormField.scss';
+import { st, classes } from './FormField.st.css';
 import { TooltipCommonProps } from '../common/PropTypes/TooltipCommon';
 
 const PLACEMENT = {
@@ -20,8 +19,8 @@ const ALIGN = {
 
 const asterisk = (
   <div
-    data-hook="formfield-asterisk"
-    className={styles.asterisk}
+    data-hook={dataHooks.asterisk}
+    className={classes.asterisk}
     children="*"
   />
 );
@@ -34,7 +33,7 @@ const charactersLeft = lengthLeft => {
       size={SIZES.small}
       weight={WEIGHTS.normal}
       {...colorProps}
-      data-hook="formfield-counter"
+      dataHook={dataHooks.counter}
       children={lengthLeft}
     />
   );
@@ -120,7 +119,7 @@ class FormField extends React.Component {
     setCharactersLeft: lengthLeft => this.setState({ lengthLeft }),
   };
 
-  renderChildren() {
+  _renderChildren() {
     const { children } = this.props;
     if (typeof children === 'function') {
       return children(this.childrenRenderPropInterface);
@@ -149,7 +148,7 @@ class FormField extends React.Component {
       infoContent && (
         <InfoIcon
           dataHook={`${dataHook}-formfield-infoicon`}
-          className={styles.infoIcon}
+          className={classes.infoIcon}
           content={infoContent}
           tooltipProps={infoTooltipProps}
           size={labelSize}
@@ -159,14 +158,13 @@ class FormField extends React.Component {
   };
 
   _renderLabelIndicators = () => {
-    const { required, children, suffix } = this.props;
+    const { required, suffix } = this.props;
 
     return (
       <div
         data-hook={dataHooks.labelIndicators}
-        className={classnames(styles.labelIndicators, {
-          [styles.minLabelHeight]: !children,
-          [styles.inlineWithSuffix]: suffix || this._hasCharCounter(),
+        className={st(classes.labelIndicators, {
+          inlineWithSuffix: Boolean(suffix || this._hasCharCounter()),
         })}
       >
         {this._renderLabel({ trimLongText: false })}
@@ -181,7 +179,7 @@ class FormField extends React.Component {
 
     return (
       (suffix || this._hasCharCounter()) && (
-        <div data-hook={dataHooks.suffix} className={styles.suffix}>
+        <div data-hook={dataHooks.suffix} className={classes.suffix}>
           {suffix ? suffix : this._renderCharCounter()}
         </div>
       )
@@ -200,7 +198,7 @@ class FormField extends React.Component {
         size={labelSize}
         htmlFor={id}
         tagName={'label'}
-        dataHook="formfield-label"
+        dataHook={dataHooks.label}
         ellipsis={trimLongText}
         style={{ display: 'block' }} // allows the label to middle vertically
         secondary
@@ -219,27 +217,29 @@ class FormField extends React.Component {
       infoContent,
       dataHook,
       children,
+      classNames,
       stretchContent,
     } = this.props;
+
+    const rootStyles = label
+      ? {
+          labelPlacement,
+          labelAlignment,
+          stretchContent,
+          minLabelHeight: !children,
+        }
+      : {
+          stretchContent,
+          minLabelHeight: !children,
+        };
 
     return (
       <div
         data-hook={dataHook}
-        className={classnames(styles.root, {
-          [styles.labelFromTop]: label && labelPlacement === PLACEMENT.top,
-          [styles.labelFromLeft]: label && labelPlacement === PLACEMENT.left,
-          [styles.labelFromRight]: label && labelPlacement === PLACEMENT.right,
-          [styles.labelAlignMiddle]: label && labelAlignment === ALIGN.middle,
-          [styles.labelAlignTop]: label && labelAlignment === ALIGN.top,
-          [styles.stretchContent]: stretchContent,
-        })}
+        className={st(classes.root, rootStyles, classNames)}
       >
         {label && labelPlacement === PLACEMENT.top && (
-          <div
-            className={classnames(styles.label, {
-              [styles.minLabelHeight]: !children,
-            })}
-          >
+          <div className={classes.label}>
             {this._renderLabel({ trimLongText: true })}
             {required && asterisk}
             {this._renderInfoIcon()}
@@ -249,15 +249,15 @@ class FormField extends React.Component {
 
         {children && (
           <div
-            data-hook="formfield-children"
-            className={classnames(styles.children, {
-              [styles.childrenWithInlineLabel]:
+            data-hook={dataHooks.children}
+            className={st(classes.children, {
+              childrenWithInlineLabel:
                 !label || this._hasInlineLabel(label, labelPlacement),
             })}
           >
             {(!label || labelPlacement !== PLACEMENT.top) &&
               this._renderSuffix()}
-            {this.renderChildren()}
+            {this._renderChildren()}
           </div>
         )}
 

@@ -1,11 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import styles from './ListItemSection.st.css';
+import { st, classes } from './ListItemSection.st.css';
 import Divider from '../Divider';
 import Text from '../Text';
 import TextButton from '../TextButton';
 import { dataHooks } from './constants';
+import { isString } from '../utils/StringUtils';
 
 export const TYPES = {
   WHITESPACE: 'whitespace',
@@ -36,7 +37,7 @@ class ListItemSection extends React.PureComponent {
     /** Text of the list item */
     title: PropTypes.string,
 
-    /** TextButton suffix */
+    /** Suffix node. Renders TextButton for a string otherwise the node itself.*/
     suffix: PropTypes.node,
 
     /** If true, long text won't break into more than one line and will be terminated with an ellipsis */
@@ -69,7 +70,7 @@ class ListItemSection extends React.PureComponent {
     const { dataHook, type } = this.props;
     return (
       <div
-        {...styles(styles.root, { [type]: true })}
+        className={st(classes.root, { [type]: true })}
         data-hook={dataHook}
         onClick={e => e.stopPropagation()}
         children={children}
@@ -77,48 +78,64 @@ class ListItemSection extends React.PureComponent {
     );
   };
 
+  _renderSuffix = () => {
+    const { suffix, onClick, ellipsis } = this.props;
+
+    return isString(suffix) ? (
+      <div className={classes.suffixWrapper}>
+        <TextButton
+          ellipsis={ellipsis}
+          dataHook={dataHooks.SUFFIX}
+          size="tiny"
+          onClick={onClick}
+          className={classes.suffix}
+        >
+          {suffix}
+        </TextButton>
+      </div>
+    ) : (
+      <div
+        data-hook={dataHooks.SUFFIX}
+        className={classes.suffixWrapper}
+        onClick={onClick}
+      >
+        {suffix}
+      </div>
+    );
+  };
+
   _renderTitle = () => {
-    const {
-      dataHook,
-      className,
-      type,
-      title,
-      suffix,
-      ellipsis,
-      onClick,
-    } = this.props;
+    const { dataHook, className, type, title, suffix, ellipsis } = this.props;
+
     return (
       <div
-        {...styles(
-          styles.root,
-          { subheader: type === TYPES.SUBHEADER },
+        className={st(
+          classes.root,
+          {
+            subheader: type === TYPES.SUBHEADER,
+            ellipsis,
+            suffix: !!suffix,
+          },
           className,
         )}
         data-hook={dataHook}
       >
         {/* Text */}
-        <Text
-          dataHook={dataHooks.TITLE}
-          tagName="div"
-          size="small"
-          className={styles.title}
-          ellipsis={ellipsis}
-          showDelay={300}
-        >
-          {title}
-        </Text>
+        <div className={classes.titleWrapper}>
+          <Text
+            dataHook={dataHooks.TITLE}
+            tagName="div"
+            size="small"
+            className={classes.title}
+            ellipsis={ellipsis}
+            enterDelay={300}
+          >
+            {title}
+          </Text>
+        </div>
 
         {/* Suffix */}
-        {suffix && (
-          <TextButton
-            onClick={onClick}
-            {...styles(styles.suffix, { ellipsis })}
-            dataHook={dataHooks.SUFFIX}
-            size="tiny"
-          >
-            {suffix}
-          </TextButton>
-        )}
+        {suffix && this._renderSuffix()}
       </div>
     );
   };
@@ -129,16 +146,19 @@ export default ListItemSection;
 export const listItemSectionBuilder = ({
   id,
   className,
+  dataHook,
   type,
   title,
   suffix,
   ellipsis,
 }) => ({
   id,
-  overrideStyle: true,
+  overrideOptionStyle: true,
+  disabled: true,
   value: props => (
     <ListItemSection
       className={className}
+      dataHook={dataHook}
       type={type}
       title={title}
       suffix={suffix}

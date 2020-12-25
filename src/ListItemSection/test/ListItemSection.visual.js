@@ -1,6 +1,7 @@
 import React from 'react';
 import { storiesOf } from '@storybook/react';
-import ListItemSection from '../ListItemSection';
+import ListItemSection, { listItemSectionBuilder } from '../ListItemSection';
+import DropdownLayout from '../../DropdownLayout';
 import Box from '../../Box';
 
 const commonProps = {
@@ -22,6 +23,12 @@ const tests = [
         },
       },
       {
+        it: 'text with suffix node',
+        props: {
+          suffix: <span style={{ color: 'red' }}>suffix node</span>,
+        },
+      },
+      {
         it: 'subheader',
         props: {
           type: 'subheader',
@@ -32,6 +39,13 @@ const tests = [
         props: {
           type: 'subheader',
           suffix: 'I am a suffix',
+        },
+      },
+      {
+        it: 'subheader with suffix node',
+        props: {
+          type: 'subheader',
+          suffix: <span style={{ color: 'red' }}>suffix node</span>,
         },
       },
       {
@@ -94,10 +108,40 @@ tests.forEach(({ describe, its }) => {
     storiesOf(`ListItemSection${describe ? '/' + describe : ''}`, module).add(
       it,
       () => (
-        <Box width="400px">
+        <div style={{ width: '400px' }}>
           <ListItemSection {...commonProps} {...props} />
-        </Box>
+        </div>
       ),
     );
   });
 });
+
+storiesOf('ListItemSection', module).add('builder', () => (
+  <DropdownLayout
+    visible
+    options={[
+      listItemSectionBuilder({
+        id: 0,
+        title: 'option 1',
+        type: 'title',
+      }),
+      listItemSectionBuilder({
+        id: 1,
+        title: 'option 2',
+        type: 'subheader',
+      }),
+      listItemSectionBuilder({
+        id: 2,
+        type: 'whitespace',
+      }),
+      listItemSectionBuilder({
+        id: 3,
+        type: 'divider',
+      }),
+      listItemSectionBuilder({
+        id: 4,
+        type: 'whitespace',
+      }),
+    ]}
+  />
+));

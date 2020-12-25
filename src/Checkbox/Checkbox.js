@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import CheckboxChecked from 'wix-ui-icons-common/system/CheckboxChecked';
 import CheckboxIndeterminate from 'wix-ui-icons-common/system/CheckboxIndeterminate';
-import styles from './Checkbox.st.css';
+import { st, classes } from './Checkbox.st.css';
 import Text from '../Text';
 import { withFocusable } from 'wix-ui-core/dist/src/hocs/Focusable/FocusableHOC';
 
@@ -39,32 +39,37 @@ class Checkbox extends React.PureComponent {
       errorMessage,
       selectionArea,
       vAlign,
-      hover,
       size,
       onChange,
       children,
       dataHook,
       focusableOnFocus,
       focusableOnBlur,
+      className,
+      selectionAreaSkin,
+      selectionAreaPadding,
     } = this.props;
-
-    const rootStyles = {
-      vAlign,
-      selectionArea,
-      disabled,
-      error: hasError && !disabled,
-      selection: indeterminate
-        ? 'indeterminate'
-        : checked
-        ? 'checked'
-        : 'unchecked',
-      indeterminate,
-    };
 
     return (
       <div
         data-hook={dataHook}
-        {...styles('root', rootStyles, this.props)}
+        className={st(
+          classes.root,
+          {
+            vAlign,
+            selectionArea,
+            selectionAreaSkin,
+            disabled,
+            error: hasError && !disabled,
+            selection: indeterminate
+              ? 'indeterminate'
+              : checked
+              ? 'checked'
+              : 'unchecked',
+            indeterminate,
+          },
+          className,
+        )}
         onFocus={focusableOnFocus}
         onBlur={focusableOnBlur}
         tabIndex={disabled ? null : 0}
@@ -79,49 +84,53 @@ class Checkbox extends React.PureComponent {
           onChange={disabled ? null : onChange}
           style={{ display: 'none' }}
         />
-
         <label
           htmlFor={id}
           data-hook={dataHooks.label}
-          className={styles.label}
+          className={classes.label}
         >
-          <Tooltip
-            dataHook={dataHooks.boxTooltip}
-            disabled={disabled || !hasError || !errorMessage}
-            placement="top"
-            textAlign="center"
-            content={errorMessage || ' '}
-            maxWidth={230}
-            hideDelay={150}
-            zIndex={10000}
+          <div
+            className={classes.labelInner}
+            style={{ padding: selectionAreaPadding }}
           >
-            <div className={styles.outer}>
-              <div data-hook={dataHooks.box} className={styles.checkbox}>
-                <div
-                  className={styles.inner}
-                  onClick={e => e.stopPropagation()}
-                >
-                  {indeterminate ? (
-                    <CheckboxIndeterminate />
-                  ) : (
-                    <CheckboxChecked />
-                  )}
+            <Tooltip
+              dataHook={dataHooks.boxTooltip}
+              disabled={disabled || !hasError || !errorMessage}
+              placement="top"
+              textAlign="center"
+              content={errorMessage || ' '}
+              maxWidth={230}
+              hideDelay={150}
+              zIndex={10000}
+            >
+              <div className={classes.outer}>
+                <div data-hook={dataHooks.box} className={classes.checkbox}>
+                  <div
+                    className={classes.inner}
+                    onClick={e => e.stopPropagation()}
+                  >
+                    {indeterminate ? (
+                      <CheckboxIndeterminate />
+                    ) : (
+                      <CheckboxChecked />
+                    )}
+                  </div>
                 </div>
               </div>
-            </div>
-          </Tooltip>
-          {children && (
-            <Text
-              size={size}
-              onClick={e => e.stopPropagation()}
-              skin={disabled ? 'disabled' : 'standard'}
-              weight="thin"
-              dataHook={dataHooks.children}
-              className={styles.children}
-            >
-              {children}
-            </Text>
-          )}
+            </Tooltip>
+            {children && (
+              <Text
+                size={size}
+                onClick={e => e.stopPropagation()}
+                skin={disabled ? 'disabled' : 'standard'}
+                weight="thin"
+                dataHook={dataHooks.children}
+                className={classes.children}
+              >
+                {children}
+              </Text>
+            )}
+          </div>
         </label>
       </div>
     );
@@ -170,6 +179,12 @@ Checkbox.propTypes = {
 
   /** Define styles through a classname */
   className: PropTypes.string,
+
+  /** Selection area skin emphasises the style of the clickable area for selectionArea ('hover' or 'always'),  filled (default) means selectionArea has backgound, outlined means selectionArea has outline */
+  selectionAreaSkin: PropTypes.oneOf(['filled', 'outlined']),
+
+  /** Selection area padding emphasises the padding of the clickable area, empty means default padding, not empty overrides the default padding*/
+  selectionAreaPadding: PropTypes.string,
 };
 
 Checkbox.defaultProps = {
@@ -181,6 +196,7 @@ Checkbox.defaultProps = {
   hasError: false,
   disabled: false,
   indeterminate: false,
+  selectionAreaSkin: 'filled',
 };
 
 export default withFocusable(Checkbox);

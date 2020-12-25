@@ -27,8 +27,11 @@ describe('InputArea', () => {
       <InputArea {...props} dataHook="textarea-div" />
     );
 
-    afterEach(() => {
-      cleanup();
+    afterEach(cleanup);
+
+    it('sanity', async () => {
+      const driver = createDriver(<InputAreaForTesting />);
+      expect(await driver.exists()).toBe(true);
     });
 
     describe('enterText driver method', () => {
@@ -55,6 +58,18 @@ describe('InputArea', () => {
 
         const driver = createDriver(<InputAreaForTesting {...props} />);
         expect(await driver.getValue()).toEqual(props.value);
+      });
+    });
+
+    describe('required attribute', () => {
+      it('should pass down to the wrapped input', async () => {
+        const driver = createDriver(<InputAreaForTesting required />);
+        expect(await driver.getRequired()).toBe(true);
+      });
+
+      it('should not add `required` attribute', async () => {
+        const driver = createDriver(<InputAreaForTesting />);
+        expect(await driver.getRequired()).toBe(false);
       });
     });
 

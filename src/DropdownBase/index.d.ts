@@ -7,6 +7,7 @@ import {
 import { PopoverProps } from '../Popover';
 
 export interface DropdownBaseProps {
+  className?: string;
   dataHook?: string;
   open?: boolean;
   placement?: PopoverProps['placement'];
@@ -17,8 +18,8 @@ export interface DropdownBaseProps {
   onMouseLeave?: () => void;
   onSelect?: (option: DropdownLayoutValueOption) => void;
   dynamicWidth?: boolean;
-  minWidth?: number;
-  maxWidth?: number;
+  maxWidth?: React.CSSProperties['maxWidth'];
+  minWidth?: React.CSSProperties['minWidth'];
   maxHeight?: number | string;
   children?: DropdownBaseChildrenFn;
   options?: DropdownLayoutProps['options'];
@@ -32,6 +33,10 @@ export interface DropdownBaseProps {
   fixed?: boolean;
   fluid?: boolean;
   animate?: boolean;
+  focusOnSelectedOption?: boolean;
+  infiniteScroll?: boolean;
+  loadMore?: (page: number) => void;
+  hasMore?: boolean;
 }
 
 export default class DropdownBase extends React.PureComponent<

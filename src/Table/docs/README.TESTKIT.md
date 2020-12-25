@@ -47,8 +47,8 @@
 
 ```javascript
   import React from 'react';
-  import {tableTestkitFactory} from 'wix-style-react/dist/testkit';
-  import {tableTestkitFactory as enzymeTableTestkitFactory} from 'wix-style-react/dist/testkit/enzyme';
+  import {TableTestkit} from 'wix-style-react/dist/testkit';
+  import {TableTestkit as EnzymeTableTestkit} from 'wix-style-react/dist/testkit/enzyme';
 
   /***************
    enzyme example
@@ -56,7 +56,7 @@
 
   const dataHook = 'myDataHook';
   const wrapper = mount(<div/><Table {...props} dataHook={dataHook}/></div>);
-  const testkit = enzymeTableTestkitFactory({wrapper, dataHook});
+  const testkit = EnzymeTableTestkit({wrapper, dataHook});
 
   //Do tests
   expect(testkit.getRowsCount()).toBe(5);
@@ -70,7 +70,7 @@
   const wrapper = div.appendChild(
     ReactTestUtils.renderIntoDocument(<div/><Table {...props} dataHook={dataHook}/></div>, {dataHook})
   );
-  const testkit = tableTestkitFactory({wrapper, dataHook});
+  const testkit = TableTestkit({wrapper, dataHook});
 
   //Do tests
   expect(testkit.getRowsCount()).toBe(5);
@@ -80,7 +80,7 @@
 
 ```javascript
 import React from 'react';
-import { tableTestkitFactory } from 'wix-style-react/dist/testkit';
+import { TableTestkit } from 'wix-style-react/dist/testkit';
 /***************
  enzyme example
 ***************/
@@ -105,12 +105,12 @@ const wrapper = mount(
   </Table>
 );
 
-const titlebarDriver = enzymeTableTestkitFactory({
+const titlebarDriver = EnzymeTableTestkit({
   wrapper,
   dataHook: 'test-table-titlebar'
 });
 
-const contentDriver = enzymeTableTestkitFactory({
+const contentDriver = EnzymeTableTestkit({
   wrapper,
   dataHook: 'test-table-content'
 });
@@ -131,10 +131,10 @@ expect(contentDriver.isRowSelected(0)).toBeTruthy();
    Protractor example
   **********************/
 
-import { tableTestkitFactory, waitForVisibilityOf } from 'wix-style-react/dist/testkit/protractor';
+import { TableTestkit, waitForVisibilityOf } from 'wix-style-react/dist/testkit/protractor';
 
 //Create an element testkit via the data-hook attribute
-const testkit = tableTestkitFactory({ dataHook: 'myDataHook' });
+const testkit = TableTestkit({ dataHook: 'myDataHook' });
 
 describe('Table', () => {
   it('should be displayed', async () => {
@@ -151,14 +151,14 @@ describe('Table', () => {
   *******************/
 
 import puppeteer from 'puppeteer';
-import { tableTestkitFactory } from 'wix-style-react/dist/testkit/puppeteer';
+import { TableTestkit } from 'wix-style-react/dist/testkit/puppeteer';
 
 //puppeteer setup
 const browser = await puppeteer.launch();
 const page = await browser.newPage();
 
 //Create an element testkit via the data-hook attribute
-const testkit = await tableTestkitFactory({ dataHook: 'myDataHook', page });
+const testkit = await TableTestkit({ dataHook: 'myDataHook', page });
 await page.goto(appUrl); //Your application url
 
 expect(await testkit.getCellTextValue(2, 3)).to.equal('my test');

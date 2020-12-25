@@ -4,7 +4,7 @@ import Text from '../Text';
 import BreadcrumbsChevronRight from 'wix-ui-icons-common/system/BreadcrumbsChevronRight';
 import { DATA_HOOKS, DATA_ATTRIBUTES, THEMES } from './constnats';
 import { FontUpgradeContext } from '../FontUpgrade/context';
-import styles from './Breadcrumbs.st.css';
+import { st, classes } from './Breadcrumbs.st.css';
 
 /**
  * a way to visualise current navigation path
@@ -33,6 +33,8 @@ class Breadcrumbs extends React.PureComponent {
     onClick: PropTypes.func,
     activeId: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
     size: PropTypes.oneOf(['medium', 'large']),
+    /** The maximum width of Breadcrumb item */
+    itemMaxWidth: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
     theme: PropTypes.oneOf([
       'onWhiteBackground',
       'onGrayBackground',
@@ -45,10 +47,11 @@ class Breadcrumbs extends React.PureComponent {
   static defaultProps = {
     size: 'medium',
     theme: 'onGrayBackground',
+    itemMaxWidth: '240px',
     onClick: () => {},
   };
 
-  _createItem({ item, isActive, onClick, fullWidth, id }) {
+  _createItem({ item, isActive, onClick, maxWidth, id }) {
     const active = isActive;
     const breadcrumbText = value => {
       const { theme, size } = this.props;
@@ -56,13 +59,14 @@ class Breadcrumbs extends React.PureComponent {
 
       return (
         <FontUpgradeContext.Consumer>
-          {context => (
+          {({ active }) => (
             <Text
               dataHook={DATA_HOOKS.BREADCRUMBS_ITEM}
               weight={isActive ? 'normal' : 'thin'}
               light={theme === THEMES.onDarkBackground}
               size={isSmallSize ? 'small' : 'medium'}
-              secondary={context.active && !isActive}
+              secondary={active && !isActive}
+              ellipsis
             >
               {value}
             </Text>
@@ -73,48 +77,48 @@ class Breadcrumbs extends React.PureComponent {
 
     const defaultBreadcrumb = id => {
       const { disabled } = item;
+      const { className } = this.props;
       const button = true;
       return (
         <button
           type="button"
           data-hook={`${DATA_HOOKS.BREADCRUMB_CLICKABLE}-${id}`}
-          {...styles(
-            styles.item,
-            { button, disabled, active, fullWidth },
-            this.props,
-          )}
+          className={st(classes.item, { button, disabled, active }, className)}
           onClick={onClick}
           children={breadcrumbText(item.value)}
+          style={{ maxWidth }}
         />
       );
     };
 
     const linkBreadcrumb = id => {
       const { disabled } = item;
+      const { className } = this.props;
       const link = true;
       return (
         <a
           href={item.link}
           data-hook={`${DATA_HOOKS.BREADCRUMB_CLICKABLE}-${id}`}
-          {...styles(
-            styles.item,
-            { link, disabled, active, fullWidth },
-            this.props,
-          )}
+          className={st(classes.item, { link, disabled, active }, className)}
           onClick={onClick}
           children={breadcrumbText(item.value)}
+          style={{ maxWidth }}
         />
       );
     };
 
-    const customBreadcrumb = id => (
-      <span
-        data-hook={`${DATA_HOOKS.BREADCRUMB_CLICKABLE}-${id}`}
-        {...styles(styles.item, { fullWidth }, this.props)}
-        onClick={onClick}
-        children={breadcrumbText(item.customElement)}
-      />
-    );
+    const customBreadcrumb = id => {
+      const { className } = this.props;
+      return (
+        <span
+          data-hook={`${DATA_HOOKS.BREADCRUMB_CLICKABLE}-${id}`}
+          className={st(classes.item, {}, className)}
+          onClick={onClick}
+          children={breadcrumbText(item.customElement)}
+          style={{ maxWidth }}
+        />
+      );
+    };
 
     if (isActive) {
       return defaultBreadcrumb(id);
@@ -140,13 +144,20 @@ class Breadcrumbs extends React.PureComponent {
   };
 
   render() {
-    const { items, size, theme, dataHook } = this.props;
+    const {
+      items,
+      size,
+      itemMaxWidth,
+      theme,
+      className,
+      dataHook,
+    } = this.props;
     const fullWidth = items.length === 1;
 
     return (
       <div
         data-hook={dataHook}
-        {...styles('root', { size, theme }, this.props)}
+        className={st(classes.root, { size, theme }, className)}
         data-size={size}
         data-theme={theme}
       >
@@ -155,7 +166,7 @@ class Breadcrumbs extends React.PureComponent {
           return (
             <div
               key={item.id}
-              {...styles(styles.itemContainer, { active })}
+              className={st(classes.itemContainer, { active })}
               {...this._getItemWrapperDataAttributes({ position: i, item })}
             >
               {this._createItem({
@@ -163,10 +174,10 @@ class Breadcrumbs extends React.PureComponent {
                 item,
                 isActive: active,
                 onClick: this._handleItemClick(item),
-                fullWidth,
+                maxWidth: fullWidth ? 'initial' : itemMaxWidth,
               })}
               {allItems[i + 1] && (
-                <BreadcrumbsChevronRight className={styles.divider} />
+                <BreadcrumbsChevronRight className={classes.divider} />
               )}
             </div>
           );

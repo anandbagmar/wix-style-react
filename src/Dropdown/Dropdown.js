@@ -1,12 +1,10 @@
-import classNames from 'classnames';
 import defaultTo from 'lodash/defaultTo';
 import isEqual from 'lodash/isEqual';
 import sortBy from 'lodash/sortBy';
 import { allValidators, extendPropTypes } from '../utils/propTypes';
-
 import InputWithOptions from '../InputWithOptions';
-import DropdownLayout from '../DropdownLayout';
-import styles from './Dropdown.scss';
+import { st, classes } from './Dropdown.st.css';
+import PropTypes from 'prop-types';
 
 const NO_SELECTED_ID = null;
 
@@ -89,9 +87,8 @@ class Dropdown extends InputWithOptions {
   }
 
   inputClasses() {
-    return classNames(styles.showPointer, {
-      [styles.noBorder]: this.props.noBorder,
-    });
+    const { noBorder } = this.props;
+    return st(classes.showPointer, { noBorder });
   }
 
   dropdownAdditionalProps() {
@@ -130,16 +127,16 @@ class Dropdown extends InputWithOptions {
 Dropdown.propTypes = {
   ...InputWithOptions.propTypes,
   /** THIS PROP WAS REMOVED */
-  withArrow: DropdownLayout.propTypes.withArrow,
+  withArrow: PropTypes.bool,
   /** Sets the selected option id. (Implies Controlled mode) */
-  selectedId: DropdownLayout.propTypes.selectedId,
+  selectedId: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
   /** An initial selected option id. (Implies Uncontrolled mode) */
-  initialSelectedId: DropdownLayout.propTypes.selectedId,
+  initialSelectedId: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
 };
 
 extendPropTypes(Dropdown, {
   selectedId: allValidators(
-    DropdownLayout.propTypes.selectedId,
+    PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
     (props, propName) => {
       if (
         props[propName] !== undefined &&

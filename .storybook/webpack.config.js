@@ -1,21 +1,23 @@
 const merge = require('lodash/merge');
 const path = require('path');
-const wixStorybookConfig = require('yoshi/config/webpack.config.storybook');
+const { decorateStorybookConfig } = require('yoshi-flow-library/storybook');
+const StylableWebpackPlugin = require('yoshi-common/build/@stylable/webpack-plugin').default;
 
 const makeTestkitTemplate = platform =>
-  `import { <%= utils.toCamel(component.displayName) %>TestkitFactory } from 'wix-style-react/dist/testkit${platform}';`;
+  `import { <%= component.displayName %>Testkit } from 'wix-style-react/dist/testkit${platform}';`;
 
 const testkitsWarning = `
-To learn how to initialize and use testkits, see <a href="/pages/wix-style-react/?path=/story/introduction-testing--testing" target="_blank">Testing guide</a>
+To learn how to initialize and use testkits, see <a href="/?path=/story/introduction-testing--testing" target="_blank">Testing guide</a>
 `;
 
-module.exports = ({ config }) => {
-  config.module.rules[0].use[0].loader = require.resolve('babel-loader');
-  config.plugins.find(
-    plugin => plugin.constructor.name === 'ProgressPlugin',
-  ).handler = () => undefined;
+const patchStylablePlugin = (config) => {
+  config.plugins.pop() // Remove the yoshi built-in stylable plugin
+  config.plugins.push(new StylableWebpackPlugin({diagnosticsMode: 'strict'})); // break the build in case of stylable warnings
+}
 
-  const newConfig = wixStorybookConfig(config);
+module.exports = ({ config }) => {
+  const newConfig = decorateStorybookConfig(config);
+  patchStylablePlugin(newConfig);
 
   return merge(newConfig, {
     context: path.resolve(__dirname, '..', 'src'),
@@ -51,6 +53,7 @@ module.exports = ({ config }) => {
                 template: makeTestkitTemplate('/protractor'),
               },
             },
+            unifiedTestkit: true,
           },
         },
       }),

@@ -51,11 +51,20 @@ function getPropsPermutations(componentName, options) {
   const propsMap = {};
 
   props.forEach(propName => {
-    if (!component.props[propName])
-      throw new Error(
-        `prop ${propName} does not exist in component ${componentName}`,
-      );
-    propsMap[propName] = getTestValues(component.props[propName], options);
+    if (typeof propName === 'string') {
+      if (!component.props[propName])
+        throw new Error(
+          `prop ${propName} does not exist in component ${componentName}`,
+        );
+
+      propsMap[propName] = getTestValues(component.props[propName], options);
+    } else if (typeof propName === 'object') {
+      if (!component.props[propName.name])
+        throw new Error(
+          `prop ${propName} does not exist in component ${componentName}`,
+        );
+      propsMap[propName.name] = propName.values;
+    }
   });
 
   Object.keys(propsMap).forEach(key => {
@@ -84,23 +93,32 @@ function getPropsPermutations(componentName, options) {
  */
 export const storyOfAllPermutations = (Story, Component, options = {}) => {
   const permutations = getPropsPermutations(Component.displayName, options);
-  const { storyName = 'Props Permutations' } = options;
-  storiesOf(Component.displayName, module).add(storyName, () => (
-    <Container>
-      {permutations.map((props, key) => (
-        <Row key={key}>
-          <Col span={1}>
-            <Tooltip content={JSON.stringify(props)}>
-              <span>{key}</span>
-            </Tooltip>
-          </Col>
-          <Col span={11}>
-            <Story {...props} />
-          </Col>
-        </Row>
-      ))}
-    </Container>
-  ));
+  const {
+    storyName = 'Props Permutations',
+    testWithTheme = i => i,
+    themeName,
+  } = options;
+  storiesOf(
+    `${themeName ? `${themeName}|` : ''}${Component.displayName}`,
+    module,
+  ).add(storyName, () =>
+    testWithTheme(
+      <Container>
+        {permutations.map((props, key) => (
+          <Row key={key}>
+            <Col span={1}>
+              <Tooltip content={JSON.stringify(props)}>
+                <span>{key}</span>
+              </Tooltip>
+            </Col>
+            <Col span={11}>
+              <Story {...props} />
+            </Col>
+          </Row>
+        ))}
+      </Container>,
+    ),
+  );
 };
 
 /** A simple wait function to test components with animations */

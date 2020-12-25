@@ -38,6 +38,8 @@ function CalendarWithAllProps() {
       showMonthDropdown
       shouldCloseOnSelect
       locale="en"
+      firstDayOfWeek={1}
+      rtl
     />
   );
 }

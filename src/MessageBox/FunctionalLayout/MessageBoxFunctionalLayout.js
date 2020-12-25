@@ -4,6 +4,7 @@ import classNames from 'classnames';
 import throttle from 'lodash/throttle';
 
 import { generateDataAttr } from '../../utils/generateDataAttr';
+import deprecationLog from '../../utils/deprecationLog';
 import HeaderLayout from './HeaderLayout';
 import FooterLayout from './FooterLayout';
 import styles from './MessageBoxFunctionalLayout.scss';
@@ -11,6 +12,9 @@ import styles from './MessageBoxFunctionalLayout.scss';
 class MessageBoxFunctionalLayout extends React.PureComponent {
   constructor(props) {
     super(props);
+    deprecationLog(
+      `Using "<MessageBoxFunctionalLayout/>" is deprecated. Instead, we advise you to use the newer "<MessageModalLayout/>" component. Please refer to it's documentation.`,
+    );
 
     this.state = {
       hasScroll: false,

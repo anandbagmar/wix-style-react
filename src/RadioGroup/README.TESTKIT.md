@@ -4,8 +4,8 @@
 
 ```javascript
   import React from 'react';
-  import {radioGroupTestkitFactory} from 'wix-style-react/dist/testkit';
-  import {radioGroupTestkitFactory as enzymeRadioGroupTestkitFactory} from 'wix-style-react/dist/testkit/enzyme';
+  import {RadioGroupTestkit} from 'wix-style-react/dist/testkit';
+  import {RadioGroupTestkit as EnzymeRadioGroupTestkit} from 'wix-style-react/dist/testkit/enzyme';
 
   /***************
    enzyme example
@@ -13,7 +13,7 @@
 
   const dataHook = 'myDataHook';
   const wrapper = mount(<div><RadioGroup dataHook={dataHook}/></div>);
-  const testkit = enzymeRadioGroupTestkitFactory({wrapper, dataHook});
+  const testkit = EnzymeRadioGroupTestkit({wrapper, dataHook});
 
   //Do tests
   expect(testkit.driver.exists()).toBeTruthy();
@@ -27,7 +27,7 @@
   const wrapper = div.appendChild(
     ReactTestUtils.renderIntoDocument(<div><RadioGroup dataHook={dataHook}/></div>, {dataHook})
   );
-  const testkit = radioGroupTestkitFactory({wrapper, dataHook});
+  const testkit = RadioGroupTestkit({wrapper, dataHook});
 
   //Do tests
   expect(testkit.driver.exists()).toBeTruthy();
@@ -42,10 +42,10 @@
    protractor example
   *******************/
 
-  import {radioGroupTestkitFactory, waitForVisibilityOf} from 'wix-style-react/dist/testkit/protractor';
+  import {RadioGroupTestkit, waitForVisibilityOf} from 'wix-style-react/dist/testkit/protractor';
 
   //Create an element testkit via the data-hook attribute
-  const testkit = radioGroupTestkitFactory({dataHook: 'myDataHook'});
+  const testkit = RadioGroupTestkit({dataHook: 'myDataHook'});
 
   browser.get(appUrl); //Your application url
 

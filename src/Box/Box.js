@@ -1,47 +1,47 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import PropTypes from 'prop-types';
-import classNames from 'classnames';
 
-import colors from '../colors.scss';
-import styles from './Box.scss';
-
-/** Defined according to the design system */
-export const spacingUnit = 6;
-
-const directions = {
-  horizontal: styles.horizontal,
-  vertical: styles.vertical,
-};
-const horizontalAlignmentValues = {
-  left: styles.left,
-  center: styles.center,
-  right: styles.right,
-  'space-between': styles.spaceBetween,
-};
-const verticalAlignmentValues = {
-  top: styles.top,
-  middle: styles.middle,
-  bottom: styles.bottom,
-  'space-between': styles.spaceBetween,
-};
-const spacingValues = {
-  tiny: `${spacingUnit}px`,
-  small: `${spacingUnit * 2}px`,
-  medium: `${spacingUnit * 3}px`,
-  large: `${spacingUnit * 4}px`,
-};
+import { st, classes } from './Box.st.css';
+import { stVars as spacingStVars } from '../Foundation/stylable/spacing.st.css';
+import { stVars as colorsStVars } from '../Foundation/stylable/colors.st.css';
+import { filterObject } from '../utils/filterObject';
+import {
+  directions,
+  horizontalAlignmentValues,
+  spacingValues,
+  verticalAlignmentValues,
+} from './constants';
 
 /** In case the value is a number, it's multiplied by the defined spacing unit.
- *  Otherwise - there're two options:
- *   1. A predefined spacing value with semantic name (tiny, small, etc.)
- *   2. Space-separated values that are represented by a string (for example: "3px 3px")
+ *  Otherwise - there are three options:
+ *   1. A Spacing Token - SP1, SP2, etc. - where the number is multiplied by the spacing unit.
+ *   2. A predefined spacing value with semantic name (tiny, small, etc.)
+ *   3. Space-separated values that are represented by a string (for example: "3px 3px")
  * */
-const formatSpacingValue = value => {
-  if (typeof value !== 'undefined')
-    return isFinite(value)
-      ? `${value * spacingUnit}px`
-      : spacingValues[value] || `${value}`;
+export const formatSingleSpacingValue = value => {
+  if (value !== undefined) {
+    return formatSpacingValue(value);
+  }
 };
+
+export const formatComplexSpacingValue = value => {
+  if (value !== undefined) {
+    return value
+      .toString()
+      .split(' ')
+      .map(size => formatSpacingValue(size))
+      .join(' ');
+  }
+};
+
+const formatSpacingValue = value => {
+  if (isFinite(value)) {
+    return `${value * parseInt(spacingStVars.Spacing)}px`;
+  }
+
+  return spacingStVars[value] || spacingValues[value] || `${value}`;
+};
+
 const formatSizeValue = value => {
   if (typeof value !== 'undefined')
     return isFinite(value) ? `${value}px` : `${value}`;
@@ -89,57 +89,106 @@ const Box = ({
 
   ...nativeStyles
 }) => {
-  const rootClassNames = classNames(styles.root, className, {
-    [styles.inline]: inline,
+  const complexSpacingValues = useMemo(
+    () =>
+      Object.entries({ padding, margin }).reduce(
+        (accu, [key, value]) => ({
+          ...accu,
+          [key]: formatComplexSpacingValue(value),
+        }),
+        {},
+      ),
+    [padding, margin],
+  );
 
-    // Alignment
-    [directions[direction]]: direction,
-    [horizontalAlignmentValues[align]]: align,
-    [verticalAlignmentValues[verticalAlign]]: verticalAlign,
-  });
+  const singleSpacingValues = useMemo(
+    () =>
+      Object.entries({
+        paddingTop,
+        paddingRight,
+        paddingBottom,
+        paddingLeft,
+        marginTop,
+        marginRight,
+        marginBottom,
+        marginLeft,
+      }).reduce(
+        (accu, [key, value]) => ({
+          ...accu,
+          [key]: formatSingleSpacingValue(value),
+        }),
+        {},
+      ),
+    [
+      paddingTop,
+      paddingRight,
+      paddingBottom,
+      paddingLeft,
+      marginTop,
+      marginRight,
+      marginBottom,
+      marginLeft,
+    ],
+  );
+  const sizeValues = useMemo(
+    () =>
+      Object.entries({
+        minWidth,
+        maxWidth,
+        width,
+        minHeight,
+        maxHeight,
+        height,
+      }).reduce(
+        (accu, [key, value]) => ({
+          ...accu,
+          [key]: formatSizeValue(value),
+        }),
+        {},
+      ),
+    [minWidth, maxWidth, width, minHeight, maxHeight, height],
+  );
+
+  const rootClassNames = st(
+    classes.root,
+    {
+      inline,
+      direction,
+      alignItems: align,
+      justifyContent: verticalAlign,
+    },
+    className,
+  );
   const rootStyles = {
     ...style,
 
     // Spacing
-    padding: formatSpacingValue(padding),
-    paddingTop: formatSpacingValue(paddingTop),
-    paddingRight: formatSpacingValue(paddingRight),
-    paddingBottom: formatSpacingValue(paddingBottom),
-    paddingLeft: formatSpacingValue(paddingLeft),
-    margin: formatSpacingValue(margin),
-    marginTop: formatSpacingValue(marginTop),
-    marginRight: formatSpacingValue(marginRight),
-    marginBottom: formatSpacingValue(marginBottom),
-    marginLeft: formatSpacingValue(marginLeft),
+    ...singleSpacingValues,
+    ...complexSpacingValues,
 
     // Sizing
-    minWidth: formatSizeValue(minWidth),
-    maxWidth: formatSizeValue(maxWidth),
-    width: formatSizeValue(width),
-    minHeight: formatSizeValue(minHeight),
-    maxHeight: formatSizeValue(maxHeight),
-    height: formatSizeValue(height),
+    ...sizeValues,
 
     // Styling
-    color: colors[color] || color,
-    backgroundColor: colors[backgroundColor] || backgroundColor,
+    color: colorsStVars[color] || color,
+    backgroundColor: colorsStVars[backgroundColor] || backgroundColor,
     border, // Must be assigned before the border color props (otherwise it would override them)
 
     // Props which are spread just in case these are actually defined
     ...(borderColor && {
-      borderColor: colors[borderColor] || borderColor,
+      borderColor: colorsStVars[borderColor] || borderColor,
     }),
     ...(borderTopColor && {
-      borderTopColor: colors[borderTopColor] || borderTopColor,
+      borderTopColor: colorsStVars[borderTopColor] || borderTopColor,
     }),
     ...(borderRightColor && {
-      borderRightColor: colors[borderRightColor] || borderRightColor,
+      borderRightColor: colorsStVars[borderRightColor] || borderRightColor,
     }),
     ...(borderBottomColor && {
-      borderBottomColor: colors[borderBottomColor] || borderBottomColor,
+      borderBottomColor: colorsStVars[borderBottomColor] || borderBottomColor,
     }),
     ...(borderLeftColor && {
-      borderLeftColor: colors[borderLeftColor] || borderLeftColor,
+      borderLeftColor: colorsStVars[borderLeftColor] || borderLeftColor,
     }),
 
     // All other props which are passed (without those that are specified above)
@@ -147,8 +196,9 @@ const Box = ({
   };
 
   // Filter undefined values
-  const rootStylesFiltered = Object.fromEntries(
-    Object.entries(rootStyles).filter(entry => typeof entry[1] !== 'undefined'),
+  const rootStylesFiltered = filterObject(
+    rootStyles,
+    (key, value) => typeof value !== 'undefined',
   );
 
   return (
@@ -179,43 +229,43 @@ Box.propTypes = {
   verticalAlign: PropTypes.oneOf(Object.keys(verticalAlignmentValues)),
   /** Sets padding on all sides.
    * Accepts a numeric value (multiplied by spacing unit), predefined spacing value (tiny, small, etc.)
-   * or a string of space-separated values ("3px 3px") */
+   * a spacing token (SP1, SP2, etc.) or a string of space-separated values ("3px 3px") */
   padding: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
   /** Sets padding on the top.
    * Accepts a numeric value (multiplied by spacing unit), predefined spacing value (tiny, small, etc.)
-   * or a string of space-separated values ("3px 3px") */
+   * a spacing token (SP1, SP2, etc.) or a string of space-separated values ("3px 3px") */
   paddingTop: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
   /** Sets padding on the right.
    * Accepts a numeric value (multiplied by spacing unit), predefined spacing value (tiny, small, etc.)
-   * or a string of space-separated values ("3px 3px") */
+   * a spacing token (SP1, SP2, etc.) or a string of space-separated values ("3px 3px") */
   paddingRight: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
   /** Sets padding on the bottom.
    * Accepts a numeric value (multiplied by spacing unit), predefined spacing value (tiny, small, etc.)
-   * or a string of space-separated values ("3px 3px") */
+   * a spacing token (SP1, SP2, etc.) or a string of space-separated values ("3px 3px") */
   paddingBottom: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
   /** Sets padding on the left.
    * Accepts a numeric value (multiplied by spacing unit), predefined spacing value (tiny, small, etc.)
-   * or a string of space-separated values ("3px 3px") */
+   * a spacing token (SP1, SP2, etc.) or a string of space-separated values ("3px 3px") */
   paddingLeft: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
   /** Sets margin on all sides.
    * Accepts a numeric value (multiplied by spacing unit), predefined spacing value (tiny, small, etc.)
-   * or a string of space-separated values ("3px 3px") */
+   * a spacing token (SP1, SP2, etc.) or a string of space-separated values ("3px 3px") */
   margin: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
   /** Sets margin on the top.
    * Accepts a numeric value (multiplied by spacing unit), predefined spacing value (tiny, small, etc.)
-   * or a string of space-separated values ("3px 3px") */
+   * a spacing token (SP1, SP2, etc.) or a string of space-separated values ("3px 3px") */
   marginTop: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
   /** Sets margin on the right.
    * Accepts a numeric value (multiplied by spacing unit), predefined spacing value (tiny, small, etc.)
-   * or a string of space-separated values ("3px 3px") */
+   * a spacing token (SP1, SP2, etc.) or a string of space-separated values ("3px 3px") */
   marginRight: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
   /** Sets margin on the bottom.
    * Accepts a numeric value (multiplied by spacing unit), predefined spacing value (tiny, small, etc.)
-   * or a string of space-separated values ("3px 3px") */
+   * a spacing token (SP1, SP2, etc.) or a string of space-separated values ("3px 3px") */
   marginBottom: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
   /** Sets margin on the left.
    * Accepts a numeric value (multiplied by spacing unit), predefined spacing value (tiny, small, etc.)
-   * or a string of space-separated values ("3px 3px") */
+   * a spacing token (SP1, SP2, etc.) or a string of space-separated values ("3px 3px") */
   marginLeft: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
   /** Sets the minimum width of the box (pixels) */
   minWidth: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),

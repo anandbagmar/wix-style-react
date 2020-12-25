@@ -26,15 +26,15 @@
 
 ```javascript
   import React from 'react';
-  import {messageBoxFunctionalLayoutTestkitFactory} from 'wix-style-react/dist/testkit';
-  import {messageBoxFunctionalLayoutTestkitFactory as enzymeMessageBoxFunctionalLayoutTestkitFactory} from 'wix-style-react/dist/testkit/enzyme';
+  import {MessageBoxFunctionalLayoutTestkit} from 'wix-style-react/dist/testkit';
+  import {MessageBoxFunctionalLayoutTestkit as EnzymeMessageBoxFunctionalLayoutTestkit} from 'wix-style-react/dist/testkit/enzyme';
 
   /**************
    enzyme example
   ***************/
 
   const component = mount(<div/><MessageBoxFunctionalLayout dataHook='messageBox'/></div>);
-  enzymeMessageBoxFunctionalLayoutTestKit = enzymeMessageBoxFunctionalLayoutTestkitFactory({wrapper: component, dataHook: 'messageBox'})
+  enzymeMessageBoxFunctionalLayoutTestKit = EnzymeMessageBoxFunctionalLayoutTestkit({wrapper: component, dataHook: 'messageBox'})
 
   expect(enzymeMessageBoxFunctionalLayoutTestKit.getConfirmationButtonText()).toBe('OK');
 
@@ -46,7 +46,7 @@
   const dataHook = 'messageBox';
   const elementToRender = React.cloneElement(Element, {dataHook});
   const wrapper = div.appendChild(ReactTestUtils.renderIntoDocument(<div>{elementToRender}</div>));
-  const testkit = messageBoxFunctionalLayoutTestkitFactory({wrapper, dataHook});
+  const testkit = MessageBoxFunctionalLayoutTestkit({wrapper, dataHook});
 
   expect(messageBoxFunctionalLayoutTestKit.getConfirmationButtonText()).toBe('OK');
 ```
@@ -73,15 +73,15 @@
 
 ```javascript
   import React from 'react';
-  import {messageBoxMarketerialLayoutTestkitFactory} from 'wix-style-react/dist/testkit';
-  import {messageBoxMarketerialLayoutTestkitFactory as enzymeMessageBoxMarketerialLayoutTestkitFactory} from 'wix-style-react/dist/testkit/enzyme';
+  import {MessageBoxMarketerialLayoutTestkit} from 'wix-style-react/dist/testkit';
+  import {MessageBoxMarketerialLayoutTestkit as EnzymeMessageBoxMarketerialLayoutTestkit} from 'wix-style-react/dist/testkit/enzyme';
 
   /**************
    enzyme example
   ***************/
 
   const component = mount(<div/><MessageBoxMarketerialLayout dataHook='messageBox'/></div>);
-  enzymeMessageBoxMarketerialLayoutTestKit = enzymeMessageBoxMarketerialLayoutTestkitFactory({wrapper: this.component, dataHook: 'messageBox'})
+  enzymeMessageBoxMarketerialLayoutTestKit = EnzymeMessageBoxMarketerialLayoutTestkit({wrapper: this.component, dataHook: 'messageBox'})
 
   expect(enzymeMessageBoxMarketerialLayoutTestKit.getPrimaryButtonText()).toBe('OK');
 
@@ -93,7 +93,7 @@
   const dataHook = 'messageBox';
   const elementToRender = React.cloneElement(Element, {dataHook});
   const wrapper = div.appendChild(ReactTestUtils.renderIntoDocument(<div>{elementToRender}</div>));
-  const testkit = messageBoxMarketerialLayoutTestkitFactory({wrapper, dataHook});
+  const testkit = MessageBoxMarketerialLayoutTestkit({wrapper, dataHook});
 
   expect(messageBoxMarketerialLayoutTestKit.getPrimaryButtonText()).toBe('OK');
 ```

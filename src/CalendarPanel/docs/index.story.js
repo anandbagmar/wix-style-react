@@ -13,10 +13,7 @@ import {
   testkit,
 } from 'wix-storybook-utils/Sections';
 import allComponents from '../../../stories/utils/allComponents';
-import addDays from 'date-fns/add_days';
-import addMonths from 'date-fns/add_months';
-import startOfMonth from 'date-fns/start_of_month';
-import endOfMonth from 'date-fns/end_of_month';
+import { addDays, addMonths, startOfMonth, endOfMonth } from 'date-fns';
 import { storySettings } from './storySettings';
 import CalendarPanelFooter, {
   defaultDateToStringOptions,
@@ -138,6 +135,7 @@ export default {
       'zh',
       'th',
       'cs',
+      'uk',
     ],
   },
 

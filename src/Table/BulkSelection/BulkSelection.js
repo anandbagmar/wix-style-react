@@ -1,8 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import createReactContext from 'create-react-context';
 
-export const BulkSelectionContext = createReactContext();
+export const BulkSelectionContext = React.createContext();
 
 export const BulkSelectionState = Object.freeze({
   ALL: 'ALL',
@@ -75,11 +74,18 @@ export class BulkSelection extends React.Component {
       !this.areSelectedIdsEqual(this.props.allIds, nextProps.allIds)
     ) {
       const { selectedIds, notSelectedIds } = this.state;
+      const nextSelectedIds =
+        selectedIds && selectedIds.filter(id => nextProps.allIds.includes(id));
+      const nextNotSelectedIds =
+        notSelectedIds &&
+        notSelectedIds.filter(id => nextProps.allIds.includes(id));
       this.setState({
+        selectedIds: nextSelectedIds,
+        notSelectedIds: nextNotSelectedIds,
         helpers: this.createHelpers({
           ...nextProps,
-          selectedIds,
-          notSelectedIds,
+          selectedIds: nextSelectedIds,
+          notSelectedIds: nextNotSelectedIds,
         }),
       });
     }

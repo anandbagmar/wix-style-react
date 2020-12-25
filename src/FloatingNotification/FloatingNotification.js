@@ -23,7 +23,10 @@ class FloatingNotification extends React.PureComponent {
   static displayName = 'FloatingNotification';
 
   static propTypes = {
+    /** Applied as data-hook HTML attribute that can be used in the tests */
     dataHook: PropTypes.string,
+
+    /** A css class to be applied to the component's root element */
     className: PropTypes.string,
 
     /** the type of notification */
@@ -57,6 +60,9 @@ class FloatingNotification extends React.PureComponent {
 
     /** The width of the content container of the notification */
     width: PropTypes.string,
+
+    /** Is notification full width (removes left and right border, border radius, more height and bigger paddings) */
+    fullWidth: PropTypes.bool,
   };
 
   static defaultProps = {
@@ -67,7 +73,7 @@ class FloatingNotification extends React.PureComponent {
   };
 
   render() {
-    const { type, className, dataHook, width } = this.props;
+    const { type, className, dataHook, width, fullWidth } = this.props;
     const icon = this._getIcon();
     const content = this._getContent();
     const textButton = this._getTextButton();
@@ -80,7 +86,9 @@ class FloatingNotification extends React.PureComponent {
     return (
       <div
         data-hook={dataHook}
-        className={classNames(styles.root, styles[type], className)}
+        className={classNames(styles.root, styles[type], className, {
+          [styles.fullWidth]: fullWidth,
+        })}
         style={style}
       >
         {icon}

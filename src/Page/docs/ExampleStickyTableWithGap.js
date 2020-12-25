@@ -1,20 +1,25 @@
 /* eslint-disable */
 import React from 'react';
-import Box from 'wix-style-react/Box';
-import Breadcrumbs from 'wix-style-react/Breadcrumbs';
-import Button from 'wix-style-react/Button';
-import Card from 'wix-style-react/Card';
-import Checkbox from 'wix-style-react/Checkbox';
-import IconButton from 'wix-style-react/IconButton';
-import Dropdown from 'wix-style-react/Dropdown';
-import { Container, Row } from 'wix-style-react/Grid';
-import Highlighter from 'wix-style-react/Highlighter';
-import Page from 'wix-style-react/Page';
-import PopoverMenu from 'wix-style-react/PopoverMenu';
-import Search from 'wix-style-react/Search';
-import Table from 'wix-style-react/Table';
-import TableActionCell from 'wix-style-react/TableActionCell';
-import TableToolbar from 'wix-style-react/TableToolbar';
+
+import {
+  Box,
+  Breadcrumbs,
+  Button,
+  Card,
+  Checkbox,
+  IconButton,
+  Dropdown,
+  Container,
+  Row,
+  Highlighter,
+  Page,
+  PopoverMenu,
+  Search,
+  Table,
+  TableActionCell,
+  TableToolbar,
+  FormField,
+} from 'wix-style-react';
 
 class Example extends React.Component {
   render() {
@@ -165,34 +170,28 @@ class ProductTable extends React.Component {
         <TableToolbar>
           <TableToolbar.ItemGroup position="start">
             <TableToolbar.Item>
-              <TableToolbar.Label>
-                Product
-                <span style={{ width: '150px' }}>
-                  <Dropdown
-                    options={collectionOptions}
-                    selectedId={this.state.collectionId}
-                    onSelect={selectedOption => {
-                      this.setState({ collectionId: selectedOption.id });
-                    }}
-                    roundInput
-                  />
-                </span>
-              </TableToolbar.Label>
+              <FormField labelPlacement="left" label='Product'>
+                <Dropdown
+                  options={collectionOptions}
+                  selectedId={this.state.collectionId}
+                  onSelect={selectedOption => {
+                    this.setState({ collectionId: selectedOption.id });
+                  }}
+                  roundInput
+                />
+              </FormField>
             </TableToolbar.Item>
             <TableToolbar.Item>
-              <TableToolbar.Label>
-                Color
-                <span style={{ width: '86px' }}>
-                  <Dropdown
-                    options={filterOptions}
-                    selectedId={this.state.filterId}
-                    onSelect={selectedOption =>
-                      this.setState({ filterId: selectedOption.id })
-                    }
-                    roundInput
-                  />
-                </span>
-              </TableToolbar.Label>
+              <FormField labelPlacement="left" label='Color'>
+                <Dropdown
+                  options={filterOptions}
+                  selectedId={this.state.filterId}
+                  onSelect={selectedOption =>
+                    this.setState({ filterId: selectedOption.id })
+                  }
+                  roundInput
+                />
+              </FormField>
             </TableToolbar.Item>
             <TableToolbar.Item>
               <Checkbox
@@ -293,7 +292,7 @@ const renderPageHeader = () => {
               </IconButton>
             }
             placement="bottom"
-            size="normal"
+            textSize="medium"
             appendTo='parent'
           >
             <PopoverMenu.MenuItem onClick={() => {}} text="Refresh" />

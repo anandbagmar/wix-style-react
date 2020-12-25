@@ -1,9 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import ListItemAction from '../ListItemAction';
+import { listItemActionBuilder } from '../ListItemAction';
 import DropdownBase from '../DropdownBase';
 import { placements } from '../Popover';
-import styles from './PopoverMenu.st.css';
+import { st, classes } from './PopoverMenu.st.css';
+import { listItemSectionBuilder } from '../ListItemSection';
 
 /** PopoverMenu */
 class PopoverMenu extends React.PureComponent {
@@ -11,13 +12,7 @@ class PopoverMenu extends React.PureComponent {
 
   static MenuItem = () => ({});
 
-  static Divider = ({ dataHook }) => {
-    return (
-      <div data-hook={dataHook} style={{ padding: `6px 24px 6px 18px` }}>
-        <div className={styles.divider} />
-      </div>
-    );
-  };
+  static Divider = () => ({});
 
   static propTypes = {
     /** The maximum width applied to the list */
@@ -185,22 +180,22 @@ class PopoverMenu extends React.PureComponent {
 
       if (displayName && displayName === 'PopoverMenu.Divider') {
         return {
-          id: id,
-          value: React.cloneElement(child, { dataHook: child.props.dataHook }),
+          id,
           divider: true,
-          overrideStyle: true,
+          dataHook: child.props.dataHook,
         };
       }
 
       if (displayName && displayName === 'PopoverMenu.MenuItem') {
         return {
-          id: id,
+          id,
           title: child.props.text,
           onClick: child.props.onClick,
           skin: child.props.skin,
           dataHook: child.props.dataHook,
           prefixIcon: child.props.prefixIcon,
           disabled: child.props.disabled,
+          subtitle: child.props.subtitle,
         };
       }
 
@@ -221,10 +216,28 @@ class PopoverMenu extends React.PureComponent {
     this._saveOnClicks(options);
 
     return options.map(option => {
-      if (option.divider || option.custom) {
+      // Custom
+      if (option.custom) {
         return option;
       }
-      const { id, disabled, onClick, dataHook, ...rest } = option;
+
+      // Divider
+      if (option.divider) {
+        return listItemSectionBuilder({
+          type: 'divider',
+          ...option,
+        });
+      }
+
+      const {
+        id,
+        disabled,
+        onClick,
+        dataHook,
+        skin,
+        subtitle,
+        ...rest
+      } = option;
 
       const { focused } = this.state;
 
@@ -232,26 +245,21 @@ class PopoverMenu extends React.PureComponent {
         this.focusableList = [...this.focusableList, id];
       }
 
-      return {
+      return listItemActionBuilder({
+        ...rest,
         id,
         disabled,
-        overrideStyle: true,
-        value: props => (
-          <ListItemAction
-            {...props}
-            {...rest}
-            as="button"
-            dataHook={dataHook ? dataHook : `popover-menu-${id}`}
-            ref={ref => (this.children[id] = ref)}
-            tabIndex={id === focused && !disabled ? '0' : '-1'}
-            onKeyDown={e => this._onKeyDown(e, id)}
-            skin={option.skin || 'dark'}
-            size={textSize}
-            className={styles.listItem}
-            ellipsis={ellipsis}
-          />
-        ),
-      };
+        as: 'button',
+        dataHook: dataHook || `popover-menu-${id}`,
+        ref: ref => (this.children[id] = ref),
+        tabIndex: id === focused && !disabled ? '0' : '-1',
+        onKeyDown: e => this._onKeyDown(e, id),
+        skin: skin || 'dark',
+        size: textSize,
+        className: classes.listItem,
+        ellipsis,
+        subtitle,
+      });
     });
   };
 
@@ -286,10 +294,11 @@ class PopoverMenu extends React.PureComponent {
       moveBy,
       maxHeight,
       zIndex,
+      className,
     } = this.props;
     return (
       <DropdownBase
-        {...styles('root', {}, this.props)}
+        className={st(classes.root, className)}
         dataHook={dataHook}
         animate
         options={this._renderOptions()}

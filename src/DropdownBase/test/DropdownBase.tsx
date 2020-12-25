@@ -13,6 +13,7 @@ function DropdownBaseWithMandatoryProps() {
 function DropdownBaseWithAllProps() {
   return (
     <DropdownBase
+      className="test"
       dataHook="hook"
       appendTo="parent"
       dynamicWidth
@@ -44,6 +45,11 @@ function DropdownBaseWithAllProps() {
       tabIndex={1}
       zIndex={2}
       animate
+      fluid
+      focusOnSelectedOption
+      infiniteScroll
+      loadMore={()=>{}}
+      hasMore
     />
   );
 }

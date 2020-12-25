@@ -2,7 +2,7 @@ import React from 'react';
 import Check from 'wix-ui-icons-common/Check';
 import X from 'wix-ui-icons-common/X';
 
-import styles from './RichTextInputAreaForm.scss';
+import { st, classes } from './RichTextInputAreaForm.st.css';
 import { RichTextInputAreaContext } from '../RichTextInputAreaContext';
 import Tooltip from '../../Tooltip';
 import Box from '../../Box';
@@ -15,9 +15,13 @@ class RichTextInputAreaForm extends React.PureComponent {
     return (
       <RichTextInputAreaContext.Consumer>
         {({ texts }) => (
-          <form data-hook={dataHook} onSubmit={onSubmit}>
+          <form
+            data-hook={dataHook}
+            onSubmit={onSubmit}
+            className={classes.root}
+          >
             {children}
-            <div className={styles.footer}>
+            <div className={classes.footer}>
               <Tooltip content={texts.insertionForm.confirmButtonLabel}>
                 <IconButton
                   dataHook="richtextarea-form-confirm-button"

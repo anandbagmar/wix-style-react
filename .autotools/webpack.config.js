@@ -1,16 +1,10 @@
-const wixStorybookConfig = require('yoshi/config/webpack.config.storybook');
 const path = require('path');
-const packagePath = path.resolve(__dirname, '..');
+const { decorateStorybookConfig } = require('yoshi-flow-library/storybook');
 
-const config = {
-  context: packagePath,
+module.exports = decorateStorybookConfig({
+  context: path.resolve(__dirname, '..'),
   mode: 'development',
-  module: {},
   resolve: {
-    extensions: []
-  }
-};
-
-const yoshiConfig = wixStorybookConfig(config);
-
-module.exports = yoshiConfig;
+    extensions: [],
+  },
+});
